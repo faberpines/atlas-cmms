@@ -42,6 +42,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static com.grash.utils.Consts.usageBasedLicenseLimits;
@@ -358,7 +360,7 @@ public class UserService {
             userInvitationService.create(new UserInvitation(email, role));
             if (!enableInvitationViaEmail || !enableMails) return;
             Map<String, Object> variables = new HashMap<String, Object>() {{
-                put("joinLink", frontendUrl + "/account/register?" + "email=" + email + "&role=" + role.getId());
+                put("joinLink", frontendUrl + "/account/register?email=" + URLEncoder.encode(email, StandardCharsets.UTF_8) + "&role=" + role.getId());
                 put("featuresLink", frontendUrl + "/#key-features");
                 put("inviter", inviter.getFirstName() + " " + inviter.getLastName());
                 put("company", inviter.getCompany().getName());
@@ -379,9 +381,6 @@ public class UserService {
             if (userReq.getNewPassword() != null) {
                 if (userReq.getNewPassword().length() < 8)
                     throw new CustomException("Password must be at least 8 characters", HttpStatus.NOT_ACCEPTABLE);
-                if (enableInvitationViaEmail)
-                    throw new CustomException("Please tell the user to reset his password", HttpStatus.NOT_FOUND);
-
                 savedUser.setPassword(passwordEncoder.encode(userReq.getNewPassword()));
             }
             OwnUser updatedUser = userRepository.saveAndFlush(userMapper.updateUser(savedUser, userReq));

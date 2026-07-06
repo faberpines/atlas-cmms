@@ -37,6 +37,7 @@ import AssetMeters from './AssetMeters';
 import { getImageAndFiles } from '../../../../utils/overall';
 import AssetDowntimes from './AssetDowntimes';
 import AssetAnalytics from './AssetAnalytics';
+import AssetInspections from './AssetInspections';
 
 interface PropsType {}
 
@@ -85,7 +86,8 @@ const ShowAsset = ({}: PropsType) => {
     { value: 'files', label: t('files') },
     { value: 'meters', label: t('meters') },
     { value: 'downtimes', label: t('downtimes') },
-    { value: 'analytics', label: t('analytics') }
+    { value: 'analytics', label: t('analytics') },
+    { value: 'inspections', label: t('inspections') }
   ];
   const tabIndex = tabs.findIndex((tab) => tab.value === arr[arr.length - 1]);
   const onDeleteSuccess = () => {
@@ -444,8 +446,10 @@ const ShowAsset = ({}: PropsType) => {
             <AssetMeters asset={asset} />
           ) : tabIndex === 5 ? (
             <AssetDowntimes asset={asset} />
+          ) : tabIndex === 6 ? (
+            <AssetAnalytics id={Number(assetId)} />
           ) : (
-            tabIndex === 6 && <AssetAnalytics id={Number(assetId)} />
+            tabIndex === 7 && <AssetInspections asset={asset} />
           )
         ) : null}
         <ConfirmDialog

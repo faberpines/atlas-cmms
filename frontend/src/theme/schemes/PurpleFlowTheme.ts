@@ -4,24 +4,24 @@ import '@mui/lab/themeAugmentation';
 // import i18n from 'src/i18n/i18n';
 
 const themeColors = {
-  primary: '#9b52e1',
-  secondary: '#000',
+  primary: '#4a7c2f',
+  secondary: '#6b7a54',
   success: '#57CA22',
   warning: '#FFA319',
   error: '#FF1943',
-  info: '#33C2FF',
-  black: '#223354',
+  info: '#52b788',
+  black: '#1a2e10',
   white: '#ffffff',
-  primaryAlt: '#000C57'
+  primaryAlt: '#1e4d0f'
 };
 
 const colors = {
   gradients: {
-    blue1: 'linear-gradient(135deg, #6B73FF 0%, #000DFF 100%)',
-    blue2: 'linear-gradient(135deg, #ABDCFF 0%, #0396FF 100%)',
-    blue3: 'linear-gradient(127.55deg, #141E30 3.73%, #243B55 92.26%)',
-    blue4: 'linear-gradient(-20deg, #2b5876 0%, #4e4376 100%)',
-    blue5: 'linear-gradient(135deg, #97ABFF 10%, #123597 100%)',
+    blue1: 'linear-gradient(135deg, #56ab2f 0%, #1a6e07 100%)',
+    blue2: 'linear-gradient(135deg, #a8e063 0%, #56ab2f 100%)',
+    blue3: 'linear-gradient(127.55deg, #1a3a1a 3.73%, #2d5a2d 92.26%)',
+    blue4: 'linear-gradient(-20deg, #2d6a2d 0%, #3d5a2d 100%)',
+    blue5: 'linear-gradient(135deg, #90c060 10%, #1a5a0a 100%)',
     orange1: 'linear-gradient(135deg, #FCCF31 0%, #F55555 100%)',
     orange2: 'linear-gradient(135deg, #FFD3A5 0%, #FD6585 100%)',
     orange3: 'linear-gradient(120deg, #f6d365 0%, #fda085 100%)',
@@ -29,8 +29,8 @@ const colors = {
     purple3: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
     pink1: 'linear-gradient(135deg, #F6CEEC 0%, #D939CD 100%)',
     pink2: 'linear-gradient(135deg, #F761A1 0%, #8C1BAB 100%)',
-    green1: 'linear-gradient(135deg, #FFF720 0%, #3CD500 100%)',
-    green2: 'linear-gradient(to bottom, #00b09b, #96c93d)',
+    green1: 'linear-gradient(135deg, #b7f04a 0%, #3fa00a 100%)',
+    green2: 'linear-gradient(to bottom, #2d8a4e, #6abf3a)',
     black1: 'linear-gradient(100.66deg, #434343 6.56%, #000000 93.57%)',
     black2: 'linear-gradient(60deg, #29323c 0%, #485563 100%)'
   },

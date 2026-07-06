@@ -34,6 +34,10 @@ const WorkflowsSettings = Loader(
 const UIConfigurationSettings = Loader(
   lazy(() => import('../content/own/Settings/UiConfiguration'))
 );
+const BreakerPanelSettings = Loader(
+  lazy(() => import('../content/own/Settings/BreakerPanels'))
+);
+const WashTank = Loader(lazy(() => import('../content/own/WashTank')));
 
 const UserProfile = Loader(lazy(() => import('../content/own/UserProfile')));
 const CompanyProfile = Loader(
@@ -72,6 +76,9 @@ const CreatePurchaseOrders = Loader(
   lazy(() => import('../content/own/PurchaseOrders/Create'))
 );
 const Locations = Loader(lazy(() => import('../content/own/Locations')));
+const Fleet = Loader(lazy(() => import('../content/own/Fleet')));
+const Loto = Loader(lazy(() => import('../content/own/Loto')));
+const HearingConservation = Loader(lazy(() => import('../content/own/HearingConservation')));
 const WorkOrders = Loader(lazy(() => import('../content/own/WorkOrders')));
 
 const VendorsAndCustomers = Loader(
@@ -85,6 +92,8 @@ const Requests = Loader(lazy(() => import('../content/own/Requests')));
 const PreventiveMaintenances = Loader(
   lazy(() => import('../content/own/PreventiveMaintenance'))
 );
+
+const Inspections = Loader(lazy(() => import('../content/own/Inspections')));
 
 const PeopleAndTeams = Loader(
   lazy(() => import('../content/own/PeopleAndTeams'))
@@ -126,7 +135,8 @@ const appRoutes = [
         element: <ChecklistsSettings />
       },
       { path: 'workflows', element: <WorkflowsSettings /> },
-      { path: 'ui-configuration', element: <UIConfigurationSettings /> }
+      { path: 'ui-configuration', element: <UIConfigurationSettings /> },
+      { path: 'breaker-panels', element: <BreakerPanelSettings /> }
     ]
   },
   {
@@ -165,6 +175,10 @@ const appRoutes = [
       {
         path: ':meterId',
         element: <Meters />
+      },
+      {
+        path: 'wash-tanks',
+        element: <WashTank />
       }
     ]
   },
@@ -195,6 +209,12 @@ const appRoutes = [
     ]
   },
   {
+    path: 'inspections',
+    children: [
+      { path: '', element: <Inspections /> }
+    ]
+  },
+  {
     path: 'purchase-orders',
     children: [
       {
@@ -217,6 +237,18 @@ const appRoutes = [
       { path: '', element: <Locations /> },
       { path: ':locationId', element: <Locations /> }
     ]
+  },
+  {
+    path: 'fleet',
+    children: [{ path: '', element: <Fleet /> }]
+  },
+  {
+    path: 'loto',
+    children: [{ path: '', element: <Loto /> }]
+  },
+  {
+    path: 'hearing-conservation',
+    children: [{ path: '', element: <HearingConservation /> }]
   },
   {
     path: 'work-orders',
@@ -257,7 +289,8 @@ const appRoutes = [
           { path: 'files', element: <ShowAsset /> },
           { path: 'meters', element: <ShowAsset /> },
           { path: 'downtimes', element: <ShowAsset /> },
-          { path: 'analytics', element: <ShowAsset /> }
+          { path: 'analytics', element: <ShowAsset /> },
+          { path: 'inspections', element: <ShowAsset /> }
         ]
       }
     ]

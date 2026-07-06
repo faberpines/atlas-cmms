@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- Fix wash_tank_reading column types: Hibernate Double requires float8 not numeric -->
+    <changeSet id="2026_03_05_fix_wash_tank_column_types" author="copilot">
+        <sql>ALTER TABLE wash_tank_reading ALTER COLUMN turbidity_ntu TYPE float8 USING turbidity_ntu::float8</sql>
+        <sql>ALTER TABLE wash_tank_reading ALTER COLUMN chemical_ppm TYPE float8 USING chemical_ppm::float8</sql>
+        <sql>ALTER TABLE wash_tank_reading ALTER COLUMN tote_level_gallons TYPE float8 USING tote_level_gallons::float8</sql>
+    </changeSet>
+
+</databaseChangeLog>

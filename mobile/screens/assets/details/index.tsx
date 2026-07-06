@@ -22,6 +22,7 @@ import { TabBar, TabView } from 'react-native-tab-view';
 import AssetWorkOrders from './AssetWorkOrders';
 import AssetFiles from './AssetFiles';
 import AssetParts from './AssetParts';
+import AssetInspections from './AssetInspections';
 import { CustomSnackBarContext } from '../../../contexts/CustomSnackBarContext';
 
 export default function AssetDetailsHome({
@@ -43,7 +44,8 @@ export default function AssetDetailsHome({
     { key: 'details', title: t('details') },
     { key: 'work-orders', title: t('work_orders') },
     { key: 'files', title: t('files') },
-    { key: 'parts', title: t('parts') }
+    { key: 'parts', title: t('parts') },
+    { key: 'inspections', title: t('inspections') }
   ]);
   const renderScene = ({ route, jumpTo }) => {
     switch (route.key) {
@@ -55,6 +57,8 @@ export default function AssetDetailsHome({
         return <AssetFiles asset={asset} />;
       case 'parts':
         return <AssetParts asset={asset} navigation={navigation} />;
+      case 'inspections':
+        return <AssetInspections asset={asset} navigation={navigation} />;
     }
   };
   const renderTabBar = (props) => (

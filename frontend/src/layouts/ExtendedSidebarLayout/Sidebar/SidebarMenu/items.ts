@@ -24,6 +24,11 @@ import SpeedTwoToneIcon from '@mui/icons-material/SpeedTwoTone';
 import MoveToInboxTwoToneIcon from '@mui/icons-material/MoveToInboxTwoTone';
 import AssignmentTwoToneIcon from '@mui/icons-material/AssignmentTwoTone';
 import PendingActionsTwoToneIcon from '@mui/icons-material/PendingActionsTwoTone';
+import FactCheckTwoToneIcon from '@mui/icons-material/FactCheckTwoTone';
+import DirectionsCarTwoToneIcon from '@mui/icons-material/DirectionsCarTwoTone';
+import LockTwoToneIcon from '@mui/icons-material/LockTwoTone';
+import HearingTwoToneIcon from '@mui/icons-material/HearingTwoTone';
+import WaterTwoToneIcon from '@mui/icons-material/WaterTwoTone';
 import { PermissionEntity } from '../../../../models/owns/role';
 import { PlanFeature } from '../../../../models/owns/subscriptionPlan';
 import { IS_LOCALHOST } from '../../../../config';
@@ -62,6 +67,11 @@ const ownMenuItems: MenuItems[] = [
         link: '/app/preventive-maintenances',
         icon: PendingActionsTwoToneIcon,
         permission: PermissionEntity.PREVENTIVE_MAINTENANCES
+      },
+      {
+        name: 'Inspections',
+        link: '/app/inspections',
+        icon: FactCheckTwoToneIcon
       },
       {
         name: 'Statistics',
@@ -152,6 +162,12 @@ const ownMenuItems: MenuItems[] = [
         uiConfigKey: 'locations'
       },
       {
+        name: 'fleet_management',
+        link: '/app/fleet',
+        icon: DirectionsCarTwoToneIcon,
+        permission: PermissionEntity.FLEET
+      },
+      {
         name: 'parts_and_inventory',
         link: '/app/inventory',
         icon: HandymanTwoToneIcon,
@@ -180,7 +196,30 @@ const ownMenuItems: MenuItems[] = [
         icon: SpeedTwoToneIcon,
         permission: PermissionEntity.METERS,
         planFeature: PlanFeature.METER,
-        uiConfigKey: 'meters'
+        uiConfigKey: 'meters',
+        items: [
+          {
+            name: 'meters',
+            link: '/app/meters'
+          },
+          {
+            name: 'wash_tanks',
+            link: '/app/meters/wash-tanks',
+            icon: WaterTwoToneIcon
+          }
+        ]
+      },
+      {
+        name: 'loto',
+        link: '/app/loto',
+        icon: LockTwoToneIcon,
+        permission: PermissionEntity.LOTO
+      },
+      {
+        name: 'hearing_conservation',
+        link: '/app/hearing-conservation',
+        icon: HearingTwoToneIcon,
+        permission: PermissionEntity.HEARING_CONSERVATION
       },
       {
         name: 'people_teams',

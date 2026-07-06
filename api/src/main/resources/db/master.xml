@@ -184,4 +184,24 @@
              relativeToChangelogFile="true"/>
     <include file="changelog/2026_02_18_1771453794_timezone.xml"
              relativeToChangelogFile="true"/>
+    <include file="changelog/2026_03_03_1772551798_fleet_management.xml"
+             relativeToChangelogFile="true"/>
+    <include file="changelog/2026_03_03_1772553000_fleet_add_updated_by.xml"
+             relativeToChangelogFile="true"/>
+    <include file="changelog/2026_03_03_1772553100_fleet_sequences.xml"
+             relativeToChangelogFile="true"/>
+    <include file="changelog/2026_03_03_1772560000_fleet_asset_number.xml"
+             relativeToChangelogFile="true"/>
+    <include file="changelog/2026_03_04_1772640000_loto_record.xml"
+             relativeToChangelogFile="true"/>
+    <include file="changelog/2026_03_04_1772660000_breaker_panels.xml"
+             relativeToChangelogFile="true"/>
+    <include file="changelog/2026_03_04_1772661000_fix_breaker_company.xml"
+             relativeToChangelogFile="true"/>
+    <include file="changelog/2026_03_05_1772700000_wash_tank_reading.xml"
+             relativeToChangelogFile="true"/>
+    <include file="changelog/2026_03_05_1772701000_fix_wash_tank_types.xml"
+             relativeToChangelogFile="true"/>
+    <include file="changelog/2026_03_05_1772702000_wash_tank_turbidity_pass.xml"
+             relativeToChangelogFile="true"/>
 </databaseChangeLog>

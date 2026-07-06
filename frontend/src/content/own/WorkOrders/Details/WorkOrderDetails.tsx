@@ -96,6 +96,7 @@ import AddFileModal from './AddFileModal';
 import { useBrand } from '../../../../hooks/useBrand';
 import { useLicenseEntitlement } from '../../../../hooks/useLicenseEntitlement';
 import { getErrorMessage } from '../../../../utils/api';
+import InspectionsTab from '../../Inspections/InspectionsTab';
 
 const LabelWrapper = styled(Box)(
   ({ theme }) => `
@@ -372,7 +373,8 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
   const workOrderStatuses = ['OPEN', 'IN_PROGRESS', 'ON_HOLD', 'COMPLETE'];
   const tabs = [
     { value: 'details', label: t('details') },
-    { value: 'updates', label: t('updates') }
+    { value: 'updates', label: t('updates') },
+    { value: 'inspections', label: 'Inspections' }
   ];
 
   const getPath = (resource, id) => {
@@ -1359,6 +1361,9 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
               You need a license to see Work Order history
             </Typography>
           ))}
+        {currentTab === 'inspections' && (
+          <InspectionsTab workOrderId={workOrder.id} />
+        )}
       </Grid>
       <AddTimeModal
         open={openAddTimeModal}

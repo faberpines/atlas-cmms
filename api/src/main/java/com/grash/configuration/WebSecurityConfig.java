@@ -65,6 +65,7 @@ public class WebSecurityConfig {
                 .requestMatchers("/auth/activate-account**").permitAll()
                 .requestMatchers("/demo/generate-account").permitAll()
                 .requestMatchers("/webhooks/**").permitAll()
+                .requestMatchers("/fleet/lora/uplink").permitAll()
                 .requestMatchers("/paddle/create-checkout-session").permitAll()
                 .requestMatchers("/auth/reset-pwd-confirm**").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()

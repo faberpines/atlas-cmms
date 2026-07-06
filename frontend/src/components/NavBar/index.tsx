@@ -129,10 +129,10 @@ export default function NavBar() {
                   style={{ cursor: 'pointer' }}
                   fontSize={13}
                   onClick={() => {
-                    window.open('https://www.intel-loop.com/', '_blank');
+                    window.open('https://www.baybabyproduce.com/', '_blank');
                   }}
                 >
-                  Powered by Intelloop
+                  Powered by Pumpkins 🎃
                 </Typography>
               )}
             </Box>

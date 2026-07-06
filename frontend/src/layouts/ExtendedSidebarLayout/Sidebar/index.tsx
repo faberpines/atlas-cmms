@@ -75,10 +75,10 @@ function Sidebar() {
                     style={{ cursor: 'pointer', color: 'white' }}
                     fontSize={13}
                     onClick={() => {
-                      window.open('https://www.intel-loop.com/', '_blank');
+                      window.open('https://www.baybabyproduce.com/', '_blank');
                     }}
                   >
-                    Powered by Intelloop
+                    Powered by Pumpkins 🎃
                   </Typography>
                 )}
               </Box>
@@ -134,10 +134,10 @@ function Sidebar() {
                       style={{ cursor: 'pointer', color: 'white' }}
                       fontSize={13}
                       onClick={() => {
-                        window.open('https://www.intel-loop.com/', '_blank');
+                        window.open('https://www.baybabyproduce.com/', '_blank');
                       }}
                     >
-                      Powered by Intelloop
+                      Powered by Pumpkins 🎃
                     </Typography>
                   )}
                 </Box>

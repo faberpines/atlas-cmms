@@ -41,7 +41,7 @@ export default function FilesList({
         >
           <ListItemText
             primary={
-              <Link href={file.url} variant="h6">
+              <Link href={file.url} variant="h6" target="_blank" rel="noopener noreferrer">
                 {file.name}
               </Link>
             }

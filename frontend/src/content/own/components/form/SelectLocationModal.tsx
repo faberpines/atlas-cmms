@@ -21,12 +21,9 @@ import CustomDataGrid, { CustomDatagridColumn } from '../CustomDatagrid';
 import {
   GridEventListener,
   GridRenderCellParams,
-  GridRow,
   GridSelectionModel
 } from '@mui/x-data-grid';
-import { DataGridProProps, useGridApiRef } from '@mui/x-data-grid-pro';
 import { LocationMiniDTO } from '../../../../models/owns/location';
-import { GroupingCellWithLazyLoading } from '../../Assets/GroupingCellWithLazyLoading';
 import ReplayTwoToneIcon from '@mui/icons-material/ReplayTwoTone';
 import { Pageable } from '../../../../models/owns/page';
 import NoRowsMessageWrapper from '../NoRowsMessageWrapper';
@@ -98,7 +95,6 @@ const SelectLocationModal: React.FC<SelectLocationModalProps> = ({
 }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const apiRef = useGridApiRef();
   const theme = useTheme();
   const { loadingGet, locationsMini } = useSelector((state) => state.locations);
   const initialized = useRef<boolean>(false);
@@ -170,31 +166,6 @@ const SelectLocationModal: React.FC<SelectLocationModalProps> = ({
     }
   ];
 
-  const groupingColDef: DataGridProProps['groupingColDef'] = {
-    headerName: t('hierarchy'),
-    renderCell: (params) => <GroupingCellWithLazyLoading {...params} />
-  };
-
-  const CustomRow = (props: React.ComponentProps<typeof GridRow>) => {
-    const rowNode = apiRef.current.getRowNode(props.rowId);
-    return (
-      <GridRow
-        {...props}
-        style={
-          (rowNode?.depth ?? 0) > 0
-            ? {
-                backgroundColor:
-                  rowNode.depth % 2 === 0
-                    ? theme.colors.primary.light
-                    : theme.colors.primary.main,
-                color: 'white'
-              }
-            : undefined
-        }
-      />
-    );
-  };
-
   const handleRowClick: GridEventListener<'rowClick'> = (params) => {
     // Prevent selection of loading rows or excluded locations
     if (typeof params.id === 'string' && params.id.startsWith('loading_'))
@@ -221,8 +192,8 @@ const SelectLocationModal: React.FC<SelectLocationModalProps> = ({
 
     // Update the selected locations array
     const updatedSelectedLocations = currentSelectionModel.map((id) => {
-      return apiRef.current.getRow(id) as IRow;
-    });
+      return locationsMini.find((l) => l.id === id);
+    }).filter(Boolean) as IRow[];
     setSelectedLocations(updatedSelectedLocations);
     if (single) {
       onSelect(updatedSelectedLocations);
@@ -289,15 +260,11 @@ const SelectLocationModal: React.FC<SelectLocationModalProps> = ({
         <Box sx={{ height: '100%', width: '100%' }}>
           <CustomDataGrid
             pro
-            treeData
-            apiRef={apiRef}
             columns={columns}
             rows={filteredLocationsHierarchy}
             loading={loadingGet}
             getRowId={(row) => row.id}
             getRowHeight={() => 'auto'}
-            getTreeDataPath={(row) => row.hierarchy.map(String)}
-            groupingColDef={groupingColDef}
             disableColumnFilter
             checkboxSelection={!single}
             selectionModel={selectionModel}
@@ -308,13 +275,12 @@ const SelectLocationModal: React.FC<SelectLocationModalProps> = ({
               }
               setSelectionModel(newSelectionModel);
               const updatedSelectedLocations = newSelectionModel.map((id) => {
-                return apiRef.current.getRow(id) as IRow;
-              });
+                return locationsMini.find((l) => l.id === id);
+              }).filter(Boolean) as IRow[];
 
               setSelectedLocations(updatedSelectedLocations);
             }}
             components={{
-              Row: CustomRow,
               NoRowsOverlay: () => (
                 <NoRowsMessageWrapper
                   message={t('noRows.location.message')}

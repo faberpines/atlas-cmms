@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="2026_03_04_breaker_panel_tables" author="copilot">
+        <!-- Sequences must be created before tables that reference them -->
+        <createSequence sequenceName="breaker_panel_seq" incrementBy="50" startValue="1"/>
+        <createSequence sequenceName="breaker_seq" incrementBy="50" startValue="1"/>
+
+        <createTable tableName="breaker_panel">
+            <column name="id" type="bigint" defaultValueSequenceNext="breaker_panel_seq">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp"/>
+            <column name="updated_at" type="timestamp"/>
+            <column name="created_by" type="bigint"/>
+            <column name="updated_by" type="bigint"/>
+            <column name="company_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="location" type="varchar(255)"/>
+            <column name="notes" type="text"/>
+        </createTable>
+
+        <createTable tableName="breaker">
+            <column name="id" type="bigint" defaultValueSequenceNext="breaker_seq">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp"/>
+            <column name="updated_at" type="timestamp"/>
+            <column name="created_by" type="bigint"/>
+            <column name="updated_by" type="bigint"/>
+            <column name="company_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="label" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="circuit_number" type="varchar(50)"/>
+            <column name="amperage" type="integer"/>
+            <column name="description" type="varchar(500)"/>
+            <column name="panel_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="breaker_panel"
+                baseColumnNames="company_id"
+                referencedTableName="company"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+                constraintName="fk_breaker_panel_company"/>
+
+        <addForeignKeyConstraint
+                baseTableName="breaker"
+                baseColumnNames="company_id"
+                referencedTableName="company"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+                constraintName="fk_breaker_company"/>
+
+        <addForeignKeyConstraint
+                baseTableName="breaker"
+                baseColumnNames="panel_id"
+                referencedTableName="breaker_panel"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+                constraintName="fk_breaker_panel"/>
+    </changeSet>
+
+    <!-- Test data: two panels with breakers for company_id = 1 -->
+    <changeSet id="2026_03_04_breaker_panel_test_data" author="copilot">
+        <insert tableName="breaker_panel">
+            <column name="id" valueSequenceNext="breaker_panel_seq"/>
+            <column name="company_id" valueNumeric="1"/>
+            <column name="name" value="Main Electrical Panel"/>
+            <column name="location" value="Main Electrical Room"/>
+            <column name="notes" value="200A main service panel - always verify de-energized before work"/>
+        </insert>
+        <insert tableName="breaker_panel">
+            <column name="id" valueSequenceNext="breaker_panel_seq"/>
+            <column name="company_id" valueNumeric="1"/>
+            <column name="name" value="Shop Floor Sub-Panel"/>
+            <column name="location" value="Shop Floor North Wall"/>
+            <column name="notes" value="100A sub-panel feeding production equipment"/>
+        </insert>
+        <insert tableName="breaker_panel">
+            <column name="id" valueSequenceNext="breaker_panel_seq"/>
+            <column name="company_id" valueNumeric="1"/>
+            <column name="name" value="Office Panel"/>
+            <column name="location" value="IT Closet"/>
+        </insert>
+
+        <!-- Main Panel Breakers -->
+        <insert tableName="breaker">
+            <column name="id" valueSequenceNext="breaker_seq"/>
+            <column name="company_id" valueNumeric="1"/>
+            <column name="panel_id" valueComputed="(SELECT id FROM breaker_panel WHERE name='Main Electrical Panel' AND company_id=1 LIMIT 1)"/>
+            <column name="label" value="B1 - Main Disconnect"/>
+            <column name="circuit_number" value="1"/>
+            <column name="amperage" valueNumeric="200"/>
+            <column name="description" value="Main building disconnect"/>
+        </insert>
+        <insert tableName="breaker">
+            <column name="id" valueSequenceNext="breaker_seq"/>
+            <column name="company_id" valueNumeric="1"/>
+            <column name="panel_id" valueComputed="(SELECT id FROM breaker_panel WHERE name='Main Electrical Panel' AND company_id=1 LIMIT 1)"/>
+            <column name="label" value="B2 - HVAC Unit 1"/>
+            <column name="circuit_number" value="2"/>
+            <column name="amperage" valueNumeric="60"/>
+            <column name="description" value="Roof HVAC unit #1 (north)"/>
+        </insert>
+        <insert tableName="breaker">
+            <column name="id" valueSequenceNext="breaker_seq"/>
+            <column name="company_id" valueNumeric="1"/>
+            <column name="panel_id" valueComputed="(SELECT id FROM breaker_panel WHERE name='Main Electrical Panel' AND company_id=1 LIMIT 1)"/>
+            <column name="label" value="B3 - HVAC Unit 2"/>
+            <column name="circuit_number" value="3"/>
+            <column name="amperage" valueNumeric="60"/>
+            <column name="description" value="Roof HVAC unit #2 (south)"/>
+        </insert>
+        <insert tableName="breaker">
+            <column name="id" valueSequenceNext="breaker_seq"/>
+            <column name="company_id" valueNumeric="1"/>
+            <column name="panel_id" valueComputed="(SELECT id FROM breaker_panel WHERE name='Main Electrical Panel' AND company_id=1 LIMIT 1)"/>
+            <column name="label" value="B4 - Shop Floor Feed"/>
+            <column name="circuit_number" value="4"/>
+            <column name="amperage" valueNumeric="100"/>
+            <column name="description" value="Feed to shop floor sub-panel"/>
+        </insert>
+        <insert tableName="breaker">
+            <column name="id" valueSequenceNext="breaker_seq"/>
+            <column name="company_id" valueNumeric="1"/>
+            <column name="panel_id" valueComputed="(SELECT id FROM breaker_panel WHERE name='Main Electrical Panel' AND company_id=1 LIMIT 1)"/>
+            <column name="label" value="B5 - Compressor Room"/>
+            <column name="circuit_number" value="5"/>
+            <column name="amperage" valueNumeric="40"/>
+            <column name="description" value="Air compressor and pneumatic system"/>
+        </insert>
+
+        <!-- Shop Floor Breakers -->
+        <insert tableName="breaker">
+            <column name="id" valueSequenceNext="breaker_seq"/>
+            <column name="company_id" valueNumeric="1"/>
+            <column name="panel_id" valueComputed="(SELECT id FROM breaker_panel WHERE name='Shop Floor Sub-Panel' AND company_id=1 LIMIT 1)"/>
+            <column name="label" value="SF1 - CNC Machine 1"/>
+            <column name="circuit_number" value="1"/>
+            <column name="amperage" valueNumeric="30"/>
+            <column name="description" value="CNC Machine #1 - Station A"/>
+        </insert>
+        <insert tableName="breaker">
+            <column name="id" valueSequenceNext="breaker_seq"/>
+            <column name="company_id" valueNumeric="1"/>
+            <column name="panel_id" valueComputed="(SELECT id FROM breaker_panel WHERE name='Shop Floor Sub-Panel' AND company_id=1 LIMIT 1)"/>
+            <column name="label" value="SF2 - CNC Machine 2"/>
+            <column name="circuit_number" value="2"/>
+            <column name="amperage" valueNumeric="30"/>
+            <column name="description" value="CNC Machine #2 - Station B"/>
+        </insert>
+        <insert tableName="breaker">
+            <column name="id" valueSequenceNext="breaker_seq"/>
+            <column name="company_id" valueNumeric="1"/>
+            <column name="panel_id" valueComputed="(SELECT id FROM breaker_panel WHERE name='Shop Floor Sub-Panel' AND company_id=1 LIMIT 1)"/>
+            <column name="label" value="SF3 - Conveyor Line"/>
+            <column name="circuit_number" value="3"/>
+            <column name="amperage" valueNumeric="20"/>
+            <column name="description" value="Main conveyor belt motor"/>
+        </insert>
+        <insert tableName="breaker">
+            <column name="id" valueSequenceNext="breaker_seq"/>
+            <column name="company_id" valueNumeric="1"/>
+            <column name="panel_id" valueComputed="(SELECT id FROM breaker_panel WHERE name='Shop Floor Sub-Panel' AND company_id=1 LIMIT 1)"/>
+            <column name="label" value="SF4 - Welding Station"/>
+            <column name="circuit_number" value="4"/>
+            <column name="amperage" valueNumeric="50"/>
+            <column name="description" value="Welding equipment - dual outlets"/>
+        </insert>
+        <insert tableName="breaker">
+            <column name="id" valueSequenceNext="breaker_seq"/>
+            <column name="company_id" valueNumeric="1"/>
+            <column name="panel_id" valueComputed="(SELECT id FROM breaker_panel WHERE name='Shop Floor Sub-Panel' AND company_id=1 LIMIT 1)"/>
+            <column name="label" value="SF5 - Overhead Crane"/>
+            <column name="circuit_number" value="5"/>
+            <column name="amperage" valueNumeric="40"/>
+            <column name="description" value="5-ton overhead bridge crane"/>
+        </insert>
+        <insert tableName="breaker">
+            <column name="id" valueSequenceNext="breaker_seq"/>
+            <column name="company_id" valueNumeric="1"/>
+            <column name="panel_id" valueComputed="(SELECT id FROM breaker_panel WHERE name='Shop Floor Sub-Panel' AND company_id=1 LIMIT 1)"/>
+            <column name="label" value="SF6 - Exhaust Fans"/>
+            <column name="circuit_number" value="6"/>
+            <column name="amperage" valueNumeric="15"/>
+            <column name="description" value="Shop exhaust ventilation fans"/>
+        </insert>
+
+        <!-- Office Breakers -->
+        <insert tableName="breaker">
+            <column name="id" valueSequenceNext="breaker_seq"/>
+            <column name="company_id" valueNumeric="1"/>
+            <column name="panel_id" valueComputed="(SELECT id FROM breaker_panel WHERE name='Office Panel' AND company_id=1 LIMIT 1)"/>
+            <column name="label" value="OF1 - Server Room"/>
+            <column name="circuit_number" value="1"/>
+            <column name="amperage" valueNumeric="20"/>
+            <column name="description" value="Server rack and network equipment"/>
+        </insert>
+        <insert tableName="breaker">
+            <column name="id" valueSequenceNext="breaker_seq"/>
+            <column name="company_id" valueNumeric="1"/>
+            <column name="panel_id" valueComputed="(SELECT id FROM breaker_panel WHERE name='Office Panel' AND company_id=1 LIMIT 1)"/>
+            <column name="label" value="OF2 - General Lighting"/>
+            <column name="circuit_number" value="2"/>
+            <column name="amperage" valueNumeric="15"/>
+            <column name="description" value="Office area lighting"/>
+        </insert>
+        <insert tableName="breaker">
+            <column name="id" valueSequenceNext="breaker_seq"/>
+            <column name="company_id" valueNumeric="1"/>
+            <column name="panel_id" valueComputed="(SELECT id FROM breaker_panel WHERE name='Office Panel' AND company_id=1 LIMIT 1)"/>
+            <column name="label" value="OF3 - Outlets Row A"/>
+            <column name="circuit_number" value="3"/>
+            <column name="amperage" valueNumeric="20"/>
+            <column name="description" value="Desk outlets - row A"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

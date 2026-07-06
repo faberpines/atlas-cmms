@@ -60,10 +60,14 @@ import { getImageAndFiles, onSearchQueryChange } from '../../../utils/overall';
 import { SearchCriteria, SortDirection } from '../../../models/owns/page';
 import { exportEntity } from '../../../slices/exports';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
+import QrCodeScannerTwoToneIcon from '@mui/icons-material/DocumentScannerTwoTone';
+import QrCode2TwoToneIcon from '@mui/icons-material/QrCode2TwoTone';
+import BarcodeScanDialog from '../components/BarcodeScanDialog';
+import BarcodePrintDialog from '../components/BarcodePrintDialog';
 import { PermissionEntity } from '../../../models/owns/role';
 import SearchInput from '../components/SearchInput';
 import { PlanFeature } from '../../../models/owns/subscriptionPlan';
-import { useGridApiRef } from '@mui/x-data-grid-pro';
+import { useGridApiRef } from '@mui/x-data-grid';
 import useGridStatePersist from '../../../hooks/useGridStatePersist';
 import { CategoryMiniDTO } from '../../../models/owns/category';
 import { getErrorMessage } from '../../../utils/api';
@@ -96,6 +100,9 @@ const Parts = ({ setAction }: PropsType) => {
   });
   const [openDelete, setOpenDelete] = useState<boolean>(false);
   const [openAddModal, setOpenAddModal] = useState<boolean>(false);
+  const [defaultBarcode, setDefaultBarcode] = useState<string>('');
+  const [openScanDialog, setOpenScanDialog] = useState<boolean>(false);
+  const [barcodePrintPart, setBarcodePrintPart] = useState<Part | null>(null);
   const [currentPart, setCurrentPart] = useState<Part>();
   const {
     getFilteredFields,
@@ -314,6 +321,26 @@ const Parts = ({ setAction }: PropsType) => {
       headerName: t('open_wo'),
       description: t('open_wo'),
       width: 150
+    },
+    {
+      field: 'printBarcode',
+      headerName: 'Barcode',
+      width: 110,
+      sortable: false,
+      filterable: false,
+      renderCell: (params: GridRenderCellParams<any, Part>) => (
+        <IconButton
+          size="small"
+          title="Print Barcode"
+          disabled={!params.row.barcode}
+          onClick={(e) => {
+            e.stopPropagation();
+            setBarcodePrintPart(params.row);
+          }}
+        >
+          <QrCode2TwoToneIcon fontSize="small" />
+        </IconButton>
+      )
     }
   ];
   const fields: Array<IField> = [
@@ -465,7 +492,7 @@ const Parts = ({ setAction }: PropsType) => {
             fields={getFilteredFields(fields)}
             validation={Yup.object().shape(shape)}
             submitText={t('create_part')}
-            values={{}}
+            values={{ barcode: defaultBarcode }}
             onChange={({ field, e }) => {}}
             onSubmit={async (values) => {
               let formattedValues = formatValues(values);
@@ -675,6 +702,26 @@ const Parts = ({ setAction }: PropsType) => {
       {renderPartAddModal()}
       {renderPartUpdateModal()}
       {renderMenu()}
+      <BarcodeScanDialog
+        open={openScanDialog}
+        onClose={() => setOpenScanDialog(false)}
+        onPartFound={(part) => {
+          handleOpenDrawer(part);
+        }}
+        onPartNotFound={(barcode) => {
+          setDefaultBarcode(barcode);
+          setOpenAddModal(true);
+        }}
+      />
+      {barcodePrintPart && (
+        <BarcodePrintDialog
+          open={!!barcodePrintPart}
+          onClose={() => setBarcodePrintPart(null)}
+          value={barcodePrintPart.barcode ?? ''}
+          label={barcodePrintPart.name}
+          sublabel={`Part #${barcodePrintPart.id}`}
+        />
+      )}
       <Stack
         mb={1}
         direction="row"
@@ -693,10 +740,19 @@ const Parts = ({ setAction }: PropsType) => {
             <Tab key={tab.value} label={tab.label} value={tab.value} />
           ))}
         </Tabs>
-        <SearchInput onChange={debouncedQueryChange} />
-        <IconButton onClick={handleOpenMenu} color="primary">
-          <MoreVertTwoToneIcon />
-        </IconButton>
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <SearchInput onChange={debouncedQueryChange} />
+          <IconButton
+            title="Scan Barcode"
+            onClick={() => setOpenScanDialog(true)}
+            color="primary"
+          >
+            <QrCodeScannerTwoToneIcon />
+          </IconButton>
+          <IconButton onClick={handleOpenMenu} color="primary">
+            <MoreVertTwoToneIcon />
+          </IconButton>
+        </Stack>
       </Stack>
       {currentTab === 'list' && (
         <CustomDataGrid

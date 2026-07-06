@@ -144,6 +144,10 @@ export type RootStackParamList = {
   AddAdditionalCost: { workOrderId: number };
   AddAdditionalTime: { workOrderId: number };
   ScanAsset: undefined;
+  Inspections: undefined;
+  InspectionDetails: { id: number; inspectionProp?: any };
+  CreateInspection: { assetId?: number };
+  SelectInspectionTemplate: { onChange: (template: any) => void };
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

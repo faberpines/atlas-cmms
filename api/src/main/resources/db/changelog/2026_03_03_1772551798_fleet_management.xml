@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <!-- Vehicle table -->
+    <changeSet id="1772551798-1" author="fleet-module">
+        <createTable tableName="vehicle">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="vehicle_pkey"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="updated_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="company_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="vin" type="VARCHAR(17)"/>
+            <column name="make" type="VARCHAR(255)"/>
+            <column name="model" type="VARCHAR(255)"/>
+            <column name="year" type="INT"/>
+            <column name="trim" type="VARCHAR(255)"/>
+            <column name="engine_type" type="VARCHAR(255)"/>
+            <column name="transmission" type="VARCHAR(255)"/>
+            <column name="drive_type" type="VARCHAR(255)"/>
+            <column name="body_class" type="VARCHAR(255)"/>
+            <column name="license_plate" type="VARCHAR(50)"/>
+            <column name="color" type="VARCHAR(100)"/>
+            <column name="mileage" type="INT"/>
+            <column name="fuel_type" type="VARCHAR(50)" defaultValue="GASOLINE"/>
+            <column name="status" type="VARCHAR(50)" defaultValue="ACTIVE"/>
+            <column name="notes" type="TEXT"/>
+            <column name="assigned_driver_id" type="BIGINT"/>
+            <column name="image_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <!-- Vehicle foreign keys -->
+    <changeSet id="1772551798-2" author="fleet-module">
+        <addForeignKeyConstraint
+                baseTableName="vehicle" baseColumnNames="company_id"
+                referencedTableName="company" referencedColumnNames="id"
+                constraintName="fk_vehicle_company"
+                onDelete="CASCADE"/>
+        <addForeignKeyConstraint
+                baseTableName="vehicle" baseColumnNames="assigned_driver_id"
+                referencedTableName="own_user" referencedColumnNames="id"
+                constraintName="fk_vehicle_driver"
+                onDelete="SET NULL"/>
+        <addForeignKeyConstraint
+                baseTableName="vehicle" baseColumnNames="image_id"
+                referencedTableName="file" referencedColumnNames="id"
+                constraintName="fk_vehicle_image"
+                onDelete="SET NULL"/>
+    </changeSet>
+
+    <!-- VehicleLocation table -->
+    <changeSet id="1772551798-3" author="fleet-module">
+        <createTable tableName="vehicle_location">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="vehicle_location_pkey"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="updated_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="company_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="vehicle_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="latitude" type="DOUBLE PRECISION"/>
+            <column name="longitude" type="DOUBLE PRECISION"/>
+            <column name="speed" type="DOUBLE PRECISION"/>
+            <column name="heading" type="DOUBLE PRECISION"/>
+            <column name="altitude" type="DOUBLE PRECISION"/>
+            <column name="device_id" type="VARCHAR(255)"/>
+            <column name="recorded_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+        </createTable>
+    </changeSet>
+
+    <!-- VehicleLocation foreign keys -->
+    <changeSet id="1772551798-4" author="fleet-module">
+        <addForeignKeyConstraint
+                baseTableName="vehicle_location" baseColumnNames="company_id"
+                referencedTableName="company" referencedColumnNames="id"
+                constraintName="fk_vehicle_location_company"
+                onDelete="CASCADE"/>
+        <addForeignKeyConstraint
+                baseTableName="vehicle_location" baseColumnNames="vehicle_id"
+                referencedTableName="vehicle" referencedColumnNames="id"
+                constraintName="fk_vehicle_location_vehicle"
+                onDelete="CASCADE"/>
+        <createIndex tableName="vehicle_location" indexName="idx_vehicle_location_vehicle_id">
+            <column name="vehicle_id"/>
+        </createIndex>
+        <createIndex tableName="vehicle_location" indexName="idx_vehicle_location_recorded_at">
+            <column name="recorded_at"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- LoraDevice table -->
+    <changeSet id="1772551798-5" author="fleet-module">
+        <createTable tableName="lora_device">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="lora_device_pkey"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="updated_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="company_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="device_eui" type="VARCHAR(16)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="description" type="TEXT"/>
+            <column name="vehicle_id" type="BIGINT"/>
+            <column name="active" type="BOOLEAN" defaultValueBoolean="true"/>
+            <column name="last_seen" type="TIMESTAMP WITHOUT TIME ZONE"/>
+        </createTable>
+    </changeSet>
+
+    <!-- LoraDevice foreign keys -->
+    <changeSet id="1772551798-6" author="fleet-module">
+        <addForeignKeyConstraint
+                baseTableName="lora_device" baseColumnNames="company_id"
+                referencedTableName="company" referencedColumnNames="id"
+                constraintName="fk_lora_device_company"
+                onDelete="CASCADE"/>
+        <addForeignKeyConstraint
+                baseTableName="lora_device" baseColumnNames="vehicle_id"
+                referencedTableName="vehicle" referencedColumnNames="id"
+                constraintName="fk_lora_device_vehicle"
+                onDelete="SET NULL"/>
+    </changeSet>
+
+</databaseChangeLog>

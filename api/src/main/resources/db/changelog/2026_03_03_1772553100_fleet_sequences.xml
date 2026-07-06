@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="1772553100-1" author="fleet-module">
+        <sql splitStatements="false"><![CDATA[
+            CREATE SEQUENCE IF NOT EXISTS vehicle_seq START WITH 1 INCREMENT BY 50;
+            CREATE SEQUENCE IF NOT EXISTS vehicle_location_seq START WITH 1 INCREMENT BY 50;
+            CREATE SEQUENCE IF NOT EXISTS lora_device_seq START WITH 1 INCREMENT BY 50;
+        ]]></sql>
+    </changeSet>
+
+</databaseChangeLog>

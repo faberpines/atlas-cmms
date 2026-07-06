@@ -46,9 +46,9 @@ import { CompanySettingsContext } from '../../../../contexts/CompanySettingsCont
 import AssetDowntime from '../../../../models/owns/assetDowntime';
 import { getAssetDetailsOverview } from '../../../../slices/analytics/asset';
 import DateTimePicker from '@mui/lab/DateTimePicker';
-import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
-import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers-pro';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 import { Filter } from '../../Analytics/WorkOrder/WOModal';
 import Loading from '../../Analytics/Loading';
 
@@ -102,22 +102,20 @@ const AssetDowntimes = ({ id }: PropsType) => {
             <Box sx={{ height: 550, width: '95%' }}>
               <Stack direction="row" justifyContent="space-between" py={3}>
                 <LocalizationProvider
-                  localeText={{ start: t('start'), end: t('end') }}
                   dateAdapter={AdapterDayjs}
                 >
-                  <DateRangePicker
-                    value={[start, end]}
-                    onChange={(newValue) => {
-                      setStart(newValue[0]);
-                      setEnd(newValue[1]);
-                    }}
-                    renderInput={(startProps, endProps) => (
-                      <>
-                        <TextField {...startProps} />
-                        <Box sx={{ mx: 2 }}> {t('to')} </Box>
-                        <TextField {...endProps} />
-                      </>
-                    )}
+                  <DatePicker
+                    label={t('start')}
+                    value={start}
+                    onChange={(newValue) => { if (newValue) setStart(newValue); }}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                  <Box sx={{ mx: 2 }}> {t('to')} </Box>
+                  <DatePicker
+                    label={t('end')}
+                    value={end}
+                    onChange={(newValue) => { if (newValue) setEnd(newValue); }}
+                    renderInput={(params) => <TextField {...params} />}
                   />
                 </LocalizationProvider>
                 <Button disabled={loading.assetDetailsOverview}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- Replace turbidity_ntu (float) with turbidity_pass (boolean) -->
+    <changeSet id="2026_03_05_wash_tank_turbidity_pass_fail" author="copilot">
+        <dropColumn tableName="wash_tank_reading" columnName="turbidity_ntu"/>
+        <addColumn tableName="wash_tank_reading">
+            <column name="turbidity_pass" type="boolean"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

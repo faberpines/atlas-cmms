@@ -41,6 +41,12 @@ import { reducer as importsReducer } from 'src/slices/imports';
 import { reducer as exportsReducer } from 'src/slices/exports';
 import { reducer as workflowReducer } from 'src/slices/workflow';
 import { reducer as licenseReducer } from 'src/slices/license';
+import { reducer as inspectionReducer } from 'src/slices/inspection';
+import { reducer as vehicleReducer } from 'src/slices/vehicle';
+import { reducer as lotoReducer } from 'src/slices/loto';
+import { reducer as breakerPanelReducer } from 'src/slices/breakerPanel';
+import { reducer as hearingConservationReducer } from 'src/slices/hearingConservation';
+import { reducer as washTankReducer } from 'src/slices/washTank';
 
 const rootReducer = combineReducers({
   calendar: calendarReducer,
@@ -84,7 +90,13 @@ const rootReducer = combineReducers({
   imports: importsReducer,
   exports: exportsReducer,
   workflows: workflowReducer,
-  license: licenseReducer
+  license: licenseReducer,
+  inspections: inspectionReducer,
+  vehicles: vehicleReducer,
+  loto: lotoReducer,
+  breakerPanels: breakerPanelReducer,
+  hearingConservation: hearingConservationReducer,
+  washTank: washTankReducer
 });
 
 export default rootReducer;

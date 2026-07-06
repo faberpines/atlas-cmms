@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="2026_03_05_wash_tank_reading_table" author="copilot">
+        <createSequence sequenceName="wash_tank_reading_seq" incrementBy="50" startValue="1"/>
+
+        <createTable tableName="wash_tank_reading">
+            <column name="id" type="bigint" defaultValueSequenceNext="wash_tank_reading_seq">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp"/>
+            <column name="updated_at" type="timestamp"/>
+            <column name="created_by" type="bigint"/>
+            <column name="updated_by" type="bigint"/>
+            <column name="company_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tank_number" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reading_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="shift" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="turbidity_ntu" type="decimal(10,3)"/>
+            <column name="chemical_ppm" type="decimal(10,3)"/>
+            <column name="tote_level_gallons" type="decimal(10,2)"/>
+            <column name="notes" type="text"/>
+            <column name="recorded_by_id" type="bigint"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="wash_tank_reading"
+                baseColumnNames="company_id"
+                referencedTableName="company"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+                constraintName="fk_wash_tank_company"/>
+
+        <addForeignKeyConstraint
+                baseTableName="wash_tank_reading"
+                baseColumnNames="recorded_by_id"
+                referencedTableName="own_user"
+                referencedColumnNames="id"
+                onDelete="SET NULL"
+                constraintName="fk_wash_tank_recorded_by"/>
+    </changeSet>
+
+</databaseChangeLog>

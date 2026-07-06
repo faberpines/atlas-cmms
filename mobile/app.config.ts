@@ -23,9 +23,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     backgroundColor: '#ffffff'
   },
   updates: {
-    fallbackToCacheTimeout: 0,
-    url: 'https://u.expo.dev/803b5007-0c60-4030-ac3a-c7630b223b92',
-    assetPatternsToBeBundled: ['**/*']
+    fallbackToCacheTimeout: 0
   },
   ios: {
     bundleIdentifier: 'com.cmms.atlas',
@@ -55,7 +53,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   extra: {
     API_URL: apiUrl,
     eas: {
-      projectId: '803b5007-0c60-4030-ac3a-c7630b223b92'
+      projectId: 'bb0fd77f-57fc-4bee-8abc-b2aedb67c82d'
     }
   },
   plugins: [

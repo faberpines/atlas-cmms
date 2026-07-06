@@ -1,10 +1,12 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { View } from '../components/Themed';
 import {
   ActivityIndicator,
   Avatar,
   Button,
+  Chip,
   Dialog,
+  Divider,
   IconButton,
   List,
   Portal,
@@ -13,6 +15,7 @@ import {
 } from 'react-native-paper';
 import useAuth from '../hooks/useAuth';
 import { useTranslation } from 'react-i18next';
+import i18n from '../i18n/i18n';
 import { getUserInitials } from '../utils/displayers';
 import * as React from 'react';
 import { useContext, useEffect, useState } from 'react';
@@ -30,6 +33,7 @@ export default function SettingsScreen({
   const { user, switchAccount, logout } = useAuth();
   const [switchingAccount, setSwitchingAccount] = useState<boolean>(false);
   const { t } = useTranslation();
+  const [currentLang, setCurrentLang] = useState<string>(i18n.language || 'en');
   const [versionPressCount, setVersionPressCount] = useState<number>(0);
   const [openLogout, setOpenLogout] = useState<boolean>(false);
   const [openDevInfo, setOpenDevInfo] = useState<boolean>(false);
@@ -126,6 +130,32 @@ export default function SettingsScreen({
           left={(props) => <IconButton icon={'information-outline'} />}
           title={t('Version')}
           description={Constants.expoConfig.version}
+        />
+        <Divider />
+        <List.Item
+          style={{ paddingHorizontal: 20 }}
+          left={(props) => <IconButton icon={'translate'} />}
+          title={t('language')}
+          description={() => (
+            <View style={{ flexDirection: 'row', gap: 8, marginTop: 6, backgroundColor: 'transparent' }}>
+              <Chip
+                selected={currentLang === 'en'}
+                onPress={() => { i18n.changeLanguage('en'); setCurrentLang('en'); }}
+                icon="flag"
+                style={{ backgroundColor: currentLang === 'en' ? theme.colors.primaryContainer : undefined }}
+              >
+                🇺🇸 English
+              </Chip>
+              <Chip
+                selected={currentLang === 'es'}
+                onPress={() => { i18n.changeLanguage('es'); setCurrentLang('es'); }}
+                icon="flag"
+                style={{ backgroundColor: currentLang === 'es' ? theme.colors.primaryContainer : undefined }}
+              >
+                🇪🇸 Español
+              </Chip>
+            </View>
+          )}
         />
       </View>
     </View>

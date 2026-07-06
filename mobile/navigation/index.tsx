@@ -95,6 +95,10 @@ import SelectNfcModal from '../screens/modals/SelectNfcModal';
 import SelectBarcodeModal from '../screens/modals/SelectBarcodeModal';
 import ScanAssetScreen from '../screens/ScanAssetScreen';
 import SelectMetersModal from '../screens/modals/SelectMetersModal';
+import InspectionsScreen from '../screens/inspections/InspectionsScreen';
+import InspectionDetailsScreen from '../screens/inspections/InspectionDetailsScreen';
+import CreateInspectionScreen from '../screens/inspections/CreateInspectionScreen';
+import SelectInspectionTemplateModal from '../screens/inspections/SelectInspectionTemplateModal';
 import {
   createEntities,
   PermissionEntity,
@@ -349,6 +353,21 @@ function RootNavigator() {
         component={ScanAssetScreen}
         options={{ title: t('to_scan') }}
       />
+      <Stack.Screen
+        name="Inspections"
+        component={InspectionsScreen}
+        options={{ title: t('inspections') }}
+      />
+      <Stack.Screen
+        name="InspectionDetails"
+        component={InspectionDetailsScreen}
+        options={{ title: t('inspection') }}
+      />
+      <Stack.Screen
+        name="CreateInspection"
+        component={CreateInspectionScreen}
+        options={{ title: t('create_inspection') }}
+      />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
         <Stack.Screen
@@ -435,6 +454,11 @@ function RootNavigator() {
           name="AddAdditionalTime"
           component={CreateAdditionalTime}
           options={{ title: t('add_time') }}
+        />
+        <Stack.Screen
+          name="SelectInspectionTemplate"
+          component={SelectInspectionTemplateModal}
+          options={{ title: t('select_template') }}
         />
       </Stack.Group>
     </Stack.Navigator>

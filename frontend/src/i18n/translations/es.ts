@@ -910,6 +910,13 @@ const esJSON = {
   enable_wo_updates_requesters_description:
     'Los usuarios obtienen actualizaciones de las Órdenes de Trabajo que solicitaron.',
   language: 'Idioma',
+  translate_to: 'Traducir a',
+  translating: 'Traduciendo',
+  please_wait: 'espera ~20s',
+  translation_failed: 'Traducción fallida. Por favor intente de nuevo.',
+  language_preferences: 'Preferencias de Idioma',
+  language_preferences_description: 'Elige tu idioma de visualización preferido. Los cambios surten efecto de inmediato.',
+  language_saved: 'Idioma actualizado con éxito',
   date_format: 'Formato de fecha',
   time_zone: 'Zona horaria',
   business_type: 'Tipo de negocio',

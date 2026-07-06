@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- Fix test data company_id to use the actual first company in the database -->
+    <changeSet id="2026_03_04_fix_breaker_test_data_company" author="copilot">
+        <sql>
+            UPDATE breaker_panel SET company_id = (SELECT MIN(id) FROM company)
+            WHERE company_id NOT IN (SELECT id FROM company);
+        </sql>
+        <sql>
+            UPDATE breaker SET company_id = (SELECT MIN(id) FROM company)
+            WHERE company_id NOT IN (SELECT id FROM company);
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

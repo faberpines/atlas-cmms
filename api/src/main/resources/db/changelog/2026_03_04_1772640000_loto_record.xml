@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="2026_03_04_loto_record_table" author="copilot">
+        <createSequence sequenceName="loto_record_seq" incrementBy="50" startValue="1"/>
+
+        <createTable tableName="loto_record">
+            <column name="id" type="bigint" defaultValueSequenceNext="loto_record_seq">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp"/>
+            <column name="updated_at" type="timestamp"/>
+            <column name="created_by" type="bigint"/>
+            <column name="updated_by" type="bigint"/>
+            <column name="company_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="isolation_point" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="energy_type" type="varchar(50)" defaultValue="ELECTRICAL"/>
+            <column name="status" type="varchar(50)" defaultValue="ACTIVE"/>
+            <column name="reason" type="text"/>
+            <column name="procedure" type="text"/>
+            <column name="notes" type="text"/>
+            <column name="asset_id" type="bigint"/>
+            <column name="tagged_by_id" type="bigint"/>
+            <column name="tagged_at" type="timestamp"/>
+            <column name="expected_release_at" type="timestamp"/>
+            <column name="released_by_id" type="bigint"/>
+            <column name="released_at" type="timestamp"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="loto_record"
+                baseColumnNames="company_id"
+                referencedTableName="company"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+                constraintName="fk_loto_company"/>
+
+        <addForeignKeyConstraint
+                baseTableName="loto_record"
+                baseColumnNames="asset_id"
+                referencedTableName="asset"
+                referencedColumnNames="id"
+                onDelete="SET NULL"
+                constraintName="fk_loto_asset"/>
+
+        <addForeignKeyConstraint
+                baseTableName="loto_record"
+                baseColumnNames="tagged_by_id"
+                referencedTableName="own_user"
+                referencedColumnNames="id"
+                onDelete="SET NULL"
+                constraintName="fk_loto_tagged_by"/>
+
+        <addForeignKeyConstraint
+                baseTableName="loto_record"
+                baseColumnNames="released_by_id"
+                referencedTableName="own_user"
+                referencedColumnNames="id"
+                onDelete="SET NULL"
+                constraintName="fk_loto_released_by"/>
+    </changeSet>
+
+</databaseChangeLog>

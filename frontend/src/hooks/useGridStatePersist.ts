@@ -5,11 +5,11 @@ import React, {
   useLayoutEffect,
   useRef
 } from 'react';
-import { GridApiPro } from '@mui/x-data-grid-pro/models/gridApiPro';
+import { GridApi } from '@mui/x-data-grid';
 import { GridColDef } from '@mui/x-data-grid';
 
 const useGridStatePersist = (
-  apiRef: React.MutableRefObject<GridApiPro>,
+  apiRef: React.MutableRefObject<GridApi>,
   columns: GridColDef[],
   prefix: string
 ) => {

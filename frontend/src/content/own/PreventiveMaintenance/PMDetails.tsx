@@ -35,6 +35,7 @@ import { getScheduleDescription } from '../../../utils/dates';
 import { getSupportedLanguage, supportedLanguages } from '../../../i18n/i18n';
 import i18n from 'i18next';
 import RecentWorkOrders from './RecentWorkOrders';
+import InspectionsTab from '../Inspections/InspectionsTab';
 import { useNavigate } from 'react-router-dom';
 
 interface RequestDetailsProps {
@@ -175,6 +176,7 @@ export default function PMDetails({
         <Tabs value={tab} onChange={handleChange}>
           <Tab label={t('details')} />
           <Tab label={t('recent_work_orders')} />
+          <Tab label="Inspections" />
         </Tabs>
       </Grid>
       {tab === 0 ? (
@@ -402,8 +404,10 @@ export default function PMDetails({
             </Grid>
           </Box>
         </Grid>
-      ) : (
+      ) : tab === 1 ? (
         <RecentWorkOrders pmId={preventiveMaintenance.id} />
+      ) : (
+        <InspectionsTab pmId={preventiveMaintenance.id} />
       )}
       {isImageViewerOpen && (
         <div style={{ zIndex: 1300 }}>

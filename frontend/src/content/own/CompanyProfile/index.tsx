@@ -5,7 +5,6 @@ import { Helmet } from 'react-helmet-async';
 import { Box, Grid } from '@mui/material';
 import CompanyCover from './CompanyCover';
 import CompanyDetails from './CompanyDetails';
-import CompanyPlan from './CompanyPlan';
 import { TitleContext } from '../../../contexts/TitleContext';
 import { useTranslation } from 'react-i18next';
 import useAuth from '../../../hooks/useAuth';
@@ -48,11 +47,6 @@ function CompanyProfile() {
           <Grid item xs={12}>
             <CompanyDetails company={company} />
           </Grid>
-          {user.ownsCompany && (
-            <Grid item xs={12}>
-              <CompanyPlan plan={company.subscription.subscriptionPlan} />
-            </Grid>
-          )}
         </Grid>
       </Box>
     </>

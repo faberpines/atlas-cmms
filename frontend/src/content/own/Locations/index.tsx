@@ -41,9 +41,7 @@ import { GridEnrichedColDef } from '@mui/x-data-grid/models/colDef/gridColDef';
 import CustomDataGrid from '../components/CustomDatagrid';
 import {
   GridActionsCellItem,
-  GridEventListener,
   GridRenderCellParams,
-  GridRow,
   GridRowParams,
   GridToolbar,
   GridValueGetterParams
@@ -58,9 +56,6 @@ import Map from '../components/Map';
 import { formatSelect, formatSelectMultiple } from '../../../utils/formatters';
 import { CustomSnackBarContext } from 'src/contexts/CustomSnackBarContext';
 import { CompanySettingsContext } from '../../../contexts/CompanySettingsContext';
-import { DataGridProProps, useGridApiRef } from '@mui/x-data-grid-pro';
-import { GroupingCellWithLazyLoading } from '../Assets/GroupingCellWithLazyLoading';
-import { AssetRow } from '../../../models/owns/asset';
 import useAuth from '../../../hooks/useAuth';
 import { PermissionEntity } from '../../../models/owns/role';
 import PermissionErrorMessage from '../components/PermissionErrorMessage';
@@ -70,8 +65,7 @@ import { getLocationUrl } from '../../../utils/urlPaths';
 import { exportEntity } from '../../../slices/exports';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 import { PlanFeature } from '../../../models/owns/subscriptionPlan';
-import useGridStatePersist from '../../../hooks/useGridStatePersist';
-import { Pageable, Sort } from '../../../models/owns/page';
+import { Pageable } from '../../../models/owns/page';
 import { googleMapsConfig } from '../../../config';
 import { getErrorMessage } from '../../../utils/api';
 
@@ -97,7 +91,6 @@ function Locations() {
   ]);
 
   const { loadingExport } = useSelector((state) => state.exports);
-  const apiRef = useGridApiRef();
   const tabs = [
     { value: 'list', label: t('list_view') },
     ...(apiKey ? [{ value: 'map', label: t('map_view') }] : [])
@@ -194,68 +187,6 @@ function Locations() {
   }, [pageable]);
 
   useEffect(() => {
-    if (apiRef.current.getRow) {
-      const handleRowExpansionChange: GridEventListener<
-        'rowExpansionChange'
-      > = async (node) => {
-        const row = apiRef.current.getRow(node.id) as AssetRow | null;
-        if (!node.childrenExpanded || !row || row.childrenFetched) {
-          return;
-        }
-        apiRef.current.updateRows([
-          {
-            id: `Loading Locations under ${row.name} #${node.id}`,
-            hierarchy: [...row.hierarchy, '']
-          }
-        ]);
-        if (
-          !deployedLocations.find(
-            (deployedLocation) => deployedLocation.id === row.id
-          )
-        )
-          setDeployedLocations(
-            deployedLocations.concat({
-              id: row.id,
-              hierarchy: row.hierarchy
-            })
-          );
-        dispatch(getLocationChildren(row.id, row.hierarchy, pageable));
-      };
-      /**
-       * By default, the grid does not toggle the expansion of rows with 0 children
-       * We need to override the `cellKeyDown` event listener to force the expansion if there are children on the server
-       */
-      const handleCellKeyDown: GridEventListener<'cellKeyDown'> = (
-        params,
-        event
-      ) => {
-        const cellParams = apiRef.current.getCellParams(
-          params.id,
-          params.field
-        );
-        if (cellParams.colDef.type === 'treeDataGroup' && event.key === ' ') {
-          event.stopPropagation();
-          event.preventDefault();
-          event.defaultMuiPrevented = true;
-
-          apiRef.current.setRowChildrenExpansion(
-            params.id,
-            !params.rowNode.childrenExpanded
-          );
-        }
-      };
-
-      apiRef.current.subscribeEvent(
-        'rowExpansionChange',
-        handleRowExpansionChange
-      );
-      apiRef.current.subscribeEvent('cellKeyDown', handleCellKeyDown, {
-        isFirst: true
-      });
-    }
-  }, [apiRef]);
-
-  useEffect(() => {
     if (locations?.length && locationId && isNumeric(locationId)) {
       handleOpenDetails(Number(locationId));
     }
@@ -338,7 +269,6 @@ function Locations() {
       }
     }
   ];
-  useGridStatePersist(apiRef, columns, 'location');
   const fields: Array<IField> = [
     {
       name: 'name',
@@ -516,33 +446,6 @@ function Locations() {
       </DialogContent>
     </Dialog>
   );
-  const groupingColDef: DataGridProProps['groupingColDef'] = {
-    headerName: t('hierarchy'),
-    disableReorder: true,
-    renderCell: (params) => <GroupingCellWithLazyLoading {...params} />,
-    flex: 0.5
-  };
-  const CustomRow = (props: React.ComponentProps<typeof GridRow>) => {
-    const rowNode = apiRef.current.getRowNode(props.rowId);
-    const theme = useTheme();
-
-    return (
-      <GridRow
-        {...props}
-        style={
-          (rowNode?.depth ?? 0) > 0
-            ? {
-                backgroundColor:
-                  rowNode.depth % 2 === 0
-                    ? theme.colors.primary.light
-                    : theme.colors.primary.main,
-                color: 'white'
-              }
-            : undefined
-        }
-      />
-    );
-  };
   const renderMenu = () => (
     <Menu
       id="basic-menu"
@@ -750,17 +653,10 @@ function Locations() {
               <Box sx={{ width: '95%' }}>
                 <CustomDataGrid
                   pro
-                  treeData
                   columns={columns}
-                  rows={locationsHierarchy}
+                  rows={locations}
                   loading={loadingGet}
-                  apiRef={apiRef}
-                  getTreeDataPath={(row) =>
-                    row.hierarchy.map((id) => id.toString())
-                  }
-                  groupingColDef={groupingColDef}
                   components={{
-                    Row: CustomRow,
                     NoRowsOverlay: () => (
                       <NoRowsMessageWrapper
                         message={t('noRows.location.message')}
@@ -773,27 +669,6 @@ function Locations() {
                     columns: {
                       columnVisibilityModel: {}
                     }
-                  }}
-                  sortingMode="client"
-                  onSortModelChange={(model, details) => {
-                    const mapper: Record<string, string> = {
-                      name: 'name',
-                      address: 'address',
-                      createdAt: 'createdAt',
-                      customId: 'customId'
-                    };
-                    if (
-                      model.length &&
-                      !Object.keys(mapper).includes(model[0].field)
-                    )
-                      return;
-                    //model length is at max 1
-                    setPageable((prevState) => ({
-                      ...prevState,
-                      sort: model.length
-                        ? [`${mapper[model[0].field]},${model[0].sort}` as Sort]
-                        : []
-                    }));
                   }}
                 />
               </Box>

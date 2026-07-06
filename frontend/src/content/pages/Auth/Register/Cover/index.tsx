@@ -27,7 +27,7 @@ import ChevronRightTwoToneIcon from '@mui/icons-material/ChevronRightTwoTone';
 import ChevronLeftTwoToneIcon from '@mui/icons-material/ChevronLeftTwoTone';
 import { useBrand } from '../../../../../hooks/useBrand';
 import CompanyLogos from '../../../../landing/components/CompanyLogos';
-import { isCloudVersion } from '../../../../../config';
+import { isCloudVersion, isEmailVerificationEnabled } from '../../../../../config';
 
 const Content = styled(Box)(
   () => `
@@ -344,11 +344,29 @@ function RegisterCover() {
                   {t('signup_description')}
                 </Typography>
               </Box>
-              <JWTRegister
-                email={searchParams.get('email')}
-                role={Number(searchParams.get('role'))}
-                subscriptionPlanId={searchParams.get('subscription-plan-id')}
-              />
+              <Box>
+                {isEmailVerificationEnabled && !searchParams.get('role') ? (
+                  <Box textAlign="center" py={4}>
+                    <Typography variant="h4" gutterBottom>
+                      Invitation Required
+                    </Typography>
+                    <Typography variant="body1" color="text.secondary">
+                      Please use the invitation link sent to your email to create your account.
+                    </Typography>
+                    <Box mt={2}>
+                      <Link component={RouterLink} to="/account/login">
+                        Already have an account? Sign in here
+                      </Link>
+                    </Box>
+                  </Box>
+                ) : (
+                  <JWTRegister
+                    email={searchParams.get('email')}
+                    role={Number(searchParams.get('role'))}
+                    subscriptionPlanId={searchParams.get('subscription-plan-id')}
+                  />
+                )}
+              </Box>
               <Box mt={4}>
                 <Typography
                   component="span"

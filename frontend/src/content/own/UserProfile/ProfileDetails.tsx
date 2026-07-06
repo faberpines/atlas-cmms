@@ -15,6 +15,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import LockTwoToneIcon from '@mui/icons-material/LockTwoTone';
+import LanguageTwoToneIcon from '@mui/icons-material/LanguageTwoTone';
 import Text from 'src/components/Text';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -25,7 +26,7 @@ import useAuth from '../../../hooks/useAuth';
 import { CustomSnackBarContext } from '../../../contexts/CustomSnackBarContext';
 
 function ProfileDetails() {
-  const { t }: { t: any } = useTranslation();
+  const { t, i18n }: { t: any; i18n: any } = useTranslation();
   const {
     user,
     userSettings,
@@ -41,6 +42,14 @@ function ProfileDetails() {
   const [openPasswordModal, setOpenPasswordModal] = useState<boolean>(false);
   const handleOpenPasswordModal = () => setOpenPasswordModal(true);
   const handleClosePasswordModal = () => setOpenPasswordModal(false);
+
+  // Current language — reacts to changes
+  const currentLang = i18n.language?.startsWith('es') ? 'es' : 'en';
+
+  const handleLanguageChange = (lang: 'en' | 'es') => {
+    i18n.changeLanguage(lang);
+    showSnackBar(t('language_saved'), 'success');
+  };
 
   useEffect(() => {
     fetchUserSettings();
@@ -433,6 +442,53 @@ function ProfileDetails() {
                 })}
               </Grid>
             </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid item xs={12}>
+        <Card>
+          <Box
+            p={3}
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Box>
+              <Typography variant="h4" gutterBottom>
+                {t('language_preferences')}
+              </Typography>
+              <Typography variant="subtitle2">
+                {t('language_preferences_description')}
+              </Typography>
+            </Box>
+            <LanguageTwoToneIcon sx={{ color: 'text.secondary', fontSize: 32 }} />
+          </Box>
+          <Divider />
+          <CardContent sx={{ p: 4 }}>
+            <Box display="flex" gap={2} flexWrap="wrap">
+              <Button
+                variant={currentLang === 'en' ? 'contained' : 'outlined'}
+                onClick={() => handleLanguageChange('en')}
+                sx={{ minWidth: 160, justifyContent: 'flex-start', gap: 1.5, px: 2 }}
+              >
+                <span style={{ fontSize: 20 }}>🇺🇸</span>
+                <Box textAlign="left">
+                  <Typography variant="body2" fontWeight="bold" lineHeight={1}>English</Typography>
+                  <Typography variant="caption" sx={{ opacity: 0.75 }}>United States</Typography>
+                </Box>
+              </Button>
+              <Button
+                variant={currentLang === 'es' ? 'contained' : 'outlined'}
+                onClick={() => handleLanguageChange('es')}
+                sx={{ minWidth: 160, justifyContent: 'flex-start', gap: 1.5, px: 2 }}
+              >
+                <span style={{ fontSize: 20 }}>🇪🇸</span>
+                <Box textAlign="left">
+                  <Typography variant="body2" fontWeight="bold" lineHeight={1}>Español</Typography>
+                  <Typography variant="caption" sx={{ opacity: 0.75 }}>Spanish</Typography>
+                </Box>
+              </Button>
+            </Box>
           </CardContent>
         </Card>
       </Grid>

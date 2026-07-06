@@ -2,6 +2,7 @@ package com.grash.model.enums;
 
 public enum PermissionEntity {
     PEOPLE_AND_TEAMS,
+    LOTO,
     CATEGORIES,
     CATEGORIES_WEB,
     WORK_ORDERS,
@@ -15,5 +16,7 @@ public enum PermissionEntity {
     LOCATIONS,
     SETTINGS,
     REQUESTS,
-    ANALYTICS
+    ANALYTICS,
+    FLEET,
+    HEARING_CONSERVATION
 }

@@ -50,7 +50,7 @@ import { onSearchQueryChange } from '../../../utils/overall';
 import SearchInput from '../components/SearchInput';
 import CancelIcon from '@mui/icons-material/Cancel';
 import ConfirmDialog from '../components/ConfirmDialog';
-import { useGridApiRef } from '@mui/x-data-grid-pro';
+import { useGridApiRef } from '@mui/x-data-grid';
 import useGridStatePersist from '../../../hooks/useGridStatePersist';
 import InviteUserDialog from './components/InviteUserDialog';
 import { isEmailVerificationEnabled } from '../../../config';
@@ -148,15 +148,11 @@ const People = ({ openModal, handleCloseModal }: PropsType) => {
       type2: 'role',
       label: t('role')
     },
-    ...(isEmailVerificationEnabled
-      ? []
-      : [
-          {
-            name: 'password',
-            type: 'text',
-            label: t('password_leave_empty_if_you_dont_want_to_change')
-          } as IField
-        ])
+    {
+      name: 'password',
+      type: 'text',
+      label: t('password_leave_empty_if_you_dont_want_to_change')
+    } as IField
   ];
   const getFields = () => {
     let fields = [...defautfields];

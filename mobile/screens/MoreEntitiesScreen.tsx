@@ -26,8 +26,8 @@ export default function MoreEntitiesScreen({
     {
       label: 'locations',
       icon: 'map-marker',
-      color: '#2491d1',
-      backgroundColor: '#c8cfd3',
+      color: '#4a7c2f',
+      backgroundColor: '#d3e8c8',
       link: 'Locations',
       visible: hasViewPermission(PermissionEntity.LOCATIONS),
       uiConfigKey: 'locations'
@@ -44,8 +44,8 @@ export default function MoreEntitiesScreen({
     {
       label: 'parts',
       icon: 'archive-outline',
-      color: '#8324d1',
-      backgroundColor: '#cfc8d3',
+      color: '#6b7a54',
+      backgroundColor: '#dde5d3',
       link: 'Parts',
       visible: hasViewPermission(PermissionEntity.PARTS_AND_MULTIPARTS)
     },
@@ -61,8 +61,8 @@ export default function MoreEntitiesScreen({
     {
       label: 'people_teams',
       icon: 'account',
-      color: '#245bd1',
-      backgroundColor: '#c8ccd3',
+      color: '#2d5a1a',
+      backgroundColor: '#cce0c4',
       link: 'PeopleTeams',
       visible: hasViewPermission(PermissionEntity.PEOPLE_AND_TEAMS)
     },
@@ -75,6 +75,14 @@ export default function MoreEntitiesScreen({
       link: 'VendorsCustomers',
       visible: hasViewPermission(PermissionEntity.VENDORS_AND_CUSTOMERS),
       uiConfigKey: 'vendorsAndCustomers'
+    },
+    {
+      label: 'inspections',
+      icon: 'clipboard-check-outline',
+      color: '#4a7c2f',
+      backgroundColor: '#d3e8c8',
+      link: 'Inspections',
+      visible: true
     }
   ];
   return (

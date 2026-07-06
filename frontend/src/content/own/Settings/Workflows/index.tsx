@@ -60,9 +60,9 @@ import { VendorMiniDTO } from '../../../../models/owns/vendor';
 import { TeamMiniDTO } from '../../../../models/owns/team';
 import Category from '../../../../models/owns/category';
 import DateTimePicker from '@mui/lab/DateTimePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers-pro';
-import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
-import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import { useBrand } from '../../../../hooks/useBrand';
 import { getErrorMessage } from '../../../../utils/api';
@@ -789,25 +789,24 @@ function Workflows() {
               />
             ) : config.type === 'dateRange' ? (
               <LocalizationProvider
-                localeText={{ start: t('start'), end: t('end') }}
                 dateAdapter={AdapterDayjs}
               >
-                <DateRangePicker
-                  value={
-                    condition.values?.length > 1
-                      ? [condition.values[0], condition.values[1]]
-                      : [null, null]
-                  }
-                  onChange={(newValues) => {
-                    handleConditionValuesChange(newValues as string[], index);
+                <DatePicker
+                  label={t('start')}
+                  value={condition.values?.length > 0 ? condition.values[0] : null}
+                  onChange={(newValue) => {
+                    handleConditionValuesChange([newValue, condition.values?.[1] ?? null] as string[], index);
                   }}
-                  renderInput={(startProps, endProps) => (
-                    <>
-                      <TextField {...startProps} />
-                      <Box sx={{ mx: 2 }}> {t('to')} </Box>
-                      <TextField {...endProps} />
-                    </>
-                  )}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+                <Box sx={{ mx: 2 }}> {t('to')} </Box>
+                <DatePicker
+                  label={t('end')}
+                  value={condition.values?.length > 1 ? condition.values[1] : null}
+                  onChange={(newValue) => {
+                    handleConditionValuesChange([condition.values?.[0] ?? null, newValue] as string[], index);
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
                 />
               </LocalizationProvider>
             ) : null}
@@ -857,25 +856,24 @@ function Workflows() {
             />
           ) : config.type === 'dateRange' ? (
             <LocalizationProvider
-              localeText={{ start: t('start'), end: t('end') }}
               dateAdapter={AdapterDayjs}
             >
-              <DateRangePicker
-                value={
-                  action.values?.length > 1
-                    ? [action.values[0], action.values[1]]
-                    : [null, null]
-                }
-                onChange={(newValues) => {
-                  handleActionValuesChange(newValues as string[]);
+              <DatePicker
+                label={t('start')}
+                value={action.values?.length > 0 ? action.values[0] : null}
+                onChange={(newValue) => {
+                  handleActionValuesChange([newValue, action.values?.[1] ?? null] as string[]);
                 }}
-                renderInput={(startProps, endProps) => (
-                  <>
-                    <TextField {...startProps} />
-                    <Box sx={{ mx: 2 }}> {t('to')} </Box>
-                    <TextField {...endProps} />
-                  </>
-                )}
+                renderInput={(params) => <TextField {...params} />}
+              />
+              <Box sx={{ mx: 2 }}> {t('to')} </Box>
+              <DatePicker
+                label={t('end')}
+                value={action.values?.length > 1 ? action.values[1] : null}
+                onChange={(newValue) => {
+                  handleActionValuesChange([action.values?.[0] ?? null, newValue] as string[]);
+                }}
+                renderInput={(params) => <TextField {...params} />}
               />
             </LocalizationProvider>
           ) : null}

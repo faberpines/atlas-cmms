@@ -33,55 +33,50 @@ import CustomDataGrid, {
   CustomDatagridColumn
 } from '../components/CustomDatagrid';
 import {
-  GridEventListener,
   GridRenderCellParams,
-  GridRow,
   GridValueGetterParams
 } from '@mui/x-data-grid';
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import {
   AssetDTO,
   AssetMiniDTO,
-  AssetRow,
   AssetStatus
 } from '../../../models/owns/asset';
 import Form from '../components/form';
 import * as Yup from 'yup';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { DataGridProProps, useGridApiRef } from '@mui/x-data-grid-pro';
 import { formatAssetValues } from '../../../utils/formatters';
-import { GroupingCellWithLazyLoading } from './GroupingCellWithLazyLoading';
 import { UserMiniDTO } from '../../../models/user';
 import UserAvatars from '../components/UserAvatars';
+import { PermissionEntity } from '../../../models/owns/role';
 import { enumerate } from '../../../utils/displayers';
 import { CustomSnackBarContext } from '../../../contexts/CustomSnackBarContext';
 import { CompanySettingsContext } from '../../../contexts/CompanySettingsContext';
 import { getAssetUrl } from '../../../utils/urlPaths';
 import useAuth from '../../../hooks/useAuth';
-import { PermissionEntity } from '../../../models/owns/role';
 import PermissionErrorMessage from '../components/PermissionErrorMessage';
 import NoRowsMessageWrapper from '../components/NoRowsMessageWrapper';
 import { isNumeric } from '../../../utils/validators';
 import { getSingleLocation } from '../../../slices/location';
 import { LocationMiniDTO } from '../../../models/owns/location';
+import AssetStatusTag from './components/AssetStatusTag';
 import { TeamMiniDTO } from '../../../models/owns/team';
 import { VendorMiniDTO } from '../../../models/owns/vendor';
 import Category from '../../../models/owns/category';
 import { exportEntity } from '../../../slices/exports';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
+import QrCode2TwoToneIcon from '@mui/icons-material/QrCode2TwoTone';
+import BarcodePrintDialog from '../components/BarcodePrintDialog';
 import {
   FilterField,
   Pageable,
-  SearchCriteria,
-  Sort
+  SearchCriteria
 } from '../../../models/owns/page';
 import Filters from './Filters';
 import { fireGa4Event, onSearchQueryChange } from '../../../utils/overall';
 import SearchInput from '../components/SearchInput';
 import File from '../../../models/owns/file';
 import { PlanFeature } from '../../../models/owns/subscriptionPlan';
-import useGridStatePersist from '../../../hooks/useGridStatePersist';
-import AssetStatusTag from './components/AssetStatusTag';
 import { getErrorMessage } from '../../../utils/api';
 
 const HIERARCHY_ZERO_PAGE_SIZE = 40;
@@ -101,12 +96,12 @@ function Assets() {
     hasFeature
   } = useAuth();
   const [openAddModal, setOpenAddModal] = useState<boolean>(false);
+  const [barcodePrintAsset, setBarcodePrintAsset] = useState<AssetDTO | null>(null);
   const dispatch = useDispatch();
   const { assetsHierarchy, loadingGet, loadingHierarchy, assets } = useSelector(
     (state) => state.assets
   );
   const { loadingExport } = useSelector((state) => state.exports);
-  const apiRef = useGridApiRef();
   const { getFormattedDate } = useContext(CompanySettingsContext);
   const { showSnackBar } = useContext(CustomSnackBarContext);
   const { locations } = useSelector((state) => state.locations);
@@ -386,9 +381,31 @@ function Assets() {
       width: 150,
       valueGetter: (params: GridValueGetterParams<string>) =>
         getFormattedDate(params.value)
+    },
+    {
+      field: 'printBarcode',
+      headerName: 'Barcode',
+      width: 90,
+      sortable: false,
+      filterable: false,
+      renderCell: (params: GridRenderCellParams<any, AssetDTO>) => {
+        const val = params.row.barCode || params.row.customId || params.row.serialNumber;
+        return (
+          <IconButton
+            size="small"
+            title="Print Barcode"
+            disabled={!val}
+            onClick={(e) => {
+              e.stopPropagation();
+              setBarcodePrintAsset(params.row);
+            }}
+          >
+            <QrCode2TwoToneIcon fontSize="small" />
+          </IconButton>
+        );
+      }
     }
   ];
-  useGridStatePersist(apiRef, columns, 'asset');
 
   // Mapping for column fields to API field names for sorting
   const fieldMapping: Record<string, string> = {
@@ -601,65 +618,6 @@ function Assets() {
   const handleReset = (callApi: boolean) => {
     dispatch(resetAssetsHierarchy(callApi));
   };
-  useEffect(() => {
-    if (apiRef.current.getRow) {
-      const handleRowExpansionChange: GridEventListener<
-        'rowExpansionChange'
-      > = async (node) => {
-        const row = apiRef.current.getRow(node.id) as AssetRow | null;
-        if (!node.childrenExpanded || !row || row.childrenFetched) {
-          return;
-        }
-        apiRef.current.updateRows([
-          {
-            id: t('loading_assets', { name: row.name, id: node.id }),
-            hierarchy: [...row.hierarchy, '']
-          }
-        ]);
-        if (
-          !deployedAssets.find((deployedAsset) => deployedAsset.id === row.id)
-        )
-          setDeployedAssets(
-            deployedAssets.concat({
-              id: row.id,
-              hierarchy: row.hierarchy
-            })
-          );
-        dispatch(getAssetChildren(row.id, row.hierarchy, pageable));
-      };
-      /**
-       * By default, the grid does not toggle the expansion of rows with 0 children
-       * We need to override the `cellKeyDown` event listener to force the expansion if there are children on the server
-       */
-      const handleCellKeyDown: GridEventListener<'cellKeyDown'> = (
-        params,
-        event
-      ) => {
-        const cellParams = apiRef.current.getCellParams(
-          params.id,
-          params.field
-        );
-        if (cellParams.colDef.type === 'treeDataGroup' && event.key === ' ') {
-          event.stopPropagation();
-          event.preventDefault();
-          event.defaultMuiPrevented = true;
-
-          apiRef.current.setRowChildrenExpansion(
-            params.id,
-            !params.rowNode.childrenExpanded
-          );
-        }
-      };
-
-      apiRef.current.subscribeEvent(
-        'rowExpansionChange',
-        handleRowExpansionChange
-      );
-      apiRef.current.subscribeEvent('cellKeyDown', handleCellKeyDown, {
-        isFirst: true
-      });
-    }
-  }, [apiRef]);
 
   const renderAssetAddModal = () => (
     <Dialog
@@ -744,36 +702,19 @@ function Assets() {
     </Dialog>
   );
 
-  const groupingColDef: DataGridProProps['groupingColDef'] = {
-    headerName: t('hierarchy'),
-    disableReorder: true,
-    renderCell: (params) => <GroupingCellWithLazyLoading {...params} />
-  };
-  const CustomRow = (props: React.ComponentProps<typeof GridRow>) => {
-    const rowNode = apiRef.current.getRowNode(props.rowId);
-    const theme = useTheme();
-
-    return (
-      <GridRow
-        {...props}
-        style={
-          (rowNode?.depth ?? 0) > 0
-            ? {
-                backgroundColor:
-                  rowNode.depth % 2 === 0
-                    ? theme.colors.primary.light
-                    : theme.colors.primary.main,
-                color: 'white'
-              }
-            : undefined
-        }
-      />
-    );
-  };
   if (hasViewPermission(PermissionEntity.ASSETS))
     return (
       <>
         {renderAssetAddModal()}
+        {barcodePrintAsset && (
+          <BarcodePrintDialog
+            open={!!barcodePrintAsset}
+            onClose={() => setBarcodePrintAsset(null)}
+            value={barcodePrintAsset.barCode || barcodePrintAsset.customId || barcodePrintAsset.serialNumber || ''}
+            label={barcodePrintAsset.name}
+            sublabel={barcodePrintAsset.customId ? `ID: ${barcodePrintAsset.customId}` : undefined}
+          />
+        )}
         <Helmet>
           <title>{t('assets')}</title>
         </Helmet>
@@ -829,26 +770,16 @@ function Assets() {
             <Box sx={{ width: '95%' }}>
               <CustomDataGrid
                 pro
-                treeData={view === 'hierarchy'}
                 columns={columns}
-                rows={view === 'hierarchy' ? assetsHierarchy : assets.content}
-                apiRef={apiRef}
+                rows={assets.content}
                 getRowHeight={() => 'auto'}
-                getTreeDataPath={(row) =>
-                  view === 'hierarchy'
-                    ? row.hierarchy.map((id) => id.toString())
-                    : [row.id.toString()]
-                }
                 disableColumnFilter
-                loading={loadingHierarchy}
-                groupingColDef={
-                  view === 'hierarchy' ? groupingColDef : undefined
-                }
-                paginationMode={view === 'hierarchy' ? undefined : 'server'}
-                sortingMode={view === 'hierarchy' ? 'client' : undefined}
+                loading={loadingGet}
+                paginationMode='server'
+                rowCount={assets.totalElements}
+                page={criteria.pageNum}
+                pageSize={criteria.pageSize}
                 onSortModelChange={(model) => {
-                  if (view !== 'hierarchy') return;
-
                   if (model.length === 0) {
                     setCriteria({
                       ...criteria,
@@ -861,21 +792,18 @@ function Assets() {
                   const field = model[0].field;
                   const mappedField = fieldMapping[field];
 
-                  // Only proceed if we have a mapping for this field
                   if (!mappedField) return;
 
-                  setPageable((prevState) => ({
-                    ...prevState,
-                    sort: model.length
-                      ? [`${mappedField},${model[0].sort}` as Sort]
-                      : []
-                  }));
+                  setCriteria({
+                    ...criteria,
+                    sortField: mappedField,
+                    direction: model[0].sort?.toUpperCase() as 'ASC' | 'DESC'
+                  });
                 }}
                 onPageSizeChange={onPageSizeChange}
                 onPageChange={onPageChange}
-                rowsPerPageOptions={view === 'list' ? [10, 20, 50] : undefined}
+                rowsPerPageOptions={[10, 20, 50]}
                 components={{
-                  Row: CustomRow,
                   NoRowsOverlay: () => (
                     <NoRowsMessageWrapper
                       message={t('noRows.asset.message')}
