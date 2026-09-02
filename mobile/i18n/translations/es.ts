@@ -80,7 +80,7 @@ const locale = {
   'eam.descriptions.0':
     '¿Frustrado por intentar organizar el caos de equipos de la empresa, preguntándose si se los ha cuidado adecuadamente, sin saber cuánto cuesta mantenerlos y todos los demás dolores de cabeza que conlleva la gestión de activos?',
   'eam.descriptions.1':
-    'El software de gestión de activos empresariales de Atlas CMMS se puede utilizar para entre 10 y 1 000 000 de activos, lo que le permite realizar un seguimiento exactamente de lo que desea, de la forma que desea, en una estructura de árbol fácil de usar y con capacidad de búsqueda.',
+    'El software de gestión de activos empresariales de Bay Baby Maintenance se puede utilizar para entre 10 y 1 000 000 de activos, lo que le permite realizar un seguimiento exactamente de lo que desea, de la forma que desea, en una estructura de árbol fácil de usar y con capacidad de búsqueda.',
   'eam.checks.0':
     'Conozca el estado de sus activos en cada momento y cuánto le están costando',
   'eam.checks.1': 'Vea registros de mantenimiento completos y detallados.',
@@ -938,8 +938,6 @@ const locale = {
   unchecked: 'Sin marcar',
   general_notes: 'Notas Generales',
   asset_required: 'El activo es requerido',
-  PENDING: 'Pendiente',
-  IN_PROGRESS: 'En Progreso',
   COMPLETED: 'Completado',
   FAILED: 'Fallido',
   ai_assistant: 'Asistente de Mantenimiento IA',

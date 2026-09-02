@@ -33,6 +33,18 @@ function patch<T>(url, data, options?: Options) {
   });
 }
 
+function postFormData<T>(url: string, formData: FormData) {
+  const accessToken = localStorage.getItem('accessToken');
+  return fetch(apiUrl + url, {
+    method: 'POST',
+    headers: accessToken ? { Authorization: 'Bearer ' + accessToken } : {},
+    body: formData
+  }).then(async (response) => {
+    if (!response.ok) throw new Error(JSON.stringify(await response.json()));
+    return response.json() as Promise<T>;
+  });
+}
+
 function deletes<T>(url, options?: Options) {
   return api<T>(apiUrl + url, { ...options, method: 'DELETE' });
 }
@@ -67,4 +79,4 @@ export const getErrorMessage = (
   }
 };
 
-export default { get, patch, post, deletes };
+export default { get, patch, post, postFormData, deletes };

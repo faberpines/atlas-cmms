@@ -43,6 +43,7 @@ function Sidebar() {
   return (
     <>
       <SidebarWrapper
+        data-print-hide="true"
         sx={{
           display: {
             xs: 'none',
@@ -101,6 +102,7 @@ function Sidebar() {
         <SidebarFooter />
       </SidebarWrapper>
       <Drawer
+        data-print-hide="true"
         sx={{
           boxShadow: `${theme.sidebar.boxShadow}`
         }}

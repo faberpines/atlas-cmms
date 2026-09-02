@@ -1,4 +1,4 @@
-package com.atlas.cmms
+package com.baybabyproduce.maintenance
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build

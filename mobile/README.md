@@ -1,8 +1,8 @@
-# Atlas CMMS Mobile App
+# Bay Baby Maintenance Android App
 
-This project aims to help manage assets, schedule maintenance and track work orders. This is the mobile app developed
-with React Native.
-You can use the [live app](https://play.google.com/store/apps/details?id=com.atlas.cmms) and configure it with your custom server url, or build the app locally
+This is the native React Native/Expo client for the Bay Baby Produce CMMS. It
+supports work orders, assets, inspections, parts, locations, requests, barcode
+and NFC scanning, attachments, audio, and notifications.
 
 **And please star the repo**.
 
@@ -22,19 +22,30 @@ Set these environment variables in the command line or creating a `.env` file
 
 | Name       | Required | Description         | Default Value |
 |------------|----------|---------------------|---------------|
-| API_URL    | Yes      | Your public api url | (empty)       |
+| API_URL | Yes | Public **HTTPS** CMMS API URL | (empty) |
+| EAS_PROJECT_ID | For cloud builds | Company-owned Expo project ID | (empty) |
+| GOOGLE_SERVICES_JSON | For remote push | Bay Baby Firebase Android config | (empty) |
 
 ## Build
 ### Setup
-- Create a firebase project. Export `google-services.json`.
-- Place the json file in `android/app`
-- Create an [expo](https://expo.dev) account.
-- Run `npm install -g eas-cli`
-### Generate apk
+
+Copy `.env.example` to `.env`, set the production API URL, create a
+company-owned [Expo](https://expo.dev) project with `npx eas init`, and run:
+
 ```shell
-eas build --profile previewAndroid --platform android
+npm run store:check
+npm run typecheck
 ```
-It will generate an apk in expo.
+
+### Generate builds
+
+```shell
+npm run build:android:preview     # installable APK
+npm run build:android:production  # Play Store AAB
+```
+
+See [PLAY_STORE_RELEASE.md](PLAY_STORE_RELEASE.md) for Firebase, signing, Play
+Console, privacy, and release requirements.
 ## Getting help
 
 If you have questions, concerns, bug reports, etc, please file an issue in this repository's Issue Tracker or send an

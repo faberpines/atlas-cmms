@@ -985,6 +985,7 @@ function WorkOrders() {
             {currentTab === 'list' ? (
               <CustomDataGrid
                 apiRef={apiRef}
+                storageKey="work_orders"
                 pageSize={criteria.pageSize}
                 page={criteria.pageNum}
                 columns={columns}
@@ -995,11 +996,6 @@ function WorkOrders() {
                 disableColumnFilter
                 paginationMode="server"
                 sortingMode="server"
-                initialState={{
-                  columns: {
-                    columnVisibilityModel: {}
-                  }
-                }}
                 onSortModelChange={(model) => {
                   if (model.length === 0) {
                     setCriteria({

@@ -33,7 +33,8 @@ export enum PermissionEntity {
   ANALYTICS = 'ANALYTICS',
   FLEET = 'FLEET',
   LOTO = 'LOTO',
-  HEARING_CONSERVATION = 'HEARING_CONSERVATION'
+  HEARING_CONSERVATION = 'HEARING_CONSERVATION',
+  JHA = 'JHA'
 }
 export type PermissionRoot =
   | 'createPermissions'

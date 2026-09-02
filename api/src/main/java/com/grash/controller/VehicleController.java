@@ -7,12 +7,14 @@ import com.grash.model.LoraDevice;
 import com.grash.model.OwnUser;
 import com.grash.model.Vehicle;
 import com.grash.model.VehicleLocation;
+import com.grash.model.VehicleUsageLog;
 import com.grash.model.enums.PermissionEntity;
 import com.grash.model.enums.RoleType;
 import com.grash.service.LoraDeviceService;
 import com.grash.service.UserService;
 import com.grash.service.VehicleLocationService;
 import com.grash.service.VehicleService;
+import com.grash.service.VehicleUsageLogService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,6 +26,7 @@ import org.springframework.web.client.RestTemplate;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +42,7 @@ public class VehicleController {
     private final VehicleLocationService vehicleLocationService;
     private final LoraDeviceService loraDeviceService;
     private final UserService userService;
+    private final VehicleUsageLogService vehicleUsageLogService;
     private final RestTemplate restTemplate = new RestTemplate();
 
     @GetMapping("")
@@ -213,5 +217,52 @@ public class VehicleController {
         }
         loraDeviceService.delete(id);
         return ResponseEntity.ok(new SuccessResponse(true, "LoRa device deleted"));
+    }
+
+    // ── Usage Log endpoints ────────────────────────────────────────────────
+
+    @GetMapping("/{id}/usage-logs")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<List<VehicleUsageLog>> getUsageLogs(@PathVariable Long id,
+                                                               HttpServletRequest req) {
+        OwnUser user = userService.whoami(req);
+        vehicleService.findByIdAndCompany(id, user.getCompany().getId())
+                .orElseThrow(() -> new CustomException("Vehicle not found", HttpStatus.NOT_FOUND));
+        return ResponseEntity.ok(vehicleUsageLogService.findByVehicleId(id));
+    }
+
+    @PostMapping("/{id}/usage-logs")
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
+    public ResponseEntity<VehicleUsageLog> createUsageLog(@PathVariable Long id,
+                                                           @RequestBody VehicleUsageLog log,
+                                                           HttpServletRequest req) {
+        OwnUser user = userService.whoami(req);
+        Vehicle vehicle = vehicleService.findByIdAndCompany(id, user.getCompany().getId())
+                .orElseThrow(() -> new CustomException("Vehicle not found", HttpStatus.NOT_FOUND));
+        log.setVehicle(vehicle);
+        log.setCompanyId(user.getCompany().getId());
+        log.setCreatedBy(user.getId());
+        log.setCreatedAt(Instant.now());
+        log.setUpdatedAt(Instant.now());
+        // update vehicle's preferred usage unit
+        if (log.getUnitType() != null) {
+            vehicle.setUsageUnit(log.getUnitType());
+            vehicleService.update(id, vehicle);
+        }
+        return ResponseEntity.ok(vehicleUsageLogService.create(log));
+    }
+
+    @DeleteMapping("/{id}/usage-logs/{logId}")
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
+    public ResponseEntity<SuccessResponse> deleteUsageLog(@PathVariable Long id,
+                                                           @PathVariable Long logId,
+                                                           HttpServletRequest req) {
+        OwnUser user = userService.whoami(req);
+        vehicleService.findByIdAndCompany(id, user.getCompany().getId())
+                .orElseThrow(() -> new CustomException("Vehicle not found", HttpStatus.NOT_FOUND));
+        vehicleUsageLogService.findById(logId)
+                .orElseThrow(() -> new CustomException("Log entry not found", HttpStatus.NOT_FOUND));
+        vehicleUsageLogService.delete(logId);
+        return ResponseEntity.ok(new SuccessResponse(true, "Usage log deleted"));
     }
 }

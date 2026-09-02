@@ -555,6 +555,7 @@ function PurchaseOrders() {
             >
               <Box sx={{ width: '95%' }}>
                 <CustomDataGrid
+                  storageKey="purchase_orders"
                   columns={columns}
                   pageSize={criteria.pageSize}
                   page={criteria.pageNum}

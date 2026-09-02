@@ -26,6 +26,7 @@ import LockTwoToneIcon from '@mui/icons-material/LockTwoTone';
 import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
+import PrintTwoToneIcon from '@mui/icons-material/PrintTwoTone';
 import { DataGrid, GridEnrichedColDef } from '@mui/x-data-grid';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -99,6 +100,12 @@ function Loto() {
   const [form, setForm] = useState<LotoFormValues>(emptyForm);
   const [saving, setSaving] = useState(false);
   const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
+  const [printRecord, setPrintRecord] = useState<LotoRecord | null>(null);
+
+  const handlePrint = (record: LotoRecord) => {
+    setPrintRecord(record);
+    setTimeout(() => window.print(), 100);
+  };
 
   useEffect(() => {
     setTitle(t('loto'));
@@ -277,8 +284,13 @@ function Loto() {
       field: 'actions',
       type: 'actions',
       headerName: t('actions'),
-      width: 140,
+      width: 170,
       getActions: (params) => [
+        <Tooltip title={t('print')} key="print">
+          <IconButton size="small" onClick={() => handlePrint(params.row as LotoRecord)}>
+            <PrintTwoToneIcon fontSize="small" />
+          </IconButton>
+        </Tooltip>,
         ...(params.row.status === 'ACTIVE'
           ? [
               <Tooltip title={t('release_lockout')} key="release">
@@ -651,8 +663,160 @@ function Loto() {
             </Button>
           </DialogActions>
         </Dialog>
+
+        {/* Hidden print-only layout */}
+        <div id="loto-print-view" style={{ display: 'none' }}>
+          {printRecord && <LotoPrintView record={printRecord} />}
+        </div>
       </Box>
     </LocalizationProvider>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────────────── */
+/* Print-only LOTO permit layout                                               */
+/* ─────────────────────────────────────────────────────────────────────────── */
+function LotoPrintView({ record }: { record: LotoRecord }) {
+  const statusColors: Record<LotoStatus, string> = {
+    ACTIVE: '#c0392b',
+    RELEASED: '#27ae60',
+    EXPIRED: '#e67e22'
+  };
+  const statusLabels: Record<LotoStatus, string> = {
+    ACTIVE: 'ACTIVE — LOCKED OUT',
+    RELEASED: 'RELEASED',
+    EXPIRED: 'EXPIRED'
+  };
+
+  const s: React.CSSProperties = {
+    fontFamily: 'Arial, sans-serif',
+    fontSize: '11pt',
+    color: '#000',
+    padding: '24px',
+    maxWidth: '800px',
+    margin: '0 auto'
+  };
+  const label: React.CSSProperties = { fontSize: '8pt', color: '#555', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 2 };
+  const val: React.CSSProperties = { fontSize: '11pt', marginBottom: 12, whiteSpace: 'pre-wrap', wordBreak: 'break-word' };
+  const sectionTitle: React.CSSProperties = { fontSize: '11pt', fontWeight: 'bold', borderBottom: '1px solid #999', paddingBottom: 4, marginTop: 18, marginBottom: 10 };
+  const twoCol: React.CSSProperties = { display: 'flex', gap: 32, flexWrap: 'wrap' };
+  const col: React.CSSProperties = { flex: '1 1 220px' };
+
+  const F = ({ lbl, v }: { lbl: string; v?: string | null }) => (
+    <div style={col}>
+      <div style={label}>{lbl}</div>
+      <div style={val}>{v || '—'}</div>
+    </div>
+  );
+
+  const fmt = (d?: string | null) =>
+    d ? dayjs(d).format('MM/DD/YYYY h:mm A') : '—';
+
+  return (
+    <div style={s}>
+      {/* Permit Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
+        <div>
+          <div style={{ fontSize: '18pt', fontWeight: 'bold', letterSpacing: '1px' }}>
+            🔒 LOCKOUT / TAGOUT PERMIT
+          </div>
+          <div style={{ fontSize: '9pt', color: '#444', marginTop: 2 }}>
+            Bay Baby Produce — OSHA 29 CFR 1910.147 Energy Control Program
+          </div>
+        </div>
+        <div style={{
+          border: `3px solid ${statusColors[record.status]}`,
+          borderRadius: 6,
+          padding: '6px 16px',
+          textAlign: 'center',
+          minWidth: 130
+        }}>
+          <div style={{ fontSize: '9pt', color: '#555' }}>STATUS</div>
+          <div style={{ fontSize: '12pt', fontWeight: 'bold', color: statusColors[record.status] }}>
+            {statusLabels[record.status]}
+          </div>
+        </div>
+      </div>
+
+      {/* Permit ID + Printed */}
+      <div style={{ fontSize: '9pt', color: '#666', marginBottom: 16 }}>
+        Permit #{record.id} &nbsp;|&nbsp; Printed: {dayjs().format('MM/DD/YYYY h:mm A')}
+      </div>
+
+      {/* Section 1 — Identity */}
+      <div style={sectionTitle}>1. Identification</div>
+      <div style={twoCol}>
+        <F lbl="Lockout Title" v={record.title} />
+        <F lbl="Energy Type" v={record.energyType} />
+      </div>
+      <div style={twoCol}>
+        <F lbl="Isolation Point" v={record.isolationPoint} />
+        <F lbl="Associated Asset / Equipment" v={record.asset?.name ?? null} />
+      </div>
+
+      {/* Section 2 — Personnel & Timing */}
+      <div style={sectionTitle}>2. Personnel &amp; Timing</div>
+      <div style={twoCol}>
+        <F lbl="Tagged By" v={record.taggedBy ? `${record.taggedBy.firstName} ${record.taggedBy.lastName}` : null} />
+        <F lbl="Tagged At" v={fmt(record.taggedAt)} />
+      </div>
+      <div style={twoCol}>
+        <F lbl="Expected Release" v={fmt(record.expectedReleaseAt)} />
+        {record.status === 'RELEASED' && (
+          <>
+            <F lbl="Released By" v={record.releasedBy ? `${record.releasedBy.firstName} ${record.releasedBy.lastName}` : null} />
+            <F lbl="Released At" v={fmt(record.releasedAt)} />
+          </>
+        )}
+      </div>
+
+      {/* Section 3 — Reason */}
+      <div style={sectionTitle}>3. Reason for Lockout</div>
+      <div style={val}>{record.reason || '—'}</div>
+
+      {/* Section 4 — Procedure */}
+      <div style={sectionTitle}>4. Isolation Procedure (Steps)</div>
+      <div style={{ ...val, border: '1px solid #ccc', borderRadius: 4, padding: '8px 12px', background: '#fafafa', minHeight: 80 }}>
+        {record.procedure || '—'}
+      </div>
+
+      {/* Section 5 — Notes */}
+      {record.notes && (
+        <>
+          <div style={sectionTitle}>5. Notes</div>
+          <div style={val}>{record.notes}</div>
+        </>
+      )}
+
+      {/* Signature block */}
+      <div style={{ marginTop: 40, borderTop: '2px solid #000', paddingTop: 16 }}>
+        <div style={{ ...sectionTitle, borderBottom: 'none', marginTop: 0 }}>Signatures</div>
+        <div style={twoCol}>
+          <div style={col}>
+            <div style={{ borderBottom: '1px solid #000', height: 36 }} />
+            <div style={{ ...label, marginTop: 4 }}>Authorized Employee (Lockout) — Signature</div>
+          </div>
+          <div style={col}>
+            <div style={{ borderBottom: '1px solid #000', height: 36 }} />
+            <div style={{ ...label, marginTop: 4 }}>Date</div>
+          </div>
+        </div>
+        <div style={{ ...twoCol, marginTop: 20 }}>
+          <div style={col}>
+            <div style={{ borderBottom: '1px solid #000', height: 36 }} />
+            <div style={{ ...label, marginTop: 4 }}>Authorized Employee (Release) — Signature</div>
+          </div>
+          <div style={col}>
+            <div style={{ borderBottom: '1px solid #000', height: 36 }} />
+            <div style={{ ...label, marginTop: 4 }}>Date</div>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 24, fontSize: '8pt', color: '#777', borderTop: '1px solid #ddd', paddingTop: 8 }}>
+        ⚠️ This permit must remain at the work site for the duration of the lockout. Keep a copy on file for OSHA compliance.
+      </div>
+    </div>
   );
 }
 

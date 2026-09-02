@@ -82,7 +82,7 @@ const locale = {
   'eam.descriptions.0':
     'Frusztrált a vállalat eszközeinek kaotikus rendszerezése miatt, azon töprengve, hogy az eszközöket megfelelően karbantartották-e, nem tudva, mennyibe kerül a fenntartásuk, és az eszközkezeléssel járó egyéb problémák miatt?',
   'eam.descriptions.1':
-    'Az Atlas CMMS Vállalati Eszközkezelő modulja 10-től 1 000 000 eszközig használható, lehetővé téve, hogy pontosan azt kövesse nyomon, amit szeretne, ahogyan szeretné, egy könnyen használható és kereshető fa struktúrában.',
+    'Az Bay Baby Maintenance Vállalati Eszközkezelő modulja 10-től 1 000 000 eszközig használható, lehetővé téve, hogy pontosan azt kövesse nyomon, amit szeretne, ahogyan szeretné, egy könnyen használható és kereshető fa struktúrában.',
   'eam.checks.0':
     'Ismerje eszközei állapotát bármely időpontban és azok költségeit',
   'eam.checks.1': 'Tekintse meg a teljes és részletes karbantartási naplókat.',

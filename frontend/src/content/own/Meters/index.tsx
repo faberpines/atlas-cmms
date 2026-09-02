@@ -586,12 +586,13 @@ function Meters() {
               <Box sx={{ width: '95%' }}>
                 <CustomDataGrid
                   apiRef={apiRef}
+                  storageKey="meters"
                   columns={columns}
-                  loading={loadingGet}
                   pageSize={criteria.pageSize}
                   page={criteria.pageNum}
                   rows={meters.content}
                   rowCount={meters.totalElements}
+                  loading={loadingGet}
                   pagination
                   paginationMode="server"
                   sortingMode="server"

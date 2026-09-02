@@ -81,10 +81,6 @@ export default function AssistantWidget() {
     }
   };
 
-  const speakLastMessage = () => {
-    // TTS not available without expo-speech; placeholder for future
-  };
-
   const renderMessage = ({ item }: { item: Message }) => {
     const isUser = item.role === 'user';
     return (
@@ -131,7 +127,6 @@ export default function AssistantWidget() {
               <Text variant="titleMedium" style={{ color: 'white', marginLeft: 8, flex: 1 }}>
                 {t('ai_assistant')}
               </Text>
-              <IconButton icon="volume-high" iconColor={speaking ? '#FFD700' : 'white'} onPress={speakLastMessage} />
               <IconButton icon="close" iconColor="white" onPress={() => { setOpen(false); }} />
             </View>
 

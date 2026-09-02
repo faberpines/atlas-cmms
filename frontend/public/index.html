@@ -33,6 +33,20 @@
 
   <!-- Runtime Environment -->
   <script src="%PUBLIC_URL%/runtime-env.js" defer></script>
+  <style>
+    @media print {
+      [data-print-hide="true"] { display: none !important; }
+      body { margin: 0; }
+      /* Hide the normal WO detail content during print */
+      [data-print-screen-only="true"] { display: none !important; }
+      /* Show the dedicated print views */
+      #wo-print-view { display: block !important; }
+      #hcp-print-view { display: block !important; }
+      #loto-print-view { display: block !important; }
+      /* Remove sidebar margin offset so content fills the page */
+      [data-print-content="true"] { margin-left: 0 !important; padding-top: 0 !important; }
+    }
+  </style>
 </head>
 
 <body>

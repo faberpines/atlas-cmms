@@ -1,7 +1,7 @@
 {
   "cli": {
-    "version": ">= 7.0.0",
-    "appVersionSource": "remote"
+    "version": ">= 18.0.6",
+    "appVersionSource": "local"
   },
   "build": {
     "development": {
@@ -20,11 +20,12 @@
       }
     },
     "production": {
-      "channel": "production-1-0-31",
+      "android": {
+        "buildType": "app-bundle"
+      },
       "ios": {
         "resourceClass": "m1-medium"
-      },
-      "autoIncrement": true
+      }
     },
     "previewAndroid": {
       "android": {

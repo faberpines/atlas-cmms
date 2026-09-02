@@ -27,6 +27,12 @@ import {
   Select,
   Stack,
   Tab,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   Tabs,
   TextField,
   Tooltip,
@@ -40,6 +46,9 @@ import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import LocationOnTwoToneIcon from '@mui/icons-material/LocationOnTwoTone';
 import RouterTwoToneIcon from '@mui/icons-material/RouterTwoTone';
 import DownloadTwoToneIcon from '@mui/icons-material/DownloadTwoTone';
+import SpeedTwoToneIcon from '@mui/icons-material/SpeedTwoTone';
+import BuildTwoToneIcon from '@mui/icons-material/BuildTwoTone';
+import HistoryTwoToneIcon from '@mui/icons-material/HistoryTwoTone';
 import { GridActionsCellItem, GridEnrichedColDef, GridRowParams } from '@mui/x-data-grid';
 import { useDispatch, useSelector } from '../../../store';
 import {
@@ -49,11 +58,13 @@ import {
   getLoraDevices,
   getVehicles
 } from '../../../slices/vehicle';
+import { addWorkOrder } from '../../../slices/workOrder';
 import Vehicle, {
   fuelTypes,
   FuelType,
   vehicleStatuses,
-  VehicleStatus
+  VehicleStatus,
+  VehicleUsageLog
 } from '../../../models/owns/vehicle';
 import { TitleContext } from '../../../contexts/TitleContext';
 import { CustomSnackBarContext } from 'src/contexts/CustomSnackBarContext';
@@ -62,7 +73,9 @@ import CustomDataGrid from '../components/CustomDatagrid';
 import PageTitleWrapper from '../../../components/PageTitleWrapper';
 import FleetMap from './FleetMap';
 import LoraDevices from './LoraDevices';
+import VehicleDetailDrawer from './VehicleDetailDrawer';
 import api from '../../../utils/api';
+import dayjs from 'dayjs';
 
 interface ImportAssetItem {
   id: number;
@@ -129,6 +142,19 @@ function Fleet() {
   const [vinLoading, setVinLoading] = useState(false);
   const [saving, setSaving] = useState(false);
 
+  // Usage log state
+  const [usageVehicle, setUsageVehicle] = useState<Vehicle | null>(null);
+  const [usageLogs, setUsageLogs] = useState<VehicleUsageLog[]>([]);
+  const [usageLogsLoading, setUsageLogsLoading] = useState(false);
+  const [usageForm, setUsageForm] = useState({ weekOf: dayjs().format('YYYY-MM-DD'), unitType: 'MILES' as 'MILES' | 'HOURS', value: '', notes: '' });
+  const [usageSaving, setUsageSaving] = useState(false);
+  const [showUsageHistory, setShowUsageHistory] = useState(false);
+
+  // Create Work Order state
+  const [woVehicle, setWoVehicle] = useState<Vehicle | null>(null);
+  const [woForm, setWoForm] = useState({ title: '', description: '', priority: 'MEDIUM', dueDate: '' });
+  const [woSaving, setWoSaving] = useState(false);
+
   // Import from assets
   const [openImport, setOpenImport] = useState(false);
   const [selectedAssetIds, setSelectedAssetIds] = useState<Set<number>>(new Set());
@@ -139,6 +165,9 @@ function Fleet() {
 
   // existing asset numbers already in fleet
   const existingAssetNumbers = new Set(vehicles.map((v) => v.assetNumber).filter(Boolean));
+
+  // Vehicle detail drawer
+  const [drawerVehicle, setDrawerVehicle] = useState<Vehicle | null>(null);
 
   const filteredImportAssets = useMemo(() => {
     const q = importSearch.toLowerCase().trim();
@@ -337,6 +366,80 @@ function Fleet() {
     return found ? found.color({ palette: { success: { main: '#57CA22' }, warning: { main: '#FFA319' }, error: { main: '#FF1943' } } }) : 'grey';
   };
 
+  // ── Open usage log dialog ──
+  const openUsageLog = async (vehicle: Vehicle) => {
+    setUsageVehicle(vehicle);
+    setUsageForm({
+      weekOf: dayjs().startOf('week').format('YYYY-MM-DD'),
+      unitType: (vehicle.usageUnit as 'MILES' | 'HOURS') || 'MILES',
+      value: '',
+      notes: ''
+    });
+    setShowUsageHistory(false);
+    setUsageLogsLoading(true);
+    try {
+      const logs = await api.get<VehicleUsageLog[]>(`fleet/vehicles/${vehicle.id}/usage-logs`);
+      setUsageLogs(logs || []);
+    } catch {
+      setUsageLogs([]);
+    } finally {
+      setUsageLogsLoading(false);
+    }
+  };
+
+  const handleSaveUsageLog = async () => {
+    if (!usageVehicle || !usageForm.value) {
+      showSnackBar(t('required_wo_title'), 'error');
+      return;
+    }
+    setUsageSaving(true);
+    try {
+      const payload = { weekOf: usageForm.weekOf, unitType: usageForm.unitType, value: parseFloat(usageForm.value), notes: usageForm.notes };
+      const newLog = await api.post<VehicleUsageLog>(`fleet/vehicles/${usageVehicle.id}/usage-logs`, payload);
+      setUsageLogs((prev) => [newLog, ...prev]);
+      setUsageForm({ weekOf: dayjs().startOf('week').format('YYYY-MM-DD'), unitType: usageForm.unitType, value: '', notes: '' });
+      showSnackBar(t('usage_logged'), 'success');
+    } catch {
+      showSnackBar(t('operation_failed'), 'error');
+    } finally {
+      setUsageSaving(false);
+    }
+  };
+
+  const handleDeleteUsageLog = async (logId: number) => {
+    if (!usageVehicle) return;
+    try {
+      await api.deletes(`fleet/vehicles/${usageVehicle.id}/usage-logs/${logId}`);
+      setUsageLogs((prev) => prev.filter((l) => l.id !== logId));
+      showSnackBar(t('usage_log_deleted'), 'success');
+    } catch {
+      showSnackBar(t('operation_failed'), 'error');
+    }
+  };
+
+  // ── Open create WO dialog ──
+  const openCreateWO = (vehicle: Vehicle) => {
+    setWoVehicle(vehicle);
+    setWoForm({ title: `${vehicle.name} Maintenance`, description: `Work order for fleet asset: ${vehicle.name}${vehicle.licensePlate ? ` (${vehicle.licensePlate})` : ''}`, priority: 'MEDIUM', dueDate: '' });
+  };
+
+  const handleCreateWO = async () => {
+    if (!woVehicle || !woForm.title) {
+      showSnackBar(t('required_wo_title'), 'error');
+      return;
+    }
+    setWoSaving(true);
+    try {
+      await dispatch(addWorkOrder({ title: woForm.title, description: woForm.description, priority: woForm.priority, dueDate: woForm.dueDate || null }));
+      showSnackBar(t('wo_created_success'), 'success');
+      setWoVehicle(null);
+    } catch {
+      showSnackBar(t('operation_failed'), 'error');
+    } finally {
+      setWoSaving(false);
+    }
+  };
+
   const columns: GridEnrichedColDef[] = [
     {
       field: 'name',
@@ -376,7 +479,20 @@ function Fleet() {
       field: 'actions',
       type: 'actions',
       headerName: t('actions'),
+      width: 180,
       getActions: (params: GridRowParams<Vehicle>) => [
+        <GridActionsCellItem
+          key="log-usage"
+          icon={<Tooltip title={t('log_usage')}><SpeedTwoToneIcon /></Tooltip>}
+          label={t('log_usage')}
+          onClick={() => openUsageLog(params.row)}
+        />,
+        <GridActionsCellItem
+          key="create-wo"
+          icon={<Tooltip title={t('create_work_order')}><BuildTwoToneIcon color="primary" /></Tooltip>}
+          label={t('create_work_order')}
+          onClick={() => openCreateWO(params.row)}
+        />,
         <GridActionsCellItem
           key="edit"
           icon={<Tooltip title={t('edit')}><EditTwoToneIcon /></Tooltip>}
@@ -435,7 +551,9 @@ function Fleet() {
               columns={columns}
               rows={vehicles}
               loading={loadingGet}
-              components={{ Toolbar: null }}
+              storageKey="fleet"
+              onRowClick={(params) => setDrawerVehicle(params.row as Vehicle)}
+              sx={{ '& .MuiDataGrid-row': { cursor: 'pointer' } }}
             />
           </Card>
         )}
@@ -798,6 +916,206 @@ function Fleet() {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* ── Log Usage Dialog ── */}
+      <Dialog open={usageVehicle !== null} onClose={() => setUsageVehicle(null)} maxWidth="sm" fullWidth>
+        {usageVehicle && (
+          <>
+            <DialogTitle>
+              <Box display="flex" alignItems="center" gap={1}>
+                <SpeedTwoToneIcon color="primary" />
+                <span>{t('log_usage')} — {usageVehicle.name}</span>
+              </Box>
+            </DialogTitle>
+            <DialogContent dividers>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <FormControl fullWidth>
+                    <InputLabel>{t('usage_unit')}</InputLabel>
+                    <Select
+                      value={usageForm.unitType}
+                      label={t('usage_unit')}
+                      onChange={(e) => setUsageForm({ ...usageForm, unitType: e.target.value as 'MILES' | 'HOURS' })}
+                    >
+                      <MenuItem value="MILES">{t('usage_unit_miles')}</MenuItem>
+                      <MenuItem value="HOURS">{t('usage_unit_hours')}</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label={t('week_of')}
+                    type="date"
+                    value={usageForm.weekOf}
+                    onChange={(e) => setUsageForm({ ...usageForm, weekOf: e.target.value })}
+                    fullWidth
+                    InputLabelProps={{ shrink: true }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label={`${t('usage_value')} (${usageForm.unitType === 'MILES' ? t('usage_unit_miles') : t('usage_unit_hours')})`}
+                    type="number"
+                    value={usageForm.value}
+                    onChange={(e) => setUsageForm({ ...usageForm, value: e.target.value })}
+                    fullWidth
+                    required
+                    inputProps={{ min: 0, step: 0.1 }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label={t('notes')}
+                    value={usageForm.notes}
+                    onChange={(e) => setUsageForm({ ...usageForm, notes: e.target.value })}
+                    fullWidth
+                    multiline
+                    rows={2}
+                  />
+                </Grid>
+              </Grid>
+
+              {/* History toggle */}
+              <Box mt={2}>
+                <Button
+                  size="small"
+                  startIcon={<HistoryTwoToneIcon />}
+                  onClick={() => setShowUsageHistory(!showUsageHistory)}
+                >
+                  {showUsageHistory ? t('hide') : t('usage_log_history')}
+                  {usageLogs.length > 0 && ` (${usageLogs.length})`}
+                </Button>
+              </Box>
+
+              {showUsageHistory && (
+                <Box mt={1}>
+                  {usageLogsLoading ? (
+                    <Box display="flex" justifyContent="center" py={2}><CircularProgress size={24} /></Box>
+                  ) : usageLogs.length === 0 ? (
+                    <Typography variant="body2" color="text.secondary" sx={{ py: 1 }}>{t('no_usage_logs')}</Typography>
+                  ) : (
+                    <TableContainer>
+                      <Table size="small">
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>{t('week_of')}</TableCell>
+                            <TableCell>{t('usage_value')}</TableCell>
+                            <TableCell>{t('usage_unit')}</TableCell>
+                            <TableCell>{t('notes')}</TableCell>
+                            <TableCell />
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {usageLogs.map((log) => (
+                            <TableRow key={log.id}>
+                              <TableCell>{dayjs(log.weekOf).format('MM/DD/YYYY')}</TableCell>
+                              <TableCell>{log.value.toLocaleString()}</TableCell>
+                              <TableCell>{log.unitType === 'MILES' ? t('usage_unit_miles') : t('usage_unit_hours')}</TableCell>
+                              <TableCell>{log.notes || '—'}</TableCell>
+                              <TableCell>
+                                <Tooltip title={t('delete')}>
+                                  <Button size="small" color="error" onClick={() => handleDeleteUsageLog(log.id)} sx={{ minWidth: 0, px: 0.5 }}>
+                                    <DeleteTwoToneIcon fontSize="small" />
+                                  </Button>
+                                </Tooltip>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  )}
+                </Box>
+              )}
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setUsageVehicle(null)}>{t('cancel')}</Button>
+              <Button
+                variant="contained"
+                onClick={handleSaveUsageLog}
+                disabled={usageSaving || !usageForm.value}
+                startIcon={usageSaving ? <CircularProgress size={16} /> : <SpeedTwoToneIcon />}
+              >
+                {usageSaving ? t('saving') : t('log_usage')}
+              </Button>
+            </DialogActions>
+          </>
+        )}
+      </Dialog>
+
+      {/* ── Create Work Order Dialog ── */}
+      <Dialog open={woVehicle !== null} onClose={() => setWoVehicle(null)} maxWidth="sm" fullWidth>
+        {woVehicle && (
+          <>
+            <DialogTitle>
+              <Box display="flex" alignItems="center" gap={1}>
+                <BuildTwoToneIcon color="primary" />
+                <span>{t('fleet_create_wo_title')} {woVehicle.name}</span>
+              </Box>
+            </DialogTitle>
+            <DialogContent dividers>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    label={t('wo_title')}
+                    value={woForm.title}
+                    onChange={(e) => setWoForm({ ...woForm, title: e.target.value })}
+                    fullWidth
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label={t('description')}
+                    value={woForm.description}
+                    onChange={(e) => setWoForm({ ...woForm, description: e.target.value })}
+                    fullWidth
+                    multiline
+                    rows={3}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <FormControl fullWidth>
+                    <InputLabel>{t('priority')}</InputLabel>
+                    <Select
+                      value={woForm.priority}
+                      label={t('priority')}
+                      onChange={(e) => setWoForm({ ...woForm, priority: e.target.value })}
+                    >
+                      <MenuItem value="NONE">{t('none')}</MenuItem>
+                      <MenuItem value="LOW">{t('low')}</MenuItem>
+                      <MenuItem value="MEDIUM">{t('medium')}</MenuItem>
+                      <MenuItem value="HIGH">{t('high')}</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label={t('due_date')}
+                    type="date"
+                    value={woForm.dueDate}
+                    onChange={(e) => setWoForm({ ...woForm, dueDate: e.target.value })}
+                    fullWidth
+                    InputLabelProps={{ shrink: true }}
+                  />
+                </Grid>
+              </Grid>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setWoVehicle(null)}>{t('cancel')}</Button>
+              <Button
+                variant="contained"
+                onClick={handleCreateWO}
+                disabled={woSaving || !woForm.title}
+                startIcon={woSaving ? <CircularProgress size={16} /> : <BuildTwoToneIcon />}
+              >
+                {woSaving ? t('saving') : t('create_work_order')}
+              </Button>
+            </DialogActions>
+          </>
+        )}
+      </Dialog>
+      <VehicleDetailDrawer vehicle={drawerVehicle} onClose={() => setDrawerVehicle(null)} />
     </>
   );
 }

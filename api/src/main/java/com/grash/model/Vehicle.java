@@ -43,6 +43,8 @@ public class Vehicle extends CompanyAudit {
 
     private String notes;
 
+    private String usageUnit = "MILES"; // MILES or HOURS
+
     @ManyToOne(fetch = FetchType.LAZY)
     private OwnUser assignedDriver;
 

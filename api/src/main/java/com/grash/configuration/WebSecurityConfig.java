@@ -60,6 +60,7 @@ public class WebSecurityConfig {
                 .requestMatchers("/mail/send").permitAll()
                 .requestMatchers("/subscription-plans").permitAll()
                 .requestMatchers("/files/download/tos", "/files/download/privacy-policy").permitAll()
+                .requestMatchers("/files/view/**").permitAll()
                 .requestMatchers("/ws/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/newsLetters").permitAll()
                 .requestMatchers("/auth/activate-account**").permitAll()

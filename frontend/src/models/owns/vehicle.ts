@@ -23,7 +23,17 @@ export default interface Vehicle extends Audit {
   fuelType: FuelType;
   status: VehicleStatus;
   notes: string;
+  usageUnit: 'MILES' | 'HOURS';
   assignedDriver: UserMiniDTO | null;
+}
+
+export interface VehicleUsageLog {
+  id: number;
+  weekOf: string; // YYYY-MM-DD
+  unitType: 'MILES' | 'HOURS';
+  value: number;
+  notes: string;
+  createdAt: string;
 }
 
 export interface VehicleLocation extends Audit {

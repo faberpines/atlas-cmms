@@ -40,6 +40,7 @@ import Tasks from './Tasks';
 import LinkTwoToneIcon from '@mui/icons-material/LinkTwoTone';
 import ArchiveTwoToneIcon from '@mui/icons-material/ArchiveTwoTone';
 import PictureAsPdfTwoToneIcon from '@mui/icons-material/PictureAsPdfTwoTone';
+import PrintTwoToneIcon from '@mui/icons-material/PrintTwoTone';
 import PriorityWrapper from '../../components/PriorityWrapper';
 import TimerTwoToneIcon from '@mui/icons-material/TimerTwoTone';
 import {
@@ -97,6 +98,7 @@ import { useBrand } from '../../../../hooks/useBrand';
 import { useLicenseEntitlement } from '../../../../hooks/useLicenseEntitlement';
 import { getErrorMessage } from '../../../../utils/api';
 import InspectionsTab from '../../Inspections/InspectionsTab';
+import WorkOrderPrintView from './WorkOrderPrintView';
 
 const LabelWrapper = styled(Box)(
   ({ theme }) => `
@@ -211,6 +213,10 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
         window.open(url);
       })
       .finally(() => setGeneratingReport(false));
+  };
+  const onPrint = () => {
+    handleCloseMenu();
+    window.print();
   };
   useEffect(() => {
     dispatch(getPartQuantitiesByWorkOrder(workOrder.id));
@@ -488,12 +494,21 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
     }
   ];
   return (
-    <Grid
-      container
-      justifyContent="center"
-      alignItems="stretch"
-      spacing={2}
-      padding={4}
+    <>
+      <WorkOrderPrintView
+        workOrder={workOrder}
+        tasks={tasks}
+        labors={labors}
+        additionalCosts={additionalCosts}
+        partQuantities={partQuantities}
+      />
+      <Grid
+        data-print-screen-only="true"
+        container
+        justifyContent="center"
+        alignItems="stretch"
+        spacing={2}
+        padding={4}
     >
       <Grid
         item
@@ -1432,6 +1447,12 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
             <Typography variant="h6">{t('pdf_report')}</Typography>
           </Stack>
         </MenuItem>
+        <MenuItem onClick={onPrint}>
+          <Stack spacing={2} direction="row">
+            <PrintTwoToneIcon />
+            <Typography variant="h6">{t('print')}</Typography>
+          </Stack>
+        </MenuItem>
         <MenuItem onClick={onArchive}>
           <Stack spacing={2} direction="row">
             <ArchiveTwoToneIcon />
@@ -1440,5 +1461,6 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
         </MenuItem>
       </Menu>
     </Grid>
+    </>
   );
 }

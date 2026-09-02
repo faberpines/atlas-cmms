@@ -79,6 +79,8 @@ const Locations = Loader(lazy(() => import('../content/own/Locations')));
 const Fleet = Loader(lazy(() => import('../content/own/Fleet')));
 const Loto = Loader(lazy(() => import('../content/own/Loto')));
 const HearingConservation = Loader(lazy(() => import('../content/own/HearingConservation')));
+const JHA = Loader(lazy(() => import('../content/own/JHA')));
+const ScanAsset = Loader(lazy(() => import('../content/own/ScanAsset')));
 const WorkOrders = Loader(lazy(() => import('../content/own/WorkOrders')));
 
 const VendorsAndCustomers = Loader(
@@ -249,6 +251,14 @@ const appRoutes = [
   {
     path: 'hearing-conservation',
     children: [{ path: '', element: <HearingConservation /> }]
+  },
+  {
+    path: 'jha',
+    children: [{ path: '', element: <JHA /> }]
+  },
+  {
+    path: 'scan-asset',
+    children: [{ path: '', element: <ScanAsset /> }]
   },
   {
     path: 'work-orders',

@@ -87,13 +87,14 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.atlas.cmms'
+    namespace 'com.baybabyproduce.maintenance'
     defaultConfig {
-        applicationId 'com.atlas.cmms'
+        applicationId 'com.baybabyproduce.maintenance'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 31
-        versionName "1.0.37"
+        versionCode 1
+        versionName "1.0.0"
+        manifestPlaceholders = [usesCleartextTraffic: "false"]
     }
     signingConfigs {
         debug {
@@ -106,6 +107,7 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            manifestPlaceholders = [usesCleartextTraffic: "true"]
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
@@ -176,4 +178,7 @@ dependencies {
     }
 }
 
-apply plugin: 'com.google.gms.google-services'
+// Firebase is optional for local builds. For push notifications, provide a
+// google-services.json registered to com.baybabyproduce.maintenance, then
+// uncomment the Google Services plugin below.
+// apply plugin: 'com.google.gms.google-services'

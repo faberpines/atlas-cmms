@@ -85,7 +85,7 @@ const ptBRJSON = {
   'eam.descriptions.0':
     'Frustrado ao tentar organizar a bagunça caótica dos equipamentos da empresa, sem saber se o equipamento foi devidamente cuidado, sem saber quanto custa para manter e todas as outras dores de cabeça que vêm com a gestão de ativos?',
   'eam.descriptions.1':
-    'O módulo de Gestão de Ativos Empresariais do Atlas CMMS pode ser usado para entre 10 e 1.000.000 de ativos, permitindo que você rastreie exatamente o que deseja, da maneira que deseja, em uma estrutura de árvore fácil de usar e pesquisável.',
+    'O módulo de Gestão de Ativos Empresariais do Bay Baby Maintenance pode ser usado para entre 10 e 1.000.000 de ativos, permitindo que você rastreie exatamente o que deseja, da maneira que deseja, em uma estrutura de árvore fácil de usar e pesquisável.',
   'eam.checks.0':
     'Conheça a saúde de seus ativos a qualquer momento e quanto eles estão custando',
   'eam.checks.1': 'Visualize registros de manutenção completos e detalhados.',

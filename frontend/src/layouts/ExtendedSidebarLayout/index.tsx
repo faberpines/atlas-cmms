@@ -45,6 +45,7 @@ const ExtendedSidebarLayout: FC<ExtendedSidebarLayoutProps> = () => {
         <Header />
         <Sidebar />
         <Box
+          data-print-content="true"
           sx={{
             position: 'relative',
             zIndex: 5,
@@ -53,6 +54,10 @@ const ExtendedSidebarLayout: FC<ExtendedSidebarLayoutProps> = () => {
             pt: `${theme.header.height}`,
             [theme.breakpoints.up('lg')]: {
               ml: `${theme.sidebar.width}`
+            },
+            '@media print': {
+              ml: '0 !important',
+              pt: '0 !important'
             }
           }}
         >
@@ -62,7 +67,9 @@ const ExtendedSidebarLayout: FC<ExtendedSidebarLayoutProps> = () => {
           {/*<ThemeSettings />*/}
         </Box>
       </Box>
-      <AssistantWidget />
+      <Box data-print-hide="true">
+        <AssistantWidget />
+      </Box>
     </>
   );
 };

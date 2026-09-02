@@ -368,6 +368,7 @@ const People = ({ openModal, handleCloseModal }: PropsType) => {
   const RenderPeopleList = () => (
     <CustomDataGrid
       apiRef={apiRef}
+      storageKey="people"
       pageSize={criteria.pageSize}
       page={criteria.pageNum}
       rows={users.content}

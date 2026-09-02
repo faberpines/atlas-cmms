@@ -54,6 +54,7 @@ public class VehicleService {
         if (patch.getFuelType() != null) existing.setFuelType(patch.getFuelType());
         if (patch.getStatus() != null) existing.setStatus(patch.getStatus());
         if (patch.getNotes() != null) existing.setNotes(patch.getNotes());
+        if (patch.getUsageUnit() != null) existing.setUsageUnit(patch.getUsageUnit());
         if (patch.getAssignedDriver() != null) existing.setAssignedDriver(patch.getAssignedDriver());
         if (patch.getImage() != null) existing.setImage(patch.getImage());
         return vehicleRepository.save(existing);

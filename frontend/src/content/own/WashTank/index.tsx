@@ -70,7 +70,7 @@ const emptyForm = (tank: 1 | 2): ReadingForm => ({
 
 // Quality thresholds for color coding
 const PPM_LOW = 50;          // below this is alert
-const PPM_HIGH = 200;        // above this is alert
+const PPM_HIGH = 300;        // above this is alert
 
 function getValueColor(value: number, low: number, high: number): string {
   if (value < low || value > high) return '#FF1943';

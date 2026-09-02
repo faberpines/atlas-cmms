@@ -52,6 +52,7 @@ function Header() {
 
   return (
     <HeaderWrapper
+      data-print-hide="true"
       display="flex"
       alignItems="center"
       sx={{

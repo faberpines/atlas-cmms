@@ -579,12 +579,13 @@ const renderAddModal = () => (
             <Box sx={{ width: '95%' }}>
               <CustomDataGrid
                 apiRef={apiRef}
+                storageKey="requests"
                 columns={columns}
-                loading={loadingGet}
                 pageSize={criteria.pageSize}
                 page={criteria.pageNum}
                 rows={requests.content}
                 rowCount={requests.totalElements}
+                loading={loadingGet}
                 pagination
                 paginationMode="server"
                 onPageSizeChange={onPageSizeChange}

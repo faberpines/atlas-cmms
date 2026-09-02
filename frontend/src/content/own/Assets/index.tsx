@@ -770,6 +770,7 @@ function Assets() {
             <Box sx={{ width: '95%' }}>
               <CustomDataGrid
                 pro
+                storageKey="assets"
                 columns={columns}
                 rows={assets.content}
                 getRowHeight={() => 'auto'}

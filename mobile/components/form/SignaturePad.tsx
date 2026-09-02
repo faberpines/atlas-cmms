@@ -17,7 +17,7 @@ const SignaturePad: React.FC<SignaturePadProps> = ({
   onChange,
   value
 }) => {
-  const ref = useRef<SignatureViewRef>();
+  const ref = useRef<SignatureViewRef | null>(null);
   const theme = useTheme();
   const [hasChanged, setHasChanged] = useState(false);
 
@@ -31,11 +31,11 @@ const SignaturePad: React.FC<SignaturePadProps> = ({
   };
 
   const saveSignature = () => {
-    ref.current.readSignature(); // This triggers onOK
+    ref.current?.readSignature(); // This triggers onOK
   };
 
   const handleClear = () => {
-    ref.current.clearSignature();
+    ref.current?.clearSignature();
     onChange('');
     setHasChanged(false);
   };

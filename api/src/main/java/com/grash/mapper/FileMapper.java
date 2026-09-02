@@ -13,6 +13,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 
 @Mapper(componentModel = "spring")
@@ -22,6 +23,9 @@ public abstract class FileMapper {
     @Autowired
     private StorageServiceFactory storageServiceFactory;
 
+    @Value("${api.host}")
+    private String apiHost;
+
     @Mappings({})
     public abstract FileMiniDTO toMiniDto(File model);
 
@@ -29,18 +33,19 @@ public abstract class FileMapper {
 
     @AfterMapping
     protected FileShowDTO toShowDto(File model, @MappingTarget FileShowDTO target) {
-        target.setUrl(getSignedUrl(model));
+        target.setUrl(getFileViewUrl(model));
         return target;
     }
 
     @AfterMapping
     protected FileMiniDTO toMiniDto(File model, @MappingTarget FileMiniDTO target) {
-        target.setUrl(getSignedUrl(model));
+        target.setUrl(getFileViewUrl(model));
         return target;
     }
 
-    private String getSignedUrl(File file) {
-        StorageService storageService = storageServiceFactory.getStorageService();
-        return storageService.generateSignedUrl(file.getPath(), 60 * 3);
+    private String getFileViewUrl(File file) {
+        // Serve files through the backend API so they are accessible from any PC
+        // that can reach the application, without needing direct MinIO port access.
+        return apiHost + "/files/view/" + file.getId();
     }
 }

@@ -48,9 +48,9 @@ public class MinioService implements StorageService {
         try {
             URI minioEndpointURI = new URI(minioEndpoint);
             MinioClient.Builder minioClientBuilder = MinioClient.builder()
-                    .endpoint(minioPublicEndpoint)
+                    .endpoint(minioEndpoint)
                     .credentials(minioAccessKey, minioSecretKey);
-            if (Helper.isLocalhost(minioPublicEndpoint)) minioClientBuilder.httpClient(
+            if (Helper.isLocalhost(minioEndpoint)) minioClientBuilder.httpClient(
                     new OkHttpClient.Builder().proxy(new Proxy(Proxy.Type.HTTP,
                             new InetSocketAddress(minioEndpointURI.getHost(), minioEndpointURI.getPort()))).build()
             );
@@ -102,6 +102,8 @@ public class MinioService implements StorageService {
                             .expiry(Math.toIntExact(expirationMinutes), TimeUnit.MINUTES)
                             .build()
             );
+            // Replace internal Docker endpoint with the publicly accessible endpoint
+            url = url.replace(minioEndpoint, minioPublicEndpoint);
             return url;
         } catch (Exception exception) {
             throw new RuntimeException(exception);

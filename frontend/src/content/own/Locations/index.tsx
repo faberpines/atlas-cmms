@@ -653,6 +653,7 @@ function Locations() {
               <Box sx={{ width: '95%' }}>
                 <CustomDataGrid
                   pro
+                  storageKey="locations"
                   columns={columns}
                   rows={locations}
                   loading={loadingGet}
@@ -665,11 +666,6 @@ function Locations() {
                     )
                   }}
                   onRowClick={(params) => handleOpenDetails(Number(params.id))}
-                  initialState={{
-                    columns: {
-                      columnVisibilityModel: {}
-                    }
-                  }}
                 />
               </Box>
             </Card>

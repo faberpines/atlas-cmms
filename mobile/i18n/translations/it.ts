@@ -57,7 +57,7 @@ const locale = {
   "eam.title": "Gestione delle risorse aziendali",
   "eam.description.short": "Conosci le tue risorse",
   "eam.descriptions.0": "Frustrato nel tentativo di organizzare il disordine caotico delle attrezzature aziendali, chiedendoti se le attrezzature sono state adeguatamente mantenute, non sapendo quanto costa la loro manutenzione e tutti gli altri grattacapi che derivano dalla gestione delle risorse?",
-  "eam.descriptions.1": "Il modulo Enterprise Asset Management di Atlas CMMS può essere utilizzato per un numero di asset compreso tra 10 e 1.000.000, consentendoti di monitorare esattamente ciò che desideri, nel modo desiderato, in una struttura ad albero facile da usare e ricercabile.",
+  "eam.descriptions.1": "Il modulo Enterprise Asset Management di Bay Baby Maintenance può essere utilizzato per un numero di asset compreso tra 10 e 1.000.000, consentendoti di monitorare esattamente ciò che desideri, nel modo desiderato, in una struttura ad albero facile da usare e ricercabile.",
   "eam.checks.0": "Conosci lo stato di salute dei tuoi beni in ogni momento e quanto ti costano",
   "eam.checks.1": "Visualizza registri di manutenzione completi e dettagliati.",
   "eam.checks.2": "Tieni traccia solo di ciò che desideri con campi personalizzati illimitati",

@@ -29,6 +29,8 @@ import DirectionsCarTwoToneIcon from '@mui/icons-material/DirectionsCarTwoTone';
 import LockTwoToneIcon from '@mui/icons-material/LockTwoTone';
 import HearingTwoToneIcon from '@mui/icons-material/HearingTwoTone';
 import WaterTwoToneIcon from '@mui/icons-material/WaterTwoTone';
+import FindInPageTwoToneIcon from '@mui/icons-material/FindInPageTwoTone';
+import QrCodeScannerTwoToneIcon from '@mui/icons-material/QrCodeScannerTwoTone';
 import { PermissionEntity } from '../../../../models/owns/role';
 import { PlanFeature } from '../../../../models/owns/subscriptionPlan';
 import { IS_LOCALHOST } from '../../../../config';
@@ -155,6 +157,12 @@ const ownMenuItems: MenuItems[] = [
         permission: PermissionEntity.ASSETS
       },
       {
+        name: 'scan_asset',
+        link: '/app/scan-asset',
+        icon: QrCodeScannerTwoToneIcon,
+        permission: PermissionEntity.ASSETS
+      },
+      {
         name: 'locations',
         link: '/app/locations',
         icon: LocationOnTwoToneIcon,
@@ -220,6 +228,12 @@ const ownMenuItems: MenuItems[] = [
         link: '/app/hearing-conservation',
         icon: HearingTwoToneIcon,
         permission: PermissionEntity.HEARING_CONSERVATION
+      },
+      {
+        name: 'jha',
+        link: '/app/jha',
+        icon: FindInPageTwoToneIcon,
+        permission: PermissionEntity.JHA
       },
       {
         name: 'people_teams',

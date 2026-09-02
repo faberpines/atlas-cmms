@@ -80,7 +80,7 @@ const locale = {
   'eam.descriptions.0':
     'Gefrustreerd door het proberen te organiseren van de chaotische rommel van het bedrijfsmaterieel, je afvragend of het materieel goed is onderhouden, niet wetend wat de onderhoudskosten zijn en alle andere hoofdpijn die komt kijken bij het beheren van activa?',
   'eam.descriptions.1':
-    'De Enterprise Asset Management-module van Atlas CMMS kan worden gebruikt voor tussen de 10 en 1.000.000 Assets, waardoor u precies kunt volgen wat u wilt, op de manier die u wilt, in een gebruiksvriendelijke en doorzoekbare boomstructuur.',
+    'De Enterprise Asset Management-module van Bay Baby Maintenance kan worden gebruikt voor tussen de 10 en 1.000.000 Assets, waardoor u precies kunt volgen wat u wilt, op de manier die u wilt, in een gebruiksvriendelijke en doorzoekbare boomstructuur.',
   'eam.checks.0':
     'Ken de status van uw assets op elk moment en wat ze u kosten',
   'eam.checks.1': 'Bekijk volledige en gedetailleerde onderhoudslogboeken.',

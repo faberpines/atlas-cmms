@@ -28,6 +28,8 @@ import {
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
+import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
+import PrintTwoToneIcon from '@mui/icons-material/PrintTwoTone';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import HearingTwoToneIcon from '@mui/icons-material/HearingTwoTone';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -184,6 +186,8 @@ export default function HearingConservation() {
   const [saving, setSaving] = useState(false);
   const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
   const [expanded, setExpanded] = useState<string | false>('section-program');
+  const [viewingRecord, setViewingRecord] = useState<HearingConservationRecord | null>(null);
+  const [printRecord, setPrintRecord] = useState<HearingConservationRecord | null>(null);
 
   useEffect(() => {
     setTitle(t('hearing_conservation'));
@@ -202,6 +206,16 @@ export default function HearingConservation() {
     setForm(recordToForm(r));
     setExpanded('section-program');
     setOpenDialog(true);
+  }
+
+  function openView(r: HearingConservationRecord) {
+    setViewingRecord(r);
+  }
+
+  function handlePrint(r: HearingConservationRecord) {
+    setPrintRecord(r);
+    setViewingRecord(null);
+    setTimeout(() => window.print(), 100);
   }
 
   async function handleSave() {
@@ -362,6 +376,11 @@ export default function HearingConservation() {
                       {r.reviewDate ? dayjs(r.reviewDate).format('MM/DD/YYYY') : '—'}
                     </TableCell>
                     <TableCell align="right">
+                      <Tooltip title={t('view')}>
+                        <IconButton size="small" onClick={() => openView(r)}>
+                          <VisibilityTwoToneIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
                       <Tooltip title={t('edit')}>
                         <IconButton size="small" onClick={() => openEdit(r)}>
                           <EditTwoToneIcon fontSize="small" />
@@ -651,7 +670,324 @@ export default function HearingConservation() {
             </Button>
           </DialogActions>
         </Dialog>
+
+        {/* ── View (Read-Only) Dialog ── */}
+        <Dialog
+          open={viewingRecord !== null}
+          onClose={() => setViewingRecord(null)}
+          maxWidth="md"
+          fullWidth
+        >
+          {viewingRecord && (
+            <>
+              <DialogTitle sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Box display="flex" alignItems="center" gap={1}>
+                  <HearingTwoToneIcon color="primary" />
+                  <span>{t('hearing_conservation')} — {t('hcp_view_record')}</span>
+                </Box>
+              </DialogTitle>
+              <DialogContent dividers>
+                <HcpReadOnlyView record={viewingRecord} t={t} />
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  startIcon={<PrintTwoToneIcon />}
+                  variant="outlined"
+                  onClick={() => handlePrint(viewingRecord)}
+                >
+                  {t('print')}
+                </Button>
+                <Button onClick={() => setViewingRecord(null)}>{t('close')}</Button>
+              </DialogActions>
+            </>
+          )}
+        </Dialog>
+
+        {/* ── Hidden print-only layout ── */}
+        <div id="hcp-print-view" style={{ display: 'none' }}>
+          {printRecord && <HcpPrintLayout record={printRecord} t={t} />}
+        </div>
       </Box>
     </LocalizationProvider>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────────────── */
+/* Read-only view used inside the dialog                                       */
+/* ─────────────────────────────────────────────────────────────────────────── */
+function HcpReadOnlyView({ record, t }: { record: HearingConservationRecord; t: any }) {
+  const noiseAreas: NoiseAreaRow[] = (() => { try { return JSON.parse(record.noiseAreas || '[]'); } catch { return []; } })();
+  const hpdDevices: HpdDeviceRow[] = (() => { try { return JSON.parse(record.hpdDevices || '[]'); } catch { return []; } })();
+
+  const field = (label: string, value: string | null | undefined) => (
+    <Grid item xs={12} sm={6}>
+      <Typography variant="caption" color="text.secondary">{label}</Typography>
+      <Typography variant="body2" sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{value || '—'}</Typography>
+    </Grid>
+  );
+  const fullField = (label: string, value: string | null | undefined) => (
+    <Grid item xs={12}>
+      <Typography variant="caption" color="text.secondary">{label}</Typography>
+      <Typography variant="body2" sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{value || '—'}</Typography>
+    </Grid>
+  );
+
+  return (
+    <Box>
+      {/* 1. Program Info */}
+      <Typography variant="subtitle1" fontWeight={700} mt={1} mb={1}>1. {t('hcp_program_info')}</Typography>
+      <Grid container spacing={2}>
+        {field(t('hcp_program_date'), record.programDate ? dayjs(record.programDate).format('MM/DD/YYYY') : null)}
+        {field(t('hcp_review_date'), record.reviewDate ? dayjs(record.reviewDate).format('MM/DD/YYYY') : null)}
+        {field(t('hcp_program_admin'), record.programAdmin)}
+      </Grid>
+      <Divider sx={{ my: 2 }} />
+
+      {/* 2. Noise Areas */}
+      <Typography variant="subtitle1" fontWeight={700} mb={1}>2. {t('hcp_noise_areas')}</Typography>
+      {noiseAreas.length === 0 ? (
+        <Typography variant="body2" color="text.secondary">—</Typography>
+      ) : (
+        <TableContainer component={Paper} variant="outlined">
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>{t('hcp_area')}</TableCell>
+                <TableCell>{t('hcp_noise_level')}</TableCell>
+                <TableCell>{t('hcp_measurement_date')}</TableCell>
+                <TableCell>{t('hcp_instrument')}</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {noiseAreas.map((row) => (
+                <TableRow key={row.id}>
+                  <TableCell>{row.area || '—'}</TableCell>
+                  <TableCell>{row.noiseLevelDb || '—'}</TableCell>
+                  <TableCell>{row.measurementDate || '—'}</TableCell>
+                  <TableCell>{row.instrument || '—'}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
+      <Divider sx={{ my: 2 }} />
+
+      {/* 3. Hearing Protection */}
+      <Typography variant="subtitle1" fontWeight={700} mb={1}>3. {t('hcp_hearing_protection')}</Typography>
+      {hpdDevices.length > 0 && (
+        <TableContainer component={Paper} variant="outlined" sx={{ mb: 2 }}>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>{t('hcp_hpd_brand')}</TableCell>
+                <TableCell>{t('hcp_hpd_sizes')}</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {hpdDevices.map((row) => (
+                <TableRow key={row.id}>
+                  <TableCell>{row.brand || '—'}</TableCell>
+                  <TableCell>{row.sizes || '—'}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
+      <Grid container spacing={2}>
+        {fullField(t('hcp_hpd_storage'), record.hpdStorageLocations)}
+        {fullField(t('hcp_required_use_areas'), record.requiredUseAreas)}
+      </Grid>
+      <Divider sx={{ my: 2 }} />
+
+      {/* 4. Audiometric */}
+      <Typography variant="subtitle1" fontWeight={700} mb={1}>4. {t('hcp_audiometric')}</Typography>
+      <Grid container spacing={2}>
+        {fullField(t('hcp_audiometric_positions'), record.audiometricPositions)}
+        {field(t('hcp_audiometric_provider'), record.audiometricProvider)}
+        {fullField(t('hcp_audiometric_schedule'), record.audiometricSchedule)}
+        {fullField(t('hcp_baseline_procedure'), record.baselineProcedure)}
+        {fullField(t('hcp_annual_procedure'), record.annualProcedure)}
+        {fullField(t('hcp_threshold_shift'), record.thresholdShiftProcedure)}
+      </Grid>
+      <Divider sx={{ my: 2 }} />
+
+      {/* 5. Training */}
+      <Typography variant="subtitle1" fontWeight={700} mb={1}>5. {t('hcp_training')}</Typography>
+      <Grid container spacing={2}>
+        {fullField(t('hcp_training_program'), record.trainingProgram)}
+        {fullField(t('hcp_training_topics'), record.trainingTopics)}
+        {fullField(t('hcp_training_schedule'), record.trainingSchedule)}
+      </Grid>
+      <Divider sx={{ my: 2 }} />
+
+      {/* 6. Records */}
+      <Typography variant="subtitle1" fontWeight={700} mb={1}>6. {t('hcp_records')}</Typography>
+      <Grid container spacing={2}>
+        {fullField(t('hcp_noise_records_location'), record.noiseMeasurementRecordsLocation)}
+        {fullField(t('hcp_audiometric_records_location'), record.audiometricRecordsLocation)}
+        {fullField(t('hcp_records_access'), record.recordsAccessProcedure)}
+      </Grid>
+      <Divider sx={{ my: 2 }} />
+
+      {/* 7. Evaluation */}
+      <Typography variant="subtitle1" fontWeight={700} mb={1}>7. {t('hcp_evaluation')}</Typography>
+      <Grid container spacing={2}>
+        {field(t('hcp_last_evaluation'), record.lastEvaluationDate ? dayjs(record.lastEvaluationDate).format('MM/DD/YYYY') : null)}
+        {fullField(t('hcp_evaluation_notes'), record.evaluationNotes)}
+        {fullField(t('hcp_deficiencies'), record.deficienciesFound)}
+        {fullField(t('hcp_corrective_actions'), record.correctiveActions)}
+      </Grid>
+    </Box>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────────────── */
+/* Print-only layout (hidden on screen, shown during window.print())           */
+/* ─────────────────────────────────────────────────────────────────────────── */
+function HcpPrintLayout({ record, t }: { record: HearingConservationRecord; t: any }) {
+  const noiseAreas: NoiseAreaRow[] = (() => { try { return JSON.parse(record.noiseAreas || '[]'); } catch { return []; } })();
+  const hpdDevices: HpdDeviceRow[] = (() => { try { return JSON.parse(record.hpdDevices || '[]'); } catch { return []; } })();
+
+  const s: React.CSSProperties = {
+    fontFamily: 'Arial, sans-serif',
+    fontSize: '11pt',
+    color: '#000',
+    margin: 0,
+    padding: '24px'
+  };
+  const h1: React.CSSProperties = { fontSize: '16pt', fontWeight: 'bold', marginBottom: 4 };
+  const h2: React.CSSProperties = { fontSize: '12pt', fontWeight: 'bold', marginTop: 18, marginBottom: 6, borderBottom: '1px solid #000', paddingBottom: 2 };
+  const label: React.CSSProperties = { fontSize: '9pt', color: '#555', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.5px' };
+  const value: React.CSSProperties = { marginTop: 2, marginBottom: 10, whiteSpace: 'pre-wrap', wordBreak: 'break-word' };
+  const row2: React.CSSProperties = { display: 'flex', gap: 32, flexWrap: 'wrap' };
+  const col2: React.CSSProperties = { flex: '1 1 280px' };
+
+  const F = ({ lbl, val }: { lbl: string; val?: string | null }) => (
+    <div style={col2}>
+      <div style={label}>{lbl}</div>
+      <div style={value}>{val || '—'}</div>
+    </div>
+  );
+
+  const tableStyle: React.CSSProperties = { width: '100%', borderCollapse: 'collapse', marginBottom: 12, fontSize: '10pt' };
+  const th: React.CSSProperties = { border: '1px solid #999', padding: '4px 8px', background: '#f0f0f0', fontWeight: 'bold', textAlign: 'left' };
+  const td: React.CSSProperties = { border: '1px solid #ccc', padding: '4px 8px' };
+
+  return (
+    <div style={s}>
+      {/* Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
+        <div>
+          <div style={h1}>Hearing Loss Prevention Program</div>
+          <div style={{ fontSize: '10pt', color: '#444' }}>WAC 296-817 — Bay Baby Produce</div>
+        </div>
+        <div style={{ textAlign: 'right', fontSize: '9pt', color: '#666' }}>
+          <div>Program Date: {record.programDate ? dayjs(record.programDate).format('MM/DD/YYYY') : '—'}</div>
+          <div>Next Review: {record.reviewDate ? dayjs(record.reviewDate).format('MM/DD/YYYY') : '—'}</div>
+          <div>Administrator: {record.programAdmin || '—'}</div>
+          <div style={{ marginTop: 4 }}>Printed: {dayjs().format('MM/DD/YYYY h:mm A')}</div>
+        </div>
+      </div>
+
+      {/* Section 2 */}
+      {noiseAreas.length > 0 && (
+        <>
+          <div style={h2}>2. Noise Areas &amp; Measurements</div>
+          <table style={tableStyle}>
+            <thead>
+              <tr>
+                <th style={th}>Area / Equipment / Job Duties</th>
+                <th style={th}>Noise Level (dBA)</th>
+                <th style={th}>Date Measured</th>
+                <th style={th}>Instrument Used</th>
+              </tr>
+            </thead>
+            <tbody>
+              {noiseAreas.map((r) => (
+                <tr key={r.id}>
+                  <td style={td}>{r.area || '—'}</td>
+                  <td style={td}>{r.noiseLevelDb || '—'}</td>
+                  <td style={td}>{r.measurementDate || '—'}</td>
+                  <td style={td}>{r.instrument || '—'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      )}
+
+      {/* Section 3 */}
+      <div style={h2}>3. Hearing Protection Devices (HPDs)</div>
+      {hpdDevices.length > 0 && (
+        <table style={tableStyle}>
+          <thead>
+            <tr>
+              <th style={th}>Brand Name</th>
+              <th style={th}>Sizes Available</th>
+            </tr>
+          </thead>
+          <tbody>
+            {hpdDevices.map((r) => (
+              <tr key={r.id}>
+                <td style={td}>{r.brand || '—'}</td>
+                <td style={td}>{r.sizes || '—'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+      <div style={row2}>
+        <F lbl="Storage / Access Locations" val={record.hpdStorageLocations} />
+        <F lbl="Areas Where HPDs Are Required" val={record.requiredUseAreas} />
+      </div>
+
+      {/* Section 4 */}
+      <div style={h2}>4. Audiometric Testing</div>
+      <div style={row2}>
+        <F lbl="Positions / Areas Covered" val={record.audiometricPositions} />
+        <F lbl="Testing Provider" val={record.audiometricProvider} />
+      </div>
+      <F lbl="Testing Schedule" val={record.audiometricSchedule} />
+      <F lbl="Baseline Testing Procedure" val={record.baselineProcedure} />
+      <F lbl="Annual Testing Procedure" val={record.annualProcedure} />
+      <F lbl="Standard Threshold Shift Notification Procedure" val={record.thresholdShiftProcedure} />
+
+      {/* Section 5 */}
+      <div style={h2}>5. Training</div>
+      <F lbl="Training Program Description" val={record.trainingProgram} />
+      <F lbl="Topics Covered" val={record.trainingTopics} />
+      <F lbl="Training Schedule / Frequency" val={record.trainingSchedule} />
+
+      {/* Section 6 */}
+      <div style={h2}>6. Access to Records</div>
+      <div style={row2}>
+        <F lbl="Location of Noise Measurement Records" val={record.noiseMeasurementRecordsLocation} />
+        <F lbl="Location of Audiometric Records" val={record.audiometricRecordsLocation} />
+      </div>
+      <F lbl="Employee Access Procedure" val={record.recordsAccessProcedure} />
+
+      {/* Section 7 */}
+      <div style={h2}>7. Program Evaluation</div>
+      <F lbl="Last Program Evaluation Date" val={record.lastEvaluationDate ? dayjs(record.lastEvaluationDate).format('MM/DD/YYYY') : null} />
+      <F lbl="Evaluation Notes" val={record.evaluationNotes} />
+      <F lbl="Deficiencies Found" val={record.deficienciesFound} />
+      <F lbl="Corrective Actions Taken" val={record.correctiveActions} />
+
+      {/* Signature block */}
+      <div style={{ marginTop: 40, borderTop: '2px solid #000', paddingTop: 16 }}>
+        <div style={row2}>
+          <div style={col2}>
+            <div style={{ borderBottom: '1px solid #000', height: 32 }} />
+            <div style={{ ...label, marginTop: 4 }}>Program Administrator Signature</div>
+          </div>
+          <div style={col2}>
+            <div style={{ borderBottom: '1px solid #000', height: 32 }} />
+            <div style={{ ...label, marginTop: 4 }}>Date</div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

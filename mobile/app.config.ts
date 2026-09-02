@@ -3,15 +3,20 @@ import { ExpoConfig, ConfigContext } from 'expo/config';
 
 const apiUrl = process.env.API_URL;
 const googleServicesJson = process.env.GOOGLE_SERVICES_JSON;
+const easProjectId = process.env.EAS_PROJECT_ID;
+
+const appName = 'Bay Baby Maintenance';
+const appVersion = '1.0.0';
+const androidPackage = 'com.baybabyproduce.maintenance';
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: 'Atlas CMMS',
-  slug: 'atlas-cmms',
-  version: '1.0.37',
+  name: appName,
+  slug: 'bay-baby-maintenance',
+  version: appVersion,
   orientation: 'portrait',
   icon: './assets/images/icon.png',
-  scheme: 'atlascmms',
+  scheme: 'baybabymaintenance',
   userInterfaceStyle: 'automatic',
   newArchEnabled: false,
   notification: {
@@ -30,7 +35,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     buildNumber: '9',
     jsEngine: 'hermes',
     supportsTablet: false,
-    runtimeVersion: '1.0.37',
+    runtimeVersion: appVersion,
     infoPlist: {
       ITSAppUsesNonExemptEncryption: false
     }
@@ -40,26 +45,42 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       foregroundImage: './assets/images/adaptive-icon.png',
       backgroundColor: '#ffffff'
     },
-    versionCode: 31,
-    package: 'com.atlas.cmms',
+    versionCode: 1,
+    package: androidPackage,
     jsEngine: 'hermes',
-    googleServicesFile:
-      googleServicesJson ?? './android/app/google-services.json',
-    runtimeVersion: '1.0.37' // Changed from policy object to fixed string
+    permissions: [
+      'android.permission.CAMERA',
+      'android.permission.INTERNET',
+      'android.permission.MODIFY_AUDIO_SETTINGS',
+      'android.permission.NFC',
+      'android.permission.RECORD_AUDIO',
+      'android.permission.VIBRATE'
+    ],
+    blockedPermissions: [
+      'android.permission.READ_EXTERNAL_STORAGE',
+      'android.permission.SYSTEM_ALERT_WINDOW',
+      'android.permission.WRITE_EXTERNAL_STORAGE'
+    ],
+    ...(googleServicesJson
+      ? { googleServicesFile: googleServicesJson }
+      : {}),
+    runtimeVersion: appVersion
   },
   web: {
     favicon: './assets/images/favicon.png'
   },
   extra: {
     API_URL: apiUrl,
-    eas: {
-      projectId: 'bb0fd77f-57fc-4bee-8abc-b2aedb67c82d'
-    }
+    ...(easProjectId ? { eas: { projectId: easProjectId } } : {})
   },
   plugins: [
     'react-native-nfc-manager',
+    '@react-native-community/datetimepicker',
+    'expo-asset',
+    'expo-audio',
     'expo-font',
     'expo-notifications',
+    'expo-web-browser',
     [
       'expo-camera',
       {
@@ -74,8 +95,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
           deploymentTarget: '15.1'
         },
         android: {
-          compileSdkVersion: 35,
-          targetSdkVersion: 35
+          compileSdkVersion: 36,
+          targetSdkVersion: 36,
+          buildToolsVersion: '36.0.0',
+          usesCleartextTraffic: false
         }
       }
     ]

@@ -22,7 +22,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
+import java.net.URLConnection;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -159,6 +162,21 @@ public class FileController {
 //    public byte[] downloadPrivacyPolicy() {
 //        return storageServiceFactory.getStorageService().download("terms and privacy/Atlas CMMS privacy policy.pdf");
 //    }
+
+    @GetMapping("/view/{id}")
+    public ResponseEntity<byte[]> viewFile(@PathVariable("id") Long id) {
+        Optional<File> optionalFile = fileService.findById(id);
+        if (optionalFile.isPresent()) {
+            File savedFile = optionalFile.get();
+            byte[] data = storageServiceFactory.getStorageService().download(savedFile.getPath());
+            String contentType = URLConnection.guessContentTypeFromName(savedFile.getName());
+            if (contentType == null) contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType(contentType));
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + savedFile.getName() + "\"");
+            return new ResponseEntity<>(data, headers, HttpStatus.OK);
+        } else throw new CustomException("Not found", HttpStatus.NOT_FOUND);
+    }
 }
 
 

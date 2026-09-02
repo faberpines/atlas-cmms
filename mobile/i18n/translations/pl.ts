@@ -81,7 +81,7 @@ const plJSON = {
   'eam.descriptions.0':
     'Czujesz frustrację, próbując uporządkować chaotyczny bałagan sprzętu firmowego, zastanawiasz się, czy o sprzęt odpowiednio dbano, nie wiesz, ile kosztuje jego utrzymanie i zmagasz się ze wszystkimi innymi problemami związanymi z zarządzaniem aktywami?',
   'eam.descriptions.1':
-    'Moduł Enterprise Asset Management systemu Atlas CMMS można wykorzystać do zarządzania aktywami obejmującymi od 10 do 1 000 000 aktywów. Pozwala on śledzić dokładnie to, co chcesz i w sposób, w jaki chcesz, w łatwej w użyciu i przeszukiwalnej strukturze drzewa.',
+    'Moduł Enterprise Asset Management systemu Bay Baby Maintenance można wykorzystać do zarządzania aktywami obejmującymi od 10 do 1 000 000 aktywów. Pozwala on śledzić dokładnie to, co chcesz i w sposób, w jaki chcesz, w łatwej w użyciu i przeszukiwalnej strukturze drzewa.',
   'eam.checks.0':
     'Poznaj stan swoich aktywów w każdym momencie i dowiedz się, ile Cię to kosztuje',
   'eam.checks.1': 'Przeglądaj kompletne i szczegółowe dzienniki konserwacji.',

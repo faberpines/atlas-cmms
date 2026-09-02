@@ -757,6 +757,7 @@ const Parts = ({ setAction }: PropsType) => {
       {currentTab === 'list' && (
         <CustomDataGrid
           apiRef={apiRef}
+          storageKey="parts"
           columns={columns}
           pageSize={criteria.pageSize}
           page={criteria.pageNum}

@@ -78,7 +78,7 @@ const trJSON = {
   'eam.descriptions.0':
     'Şirketin ekipmanlarının kaotik karmaşasını organize etmeye çalışmaktan, ekipmana gereken bakımın yapılıp yapılmadığını merak etmekten, bakımının ne kadara mal olacağını bilmemekten ve varlık yönetiminin getirdiği tüm diğer baş ağrılarından bıktınız mı?',
   'eam.descriptions.1':
-    "Atlas CMMS'nin Kurumsal Varlık Yönetimi modülü, 10 ila 1.000.000 Varlık arasında herhangi bir yerde kullanılabilir ve kullanımı kolay ve aranabilir bir ağaç yapısında tam olarak ne istediğinizi, istediğiniz şekilde izlemenize olanak tanır.",
+    "Bay Baby Maintenance'nin Kurumsal Varlık Yönetimi modülü, 10 ila 1.000.000 Varlık arasında herhangi bir yerde kullanılabilir ve kullanımı kolay ve aranabilir bir ağaç yapısında tam olarak ne istediğinizi, istediğiniz şekilde izlemenize olanak tanır.",
   'eam.checks.0':
     'Varlıklarınızın sağlığını ve size ne kadara mal olduklarını her zaman öğrenin',
   'eam.checks.1': 'Tam ve ayrıntılı Bakım Günlüklerini görüntüleyin.',

@@ -760,9 +760,8 @@ function PMs() {
               <Box sx={{ width: '95%' }}>
                 <CustomDataGrid
                   apiRef={apiRef}
+                  storageKey="preventive_maintenance"
                   columns={columns}
-                  loading={loadingGet}
-                  pageSize={criteria.pageSize}
                   page={criteria.pageNum}
                   rows={preventiveMaintenances.content}
                   rowCount={preventiveMaintenances.totalElements}

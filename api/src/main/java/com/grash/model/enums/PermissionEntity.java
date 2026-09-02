@@ -18,5 +18,6 @@ public enum PermissionEntity {
     REQUESTS,
     ANALYTICS,
     FLEET,
-    HEARING_CONSERVATION
+    HEARING_CONSERVATION,
+    JHA
 }

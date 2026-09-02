@@ -47,6 +47,7 @@ import { reducer as lotoReducer } from 'src/slices/loto';
 import { reducer as breakerPanelReducer } from 'src/slices/breakerPanel';
 import { reducer as hearingConservationReducer } from 'src/slices/hearingConservation';
 import { reducer as washTankReducer } from 'src/slices/washTank';
+import { reducer as jhaReducer } from 'src/slices/jha';
 
 const rootReducer = combineReducers({
   calendar: calendarReducer,
@@ -96,7 +97,8 @@ const rootReducer = combineReducers({
   loto: lotoReducer,
   breakerPanels: breakerPanelReducer,
   hearingConservation: hearingConservationReducer,
-  washTank: washTankReducer
+  washTank: washTankReducer,
+  jha: jhaReducer
 });
 
 export default rootReducer;
