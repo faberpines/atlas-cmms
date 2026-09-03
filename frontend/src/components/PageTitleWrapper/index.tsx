@@ -4,7 +4,15 @@ import { Box, styled } from '@mui/material';
 
 const PageTitle = styled(Box)(
   ({ theme }) => `
-        padding: ${theme.spacing(4)};
+        padding: ${theme.spacing(3)} ${theme.spacing(4)} ${theme.spacing(2)};
+
+        ${theme.breakpoints.down('sm')} {
+          padding: ${theme.spacing(2)};
+        }
+
+        & > * {
+          min-width: 0;
+        }
 `
 );
 
@@ -13,11 +21,7 @@ interface PageTitleWrapperProps {
 }
 
 const PageTitleWrapper: FC<PageTitleWrapperProps> = ({ children }) => {
-  return (
-    <>
-      <PageTitle className="MuiPageTitle-wrapper">{children}</PageTitle>
-    </>
-  );
+  return <PageTitle className="MuiPageTitle-wrapper">{children}</PageTitle>;
 };
 
 PageTitleWrapper.propTypes = {

@@ -5,12 +5,10 @@ import {
   Box,
   Divider,
   IconButton,
-  lighten,
   Stack,
   styled,
   Tooltip,
-  Typography,
-  useTheme
+  Typography
 } from '@mui/material';
 import MenuTwoToneIcon from '@mui/icons-material/MenuTwoTone';
 import { SidebarContext } from 'src/contexts/SidebarContext';
@@ -27,11 +25,12 @@ const HeaderWrapper = styled(Box)(
   ({ theme }) => `
         height: ${theme.header.height};
         color: ${theme.header.textColor};
-        padding: ${theme.spacing(0, 2)};
+        padding: ${theme.spacing(0, 2.5)};
         right: 0;
         z-index: 6;
-        background-color: ${alpha(theme.header.background, 0.95)};
-        backdrop-filter: blur(3px);
+        background-color: ${alpha(theme.header.background, 0.98)};
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid ${theme.palette.divider};
         position: fixed;
         justify-content: space-between;
         width: 100%;
@@ -45,7 +44,6 @@ const HeaderWrapper = styled(Box)(
 function Header() {
   const { sidebarToggle, toggleSidebar } = useContext(SidebarContext);
   const { title } = useContext(TitleContext);
-  const theme = useTheme();
   const { t }: { t: any } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
@@ -56,31 +54,26 @@ function Header() {
       display="flex"
       alignItems="center"
       sx={{
-        boxShadow:
-          theme.palette.mode === 'dark'
-            ? `0 1px 0 ${alpha(
-                lighten(theme.colors.primary.main, 0.7),
-                0.15
-              )}, 0px 2px 8px -3px rgba(0, 0, 0, 0.2), 0px 5px 22px -4px rgba(0, 0, 0, .1)`
-            : `0px 2px 8px -3px ${alpha(
-                theme.colors.alpha.black[100],
-                0.2
-              )}, 0px 5px 22px -4px ${alpha(
-                theme.colors.alpha.black[100],
-                0.1
-              )}`
+        boxShadow: '0 2px 10px rgba(24, 45, 32, 0.04)'
       }}
     >
       <Stack
         direction="row"
         divider={<Divider orientation="vertical" flexItem />}
         alignItems="center"
-        spacing={2}
+        spacing={1.5}
       >
-        <IconButton onClick={()=>navigate(-1)} disabled={location.key==='default'}>
+        <IconButton
+          aria-label={t('back')}
+          onClick={() => navigate(-1)}
+          disabled={location.key === 'default'}
+          sx={{ width: 44, height: 44 }}
+        >
           <ArrowBackTwoToneIcon/>
-          </IconButton>
-        <Typography variant="h2">{title}</Typography>
+        </IconButton>
+        <Typography variant="h2" noWrap sx={{ fontSize: { xs: 18, sm: 21 }, fontWeight: 700 }}>
+          {title}
+        </Typography>
       </Stack>
       <Box display="flex" alignItems="center">
         <HeaderButtons />
@@ -93,7 +86,7 @@ function Header() {
           }}
         >
           <Tooltip arrow title={t('toggle_menu')}>
-            <IconButton color="primary" onClick={toggleSidebar}>
+            <IconButton aria-label={t('toggle_menu')} color="primary" onClick={toggleSidebar} sx={{ width: 44, height: 44 }}>
               {!sidebarToggle ? (
                 <MenuTwoToneIcon fontSize="small" />
               ) : (

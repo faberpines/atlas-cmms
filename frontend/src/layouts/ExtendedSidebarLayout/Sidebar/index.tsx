@@ -5,13 +5,10 @@ import { SidebarContext } from 'src/contexts/SidebarContext';
 import {
   alpha,
   Box,
-  Button,
   darken,
   Divider,
   Drawer,
   lighten,
-  Link,
-  Stack,
   styled,
   Typography,
   useTheme
@@ -19,9 +16,7 @@ import {
 import SidebarMenu from './SidebarMenu';
 import SidebarFooter from './SidebarFooter';
 import Logo from 'src/components/LogoSign';
-import { isCloudVersion, isWhiteLabeled } from '../../../config';
-import useAuth from '../../../hooks/useAuth';
-import dayjs from 'dayjs';
+import { isWhiteLabeled } from '../../../config';
 
 const SidebarWrapper = styled(Box)(
   ({ theme }) => `
@@ -31,8 +26,37 @@ const SidebarWrapper = styled(Box)(
         position: relative;
         z-index: 7;
         height: 100%;
-        padding-bottom: 61px;
+        padding-bottom: 64px;
+        border-right: 1px solid ${theme.colors.alpha.trueWhite[10]};
 `
+);
+
+const SidebarBrand = () => (
+  <Box sx={{ px: 2.5, pt: 2.25, pb: 1.75, textAlign: 'center' }}>
+    <Logo white />
+    {!isWhiteLabeled && (
+      <Typography
+        component="button"
+        type="button"
+        onClick={() => window.open('https://www.baybabyproduce.com/', '_blank')}
+        sx={{
+          mt: 0.75,
+          p: 0,
+          border: 0,
+          background: 'none',
+          color: 'rgba(255,255,255,.68)',
+          font: 'inherit',
+          fontSize: 12,
+          letterSpacing: '.02em',
+          cursor: 'pointer',
+          '&:hover': { color: 'common.white' },
+          '&:focus-visible': { outline: '2px solid currentColor', outlineOffset: 3 }
+        }}
+      >
+        Powered by Pumpkins 🎃
+      </Typography>
+    )}
+  </Box>
 );
 
 function Sidebar() {
@@ -61,33 +85,10 @@ function Sidebar() {
         }}
       >
         <Scrollbar>
-          <Box mt={3}>
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                flexDirection: 'row'
-              }}
-            >
-              <Box>
-                <Logo white />
-                {!isWhiteLabeled && (
-                  <Typography
-                    style={{ cursor: 'pointer', color: 'white' }}
-                    fontSize={13}
-                    onClick={() => {
-                      window.open('https://www.baybabyproduce.com/', '_blank');
-                    }}
-                  >
-                    Powered by Pumpkins 🎃
-                  </Typography>
-                )}
-              </Box>
-            </Box>
-          </Box>
+          <SidebarBrand />
           <Divider
             sx={{
-              mt: theme.spacing(1),
+              mt: 0,
               mx: theme.spacing(2),
               background: theme.colors.alpha.trueWhite[10]
             }}
@@ -111,6 +112,7 @@ function Sidebar() {
         onClose={closeSidebar}
         variant="temporary"
         elevation={9}
+        ModalProps={{ keepMounted: true }}
       >
         <SidebarWrapper
           sx={{
@@ -121,33 +123,10 @@ function Sidebar() {
           }}
         >
           <Scrollbar>
-            <Box mt={3}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  flexDirection: 'row'
-                }}
-              >
-                <Box>
-                  <Logo white />
-                  {!isWhiteLabeled && (
-                    <Typography
-                      style={{ cursor: 'pointer', color: 'white' }}
-                      fontSize={13}
-                      onClick={() => {
-                        window.open('https://www.baybabyproduce.com/', '_blank');
-                      }}
-                    >
-                      Powered by Pumpkins 🎃
-                    </Typography>
-                  )}
-                </Box>
-              </Box>
-            </Box>
+            <SidebarBrand />
             <Divider
               sx={{
-                mt: theme.spacing(1),
+                mt: 0,
                 mx: theme.spacing(2),
                 background: theme.colors.alpha.trueWhite[10]
               }}

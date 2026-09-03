@@ -26,7 +26,7 @@ interface CustomDatagridProps extends DataGridProps {
 
 function ColumnsToolbar() {
   return (
-    <GridToolbarContainer>
+    <GridToolbarContainer sx={{ px: 1.5, py: 1 }}>
       <GridToolbarColumnsButton />
     </GridToolbarContainer>
   );
@@ -93,17 +93,53 @@ function CustomDataGrid(props: CustomDatagridProps) {
     : callerComponents;
 
   return (
-    <div ref={tableRef} style={{ height: tableHeight, width: '100%' }}>
+    <div
+      ref={tableRef}
+      style={{ height: tableHeight, minHeight: 360, width: '100%' }}
+    >
       {/*@ts-ignore*/}
       <DataGrid
         sx={{
-          ' .MuiDataGrid-columnHeader': {
-            fontWeight: 'bold',
-            textTransform: 'uppercase',
-            backgroundColor: theme.colors.alpha.black[10]
+          border: 0,
+          color: theme.palette.text.primary,
+          '& .MuiDataGrid-columnHeaders': {
+            borderBottom: `1px solid ${theme.palette.divider}`,
+            backgroundColor: theme.colors.alpha.black[5]
           },
-          '.MuiDataGrid-row': {
-            cursor: notClickable ? 'auto' : 'pointer'
+          '& .MuiDataGrid-columnHeader': {
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '0.045em',
+            fontSize: theme.typography.pxToRem(11),
+            color: theme.palette.text.secondary
+          },
+          '& .MuiDataGrid-columnHeader:focus, & .MuiDataGrid-cell:focus': {
+            outline: 'none'
+          },
+          '& .MuiDataGrid-columnHeader:focus-visible, & .MuiDataGrid-cell:focus-visible': {
+            outline: `2px solid ${theme.palette.primary.main}`,
+            outlineOffset: -2
+          },
+          '& .MuiDataGrid-row': {
+            cursor: notClickable ? 'auto' : 'pointer',
+            transition: 'background-color 120ms ease',
+            '&:hover': { backgroundColor: theme.colors.primary.lighter },
+            '&:last-of-type .MuiDataGrid-cell': { borderBottom: 0 }
+          },
+          '& .MuiDataGrid-cell': {
+            borderColor: theme.palette.divider,
+            display: 'flex',
+            alignItems: 'center'
+          },
+          '& .MuiDataGrid-footerContainer': {
+            minHeight: 52,
+            borderTop: `1px solid ${theme.palette.divider}`
+          },
+          '& .MuiDataGrid-toolbarContainer': {
+            borderBottom: `1px solid ${theme.palette.divider}`
+          },
+          '& .MuiDataGrid-overlay': {
+            backgroundColor: theme.palette.background.paper
           }
         }}
         components={{

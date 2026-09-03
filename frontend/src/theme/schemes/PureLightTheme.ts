@@ -1,3 +1,8 @@
+/* Hallmark · genre: modern-minimal · macrostructure: Workbench · design-system: design.md · designed-as-app
+ * palette: warm-white / leaf-green / restrained-pumpkin · contrast: pass (40–41)
+ * nav: operational-sidebar · chrome: pass (42–47) · tokens: design.md + tokens.css
+ * responsive: pass (34, 49–57) · pre-emit critique: P5 H4 E4 S5 R5 V4
+ */
 import { alpha, createTheme, lighten, darken } from '@mui/material';
 import '@mui/lab/themeAugmentation';
 import { customColors } from '../../config';
@@ -11,7 +16,7 @@ const themeColors = {
   error: '#FF1943',
   info: '#52b788',
   black: '#1a2e10',
-  white: '#ffffff',
+  white: '#fffefb',
   primaryAlt: '#1e4d0f',
   ...customColors
 };
@@ -45,24 +50,23 @@ const colors = {
       '0px 1px 4px rgba(74, 124, 47, 0.25), 0px 3px 12px 2px rgba(74, 124, 47, 0.35)',
     warning:
       '0px 1px 4px rgba(255, 163, 25, 0.25), 0px 3px 12px 2px rgba(255, 163, 25, 0.35)',
-    card: '0px 9px 16px rgba(159, 162, 191, .18), 0px 2px 2px rgba(159, 162, 191, 0.32)',
-    cardSm:
-      '0px 2px 3px rgba(159, 162, 191, .18), 0px 1px 1px rgba(159, 162, 191, 0.32)',
+    card: '0 1px 2px rgba(26, 46, 16, .06), 0 8px 24px rgba(26, 46, 16, .07)',
+    cardSm: '0 1px 2px rgba(26, 46, 16, .06), 0 3px 10px rgba(26, 46, 16, .05)',
     cardLg:
-      '0 5rem 14rem 0 rgb(255 255 255 / 30%), 0 0.8rem 2.3rem rgb(0 0 0 / 60%), 0 0.2rem 0.3rem rgb(0 0 0 / 45%)'
+      '0 20px 60px rgba(26, 46, 16, .18), 0 4px 16px rgba(26, 46, 16, .10)'
   },
   layout: {
     general: {
-      bodyBg: '#f2f5f9'
+      bodyBg: '#f4f6f1'
     },
     sidebar: {
       background: themeColors.white,
       textColor: themeColors.secondary,
-      dividerBg: '#f2f5f9',
+      dividerBg: '#e7ebE2',
       menuItemColor: '#1e3a10',
       menuItemColorActive: themeColors.primary,
       menuItemBg: themeColors.white,
-      menuItemBgActive: '#f2f5f9',
+      menuItemBgActive: '#edf3e9',
       menuItemIconColor: lighten(themeColors.secondary, 0.3),
       menuItemIconColorActive: themeColors.primary,
       menuItemHeadingColor: darken(themeColors.secondary, 0.3)
@@ -226,9 +230,9 @@ export const PureLightTheme = createTheme({
   general: {
     reactFrameworkColor: '#00D8FF',
     borderRadiusSm: '6px',
-    borderRadius: '10px',
-    borderRadiusLg: '12px',
-    borderRadiusXl: '16px'
+    borderRadius: '8px',
+    borderRadiusLg: '8px',
+    borderRadiusXl: '10px'
   },
   sidebar: {
     background: colors.layout.sidebar.background,
@@ -241,17 +245,16 @@ export const PureLightTheme = createTheme({
     menuItemIconColor: colors.layout.sidebar.menuItemIconColor,
     menuItemIconColorActive: colors.layout.sidebar.menuItemIconColorActive,
     menuItemHeadingColor: colors.layout.sidebar.menuItemHeadingColor,
-    boxShadow:
-      '2px 0 3px rgba(159, 162, 191, .18), 1px 0 1px rgba(159, 162, 191, 0.32)',
-    width: '290px'
+    boxShadow: '1px 0 0 rgba(26, 46, 16, .08)',
+    width: '260px'
   },
   header: {
-    height: '80px',
+    height: '64px',
     background: colors.alpha.white[100],
     boxShadow: colors.shadows.cardSm,
     textColor: colors.secondary.main
   },
-  spacing: 9,
+  spacing: 8,
   palette: {
     common: {
       black: colors.alpha.black[100],
@@ -353,17 +356,20 @@ export const PureLightTheme = createTheme({
       styleOverrides: {
         'html, body': {
           width: '100%',
-          height: '100%'
+          height: '100%',
+          overflowX: 'clip'
         },
         body: {
           display: 'flex',
           flexDirection: 'column',
           minHeight: '100%',
           width: '100%',
-          flex: 1
+          flex: 1,
+          backgroundColor: colors.layout.general.bodyBg
         },
         '#root': {
           width: '100%',
+          minWidth: 0,
           height: '100%',
           display: 'flex',
           flex: 1,
@@ -399,6 +405,32 @@ export const PureLightTheme = createTheme({
         },
         ':root': {
           '--swiper-theme-color': colors.primary.main
+        },
+        '*:focus-visible': {
+          outline: `3px solid ${alpha(colors.primary.main, 0.28)}`,
+          outlineOffset: 2
+        },
+        '.MuiDataGrid-root': {
+          borderColor: alpha(themeColors.black, 0.1),
+          borderRadius: 8,
+          backgroundColor: themeColors.white,
+          boxShadow: '0 1px 2px rgba(26, 46, 16, .04)'
+        },
+        '.MuiDataGrid-columnHeaders': {
+          backgroundColor: '#f1f4ed',
+          borderBottomColor: alpha(themeColors.black, 0.1)
+        },
+        '.MuiDataGrid-columnHeaderTitle': {
+          fontSize: 12,
+          fontWeight: 700,
+          letterSpacing: '0.045em',
+          textTransform: 'uppercase'
+        },
+        '.MuiDataGrid-row:hover': {
+          backgroundColor: `${alpha(themeColors.primary, 0.045)} !important`
+        },
+        '.MuiDataGrid-cell': {
+          borderBottomColor: alpha(themeColors.black, 0.07)
         },
         code: {
           background: colors.info.lighter,
@@ -459,6 +491,12 @@ export const PureLightTheme = createTheme({
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
+          borderRadius: 8,
+          backgroundColor: colors.alpha.white[100],
+          transition: 'box-shadow 150ms ease, border-color 150ms ease',
+          '&.Mui-focused': {
+            boxShadow: `0 0 0 3px ${alpha(colors.primary.main, 0.12)}`
+          },
           '& .MuiInputAdornment-positionEnd.MuiInputAdornment-outlined': {
             paddingRight: 6
           },
@@ -484,6 +522,9 @@ export const PureLightTheme = createTheme({
     },
     MuiCardHeader: {
       styleOverrides: {
+        root: {
+          padding: '18px 20px'
+        },
         action: {
           marginTop: -5,
           marginBottom: -5
@@ -502,6 +543,10 @@ export const PureLightTheme = createTheme({
     },
     MuiChip: {
       styleOverrides: {
+        root: {
+          borderRadius: 6,
+          fontWeight: 600
+        },
         colorSecondary: {
           background: colors.alpha.black[5],
           color: colors.alpha.black[100],
@@ -596,10 +641,19 @@ export const PureLightTheme = createTheme({
       },
       styleOverrides: {
         root: {
-          fontWeight: 'bold',
+          minHeight: 38,
+          borderRadius: 7,
+          fontWeight: 650,
           textTransform: 'none',
           paddingLeft: 16,
           paddingRight: 16,
+          boxShadow: 'none',
+          transition:
+            'background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease',
+
+          '&:focus-visible': {
+            boxShadow: `0 0 0 3px ${alpha(colors.primary.main, 0.22)}`
+          },
 
           '.MuiSvgIcon-root': {
             transition: 'all .2s'
@@ -612,6 +666,11 @@ export const PureLightTheme = createTheme({
           backgroundColor: colors.secondary.main,
           color: colors.alpha.white[100],
           border: '1px solid ' + colors.alpha.black[30]
+        },
+        containedPrimary: {
+          '&:hover': {
+            boxShadow: '0 3px 10px rgba(74, 124, 47, .2)'
+          }
         },
         outlinedSecondary: {
           backgroundColor: colors.alpha.white[100],
@@ -674,6 +733,7 @@ export const PureLightTheme = createTheme({
         root: {
           borderRadius: 8,
           padding: 8,
+          transition: 'background-color 150ms ease, color 150ms ease',
 
           '& .MuiTouchRipple-root': {
             borderRadius: 8
@@ -737,7 +797,8 @@ export const PureLightTheme = createTheme({
     MuiPaper: {
       styleOverrides: {
         root: {
-          padding: 0
+          padding: 0,
+          backgroundImage: 'none'
         },
         elevation0: {
           boxShadow: 'none'
@@ -752,7 +813,27 @@ export const PureLightTheme = createTheme({
           boxShadow: colors.shadows.cardLg
         },
         outlined: {
-          boxShadow: colors.shadows.card
+          borderColor: alpha(themeColors.black, 0.1),
+          boxShadow: '0 1px 2px rgba(26, 46, 16, .04)'
+        }
+      }
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          border: `1px solid ${alpha(themeColors.black, 0.08)}`,
+          borderRadius: 8,
+          boxShadow: colors.shadows.cardSm
+        }
+      }
+    },
+    MuiCardContent: {
+      styleOverrides: {
+        root: {
+          padding: 20,
+          '&:last-child': {
+            paddingBottom: 20
+          }
         }
       }
     },
@@ -822,16 +903,13 @@ export const PureLightTheme = createTheme({
     MuiTabs: {
       styleOverrides: {
         root: {
-          height: 38,
-          minHeight: 38,
+          minHeight: 42,
           overflow: 'visible'
         },
         indicator: {
-          height: 38,
-          minHeight: 38,
-          borderRadius: 6,
-          border: '1px solid ' + colors.primary.dark,
-          boxShadow: '0px 2px 10px ' + colors.primary.light
+          height: 3,
+          borderRadius: '3px 3px 0 0',
+          backgroundColor: colors.primary.main
         },
         scrollableX: {
           overflow: 'visible !important'
@@ -842,10 +920,10 @@ export const PureLightTheme = createTheme({
       styleOverrides: {
         root: {
           padding: 0,
-          height: 38,
-          minHeight: 38,
+          minHeight: 42,
           borderRadius: 6,
-          transition: 'color .2s',
+          fontWeight: 600,
+          transition: 'color .15s, background-color .15s',
           textTransform: 'capitalize',
 
           '&.MuiButtonBase-root': {
@@ -855,7 +933,8 @@ export const PureLightTheme = createTheme({
             marginRight: 4
           },
           '&.Mui-selected, &.Mui-selected:hover': {
-            color: colors.alpha.white[100],
+            color: colors.primary.dark,
+            backgroundColor: alpha(colors.primary.main, 0.08),
             zIndex: 5
           },
           '&:hover': {
@@ -977,7 +1056,7 @@ export const PureLightTheme = createTheme({
     MuiTableRow: {
       styleOverrides: {
         head: {
-          background: colors.alpha.black[5]
+          background: '#f1f4ed'
         },
         root: {
           transition: 'background-color .2s',
@@ -992,13 +1071,15 @@ export const PureLightTheme = createTheme({
       styleOverrides: {
         root: {
           borderBottomColor: colors.alpha.black[10],
-          fontSize: 14
+          fontSize: 14,
+          padding: '13px 16px'
         },
         head: {
           textTransform: 'uppercase',
-          fontSize: 13,
+          fontSize: 12,
           fontWeight: 'bold',
-          color: colors.alpha.black[70]
+          color: colors.alpha.black[70],
+          letterSpacing: '0.045em'
         }
       }
     },
@@ -1165,23 +1246,28 @@ export const PureLightTheme = createTheme({
     }
   },
   shape: {
-    borderRadius: 10
+    borderRadius: 8
   },
   typography: {
     fontFamily:
       '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',
     h1: {
       fontWeight: 700,
-      fontSize: 35
+      fontSize: 34,
+      lineHeight: 1.18,
+      letterSpacing: '-0.025em'
     },
     h2: {
       fontWeight: 700,
-      fontSize: 30
+      fontSize: 29,
+      lineHeight: 1.22,
+      letterSpacing: '-0.02em'
     },
     h3: {
       fontWeight: 700,
       fontSize: 25,
-      lineHeight: 1.4,
+      lineHeight: 1.3,
+      letterSpacing: '-0.015em',
       color: colors.alpha.black[100]
     },
     h4: {
@@ -1196,10 +1282,12 @@ export const PureLightTheme = createTheme({
       fontSize: 15
     },
     body1: {
-      fontSize: 14
+      fontSize: 14,
+      lineHeight: 1.55
     },
     body2: {
-      fontSize: 14
+      fontSize: 14,
+      lineHeight: 1.5
     },
     button: {
       fontWeight: 600

@@ -53,7 +53,9 @@ function SidebarFooter() {
   return (
     <Box
       sx={{
-        height: 60
+        height: 64,
+        gap: 0.75,
+        px: 1.5
       }}
       display="flex"
       alignItems="center"
@@ -63,6 +65,8 @@ function SidebarFooter() {
         <LightTooltip placement="top" arrow title={t('upgrade_now')}>
           <IconButton
             sx={{
+              width: 44,
+              height: 44,
               background: `${theme.colors.alpha.trueWhite[10]}`,
               color: `${theme.colors.alpha.trueWhite[70]}`,
               transition: `${theme.transitions.create(['all'])}`,
@@ -88,6 +92,8 @@ function SidebarFooter() {
       <LightTooltip placement="top" arrow title={t('documentation')}>
         <IconButton
           sx={{
+            width: 44,
+            height: 44,
             background: `${theme.colors.alpha.trueWhite[10]}`,
             color: `${theme.colors.alpha.trueWhite[70]}`,
             transition: `${theme.transitions.create(['all'])}`,
@@ -106,6 +112,8 @@ function SidebarFooter() {
         <LightTooltip placement="top" arrow title={t('wo_calendar')}>
           <IconButton
             sx={{
+              width: 44,
+              height: 44,
               background: `${theme.colors.alpha.trueWhite[10]}`,
               color: `${theme.colors.alpha.trueWhite[70]}`,
               transition: `${theme.transitions.create(['all'])}`,
@@ -125,6 +133,8 @@ function SidebarFooter() {
       <LightTooltip placement="top" arrow title={t('Logout')}>
         <IconButton
           sx={{
+            width: 44,
+            height: 44,
             background: `${theme.colors.alpha.trueWhite[10]}`,
             color: `${theme.colors.alpha.trueWhite[70]}`,
             transition: `${theme.transitions.create(['all'])}`,

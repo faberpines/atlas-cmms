@@ -885,13 +885,18 @@ function WorkOrders() {
       <Helmet>
         <title>{t('work_orders')}</title>
       </Helmet>
-      <Box justifyContent="center" alignItems="stretch" paddingX={4}>
+      <Box
+        justifyContent="center"
+        alignItems="stretch"
+        sx={{ px: { xs: 1.5, sm: 2.5, md: 4 }, pb: 3 }}
+      >
         <Box
           my={1}
           display="flex"
-          flexDirection="row"
+          flexDirection={{ xs: 'column', sm: 'row' }}
           justifyContent="space-between"
-          alignItems="center"
+          alignItems={{ xs: 'stretch', sm: 'center' }}
+          gap={1}
         >
           <Tabs
             onChange={handleTabsChange}
@@ -918,15 +923,24 @@ function WorkOrders() {
               )
             )}
           </Tabs>
-          <Stack direction={'row'} alignItems="center" spacing={1}>
-            <IconButton onClick={handleOpenMenu} color="primary">
+          <Stack
+            direction={'row'}
+            alignItems="center"
+            justifyContent="flex-end"
+            spacing={1}
+          >
+            <IconButton
+              onClick={handleOpenMenu}
+              color="primary"
+              aria-label={t('more')}
+            >
               <MoreVertTwoToneIcon />
             </IconButton>
             {hasCreatePermission(PermissionEntity.WORK_ORDERS) && (
               <Button
                 onClick={() => setOpenAddModal(true)}
                 startIcon={<AddTwoToneIcon />}
-                sx={{ mx: 6, my: 1 }}
+                sx={{ my: 0.5 }}
                 variant="contained"
               >
                 {t('work_order')}
@@ -936,19 +950,26 @@ function WorkOrders() {
         </Box>
         <Card
           sx={{
-            py: 2,
+            pt: 1.5,
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center'
+            alignItems: 'stretch',
+            borderRadius: 2,
+            overflow: 'hidden'
           }}
         >
           {currentTab !== 'calendar' && (
             <Stack
-              sx={{ ml: 1 }}
+              sx={{
+                px: { xs: 1.5, sm: 2 },
+                pb: 1.5,
+                flexWrap: 'wrap',
+                rowGap: 1
+              }}
               direction="row"
               spacing={1}
               justifyContent={'flex-start'}
-              width={'95%'}
+              width={'100%'}
             >
               <Button
                 onClick={() => setOpenFilterDrawer(true)}
@@ -980,8 +1001,8 @@ function WorkOrders() {
               <SearchInput onChange={debouncedQueryChange} />
             </Stack>
           )}
-          <Divider sx={{ mt: 1 }} />
-          <Box sx={{ width: '95%' }}>
+          <Divider />
+          <Box sx={{ width: '100%' }}>
             {currentTab === 'list' ? (
               <CustomDataGrid
                 apiRef={apiRef}
@@ -1054,7 +1075,13 @@ function WorkOrders() {
         open={openDrawer}
         onClose={handleCloseDetails}
         PaperProps={{
-          sx: { width: '50%' }
+          sx: {
+            width: {
+              xs: '100%',
+              sm: 'min(680px, 88vw)',
+              lg: 'min(760px, 58vw)'
+            }
+          }
         }}
       >
         <WorkOrderDetails
@@ -1069,7 +1096,7 @@ function WorkOrders() {
         open={openFilterDrawer}
         onClose={handleCloseFilterDrawer}
         PaperProps={{
-          sx: { width: '30%' }
+          sx: { width: { xs: '100%', sm: 400, md: 440 }, maxWidth: '100vw' }
         }}
       >
         <MoreFilters

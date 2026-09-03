@@ -25,7 +25,7 @@ import { isCloudVersion } from 'src/config';
 const MenuWrapper = styled(Box)(
   ({ theme }) => `
   .MuiList-root {
-    padding: ${theme.spacing(1)};
+    padding: ${theme.spacing(1.25, 1.5)};
 
     & > .MuiList-root {
       padding: 0 ${theme.spacing(0)} ${theme.spacing(1)};
@@ -34,11 +34,12 @@ const MenuWrapper = styled(Box)(
 
     .MuiListSubheader-root {
       text-transform: uppercase;
-      font-weight: bold;
-      font-size: ${theme.typography.pxToRem(12)};
+      font-weight: 700;
+      font-size: ${theme.typography.pxToRem(11)};
+      letter-spacing: .09em;
       color: ${theme.colors.alpha.trueWhite[50]};
-      padding: ${theme.spacing(0, 2.5)};
-      line-height: 1.4;
+      padding: ${theme.spacing(1.25, 1.5, 0.75)};
+      line-height: 1.5;
     }
 `
 );
@@ -48,7 +49,7 @@ const SubMenuWrapper = styled(Box)(
     .MuiList-root {
 
       .MuiListItem-root {
-        padding: 1px 0;
+        padding: 2px 0;
 
         .MuiBadge-root {
           position: absolute;
@@ -69,7 +70,10 @@ const SubMenuWrapper = styled(Box)(
           background-color: transparent;
           width: 100%;
           justify-content: flex-start;
-          padding: ${theme.spacing(1.2, 3)};
+          min-height: 44px;
+          padding: ${theme.spacing(1, 1.5)};
+          border-radius: ${theme.general.borderRadiusSm};
+          font-weight: 600;
 
           .MuiButton-startIcon,
           .MuiButton-endIcon {
@@ -84,7 +88,7 @@ const SubMenuWrapper = styled(Box)(
           .MuiButton-startIcon {
             color: ${theme.colors.alpha.trueWhite[30]};
             font-size: ${theme.typography.pxToRem(20)};
-            margin-right: ${theme.spacing(1)};
+            margin-right: ${theme.spacing(1.25)};
           }
           
           .MuiButton-endIcon {
@@ -96,13 +100,22 @@ const SubMenuWrapper = styled(Box)(
 
           &.active,
           &:hover {
-            background-color: ${alpha(theme.colors.alpha.trueWhite[100], 0.06)};
+            background-color: ${alpha(theme.colors.alpha.trueWhite[100], 0.09)};
             color: ${theme.colors.alpha.trueWhite[100]};
 
             .MuiButton-startIcon,
             .MuiButton-endIcon {
               color: ${theme.colors.alpha.trueWhite[100]};
             }
+          }
+
+          &.active {
+            box-shadow: inset 3px 0 0 ${theme.colors.primary.main};
+          }
+
+          &:focus-visible {
+            outline: 2px solid ${theme.colors.primary.main};
+            outline-offset: 1px;
           }
         }
 
@@ -126,7 +139,8 @@ const SubMenuWrapper = styled(Box)(
             padding: 1px 0;
 
             .MuiButton-root {
-              padding: ${theme.spacing(0.8, 3)};
+              min-height: 44px;
+              padding: ${theme.spacing(0.75, 1.5, 0.75, 2.25)};
 
               .MuiBadge-root {
                 right: ${theme.spacing(3.2)};

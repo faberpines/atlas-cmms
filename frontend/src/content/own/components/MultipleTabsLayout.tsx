@@ -8,11 +8,8 @@ import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 
 const TabsContainerWrapper = styled(Box)(
   ({ theme }) => `
-      padding: 0 ${theme.spacing(8)};
-      margin-top: 2px;
-      position: relative;
-      bottom: -1px;
-      max-width: 82%;
+      min-width: 0;
+      flex: 1 1 auto;
 
       .MuiTabs-root {
         height: 44px;
@@ -27,7 +24,7 @@ const TabsContainerWrapper = styled(Box)(
           min-height: 4px;
           height: 4px;
           box-shadow: none;
-          bottom: -4px;
+          bottom: 0;
           background: none;
           border: 0;
 
@@ -47,9 +44,8 @@ const TabsContainerWrapper = styled(Box)(
           &.MuiButtonBase-root {
               height: 44px;
               min-height: 44px;
-              background: ${theme.colors.alpha.white[50]};
-              border: 1px solid ${theme.colors.alpha.black[10]};
-              border-bottom: 0;
+              background: transparent;
+              border: 0;
               position: relative;
               margin-right: ${theme.spacing(1)};
               font-size: ${theme.typography.pxToRem(14)};
@@ -61,17 +57,6 @@ const TabsContainerWrapper = styled(Box)(
                 opacity: .1;
               }
 
-              &:after {
-                position: absolute;
-                left: 0;
-                right: 0;
-                width: 100%;
-                bottom: 0;
-                height: 1px;
-                content: '';
-                background: ${theme.colors.alpha.black[10]};
-              }
-
               &:hover {
                 color: ${theme.colors.alpha.black[100]};
               }
@@ -79,12 +64,7 @@ const TabsContainerWrapper = styled(Box)(
 
           &.Mui-selected {
               color: ${theme.colors.alpha.black[100]};
-              background: ${theme.colors.alpha.white[100]};
-              border-bottom-color: ${theme.colors.alpha.white[100]};
-
-              &:after {
-                height: 0;
-              }
+              font-weight: 700;
           }
       }
   `
@@ -133,7 +113,16 @@ function MultipleTabsLayout(props: SettingsLayoutProps) {
       <Helmet>
         <title>{title}</title>
       </Helmet>
-      <Box display="flex" justifyContent="space-between">
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        gap={2}
+        sx={{
+          px: { xs: 2, sm: 3, md: 4 },
+          flexWrap: { xs: 'wrap', md: 'nowrap' }
+        }}
+      >
         <TabsContainerWrapper>
           <Tabs
             onChange={handleTabsChange}
@@ -148,7 +137,11 @@ function MultipleTabsLayout(props: SettingsLayoutProps) {
             ))}
           </Tabs>
         </TabsContainerWrapper>
-        <Stack direction="row" spacing={1} sx={{ mr: 4, my: 1 }}>
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{ my: 1, flexShrink: 0, flexWrap: 'wrap' }}
+        >
           {action && (
             <Button
               startIcon={editAction ? <EditTwoToneIcon /> : <AddTwoToneIcon />}
@@ -175,7 +168,9 @@ function MultipleTabsLayout(props: SettingsLayoutProps) {
         <Card
           variant="outlined"
           sx={{
-            mx: 4
+            mx: { xs: 2, sm: 3, md: 4 },
+            borderRadius: 2,
+            overflow: 'hidden'
           }}
         >
           {children}

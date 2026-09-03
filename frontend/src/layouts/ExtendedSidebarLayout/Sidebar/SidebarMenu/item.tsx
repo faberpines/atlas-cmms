@@ -69,7 +69,8 @@ const SidebarMenuItem: FC<SidebarMenuItemProps> = ({
     return (
       <ListItem component="div" className="Mui-children" key={name} {...rest}>
         <Button
-          className={clsx({ active: menuToggle })}
+          className={clsx({ active: active || menuToggle })}
+          aria-expanded={menuToggle}
           startIcon={Icon && <Icon />}
           endIcon={
             menuToggle ? <ExpandLessTwoToneIcon /> : <ExpandMoreTwoToneIcon />
@@ -100,11 +101,11 @@ const SidebarMenuItem: FC<SidebarMenuItemProps> = ({
   return (
     <ListItem component="div" key={name} {...rest}>
       <Button
-        disableRipple
         component={RouterLink}
         onClick={closeSidebar}
         to={link}
         startIcon={Icon && <Icon />}
+        aria-current={active ? 'page' : undefined}
       >
         {t(name)}
         {badgeTooltip ? (
