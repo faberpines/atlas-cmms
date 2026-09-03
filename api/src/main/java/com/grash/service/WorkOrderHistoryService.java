@@ -12,10 +12,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
+import java.util.Comparator;
+import java.util.stream.Stream;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,8 +49,8 @@ public class WorkOrderHistoryService {
     }
 
     public Collection<WorkOrderHistory> findByWorkOrder(Long id) {
-        if (!licenseService.hasEntitlement(LicenseEntitlement.WORK_ORDER_HISTORY)) return new ArrayList<>();
-        return workOrderAudRepository.findByIdAndRevtype(id, 1).stream().map(workOrderAud -> {
+        Stream<WorkOrderHistory> auditHistory = licenseService.hasEntitlement(LicenseEntitlement.WORK_ORDER_HISTORY)
+                ? workOrderAudRepository.findByIdAndRevtype(id, 1).stream().map(workOrderAud -> {
             WorkOrder workOrder = workOrderRepository.findById(id).get();
             OwnUser user = workOrderAud.getWorkOrderAudId().getRev().getUser();
             WorkOrderHistory workOrderHistory = WorkOrderHistory.builder()
@@ -59,6 +60,10 @@ public class WorkOrderHistoryService {
                     .build();
             workOrderHistory.setCreatedAt(new Date(workOrderAud.getWorkOrderAudId().getRev().getTimestamp()));
             return workOrderHistory;
-        }).collect(Collectors.toList());
+        }) : Stream.empty();
+
+        return Stream.concat(workOrderHistoryRepository.findByWorkOrder_Id(id).stream(), auditHistory)
+                .sorted(Comparator.comparing(WorkOrderHistory::getCreatedAt))
+                .collect(Collectors.toList());
     }
 }

@@ -28,6 +28,16 @@ const slice = createSlice({
     ) {
       const { workOrderHistories, id } = action.payload;
       state.workOrderHistories[id] = workOrderHistories;
+    },
+    addWorkOrderHistory(
+      state: WorkOrderHistoriestate,
+      action: PayloadAction<{ id: number; history: WorkOrderHistory }>
+    ) {
+      const { id, history } = action.payload;
+      state.workOrderHistories[id] = [
+        ...(state.workOrderHistories[id] ?? []),
+        history
+      ];
     }
   }
 });
@@ -41,6 +51,16 @@ export const getWorkOrderHistories =
       `${basePath}/work-order/${id}`
     );
     dispatch(slice.actions.getWorkOrderHistories({ id, workOrderHistories }));
+  };
+
+export const addWorkOrderHistory =
+  (id: number, name: string): AppThunk =>
+  async (dispatch) => {
+    const history = await api.post<WorkOrderHistory>(
+      `${basePath}/work-order/${id}`,
+      { name }
+    );
+    dispatch(slice.actions.addWorkOrderHistory({ id, history }));
   };
 
 export default slice;

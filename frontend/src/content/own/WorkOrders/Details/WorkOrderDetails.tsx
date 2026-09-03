@@ -75,7 +75,10 @@ import {
 } from '../../../../slices/additionalCost';
 import { getTasksByWorkOrder } from '../../../../slices/task';
 import { Task } from '../../../../models/owns/tasks';
-import { getWorkOrderHistories } from '../../../../slices/workOrderHistory';
+import {
+  addWorkOrderHistory,
+  getWorkOrderHistories
+} from '../../../../slices/workOrderHistory';
 import LinkModal from './LinkModal';
 import { CustomSnackBarContext } from '../../../../contexts/CustomSnackBarContext';
 import { deleteRelation, getRelations } from '../../../../slices/relation';
@@ -95,7 +98,6 @@ import { PlanFeature } from '../../../../models/owns/subscriptionPlan';
 import PartQuantitiesList from '../../components/PartQuantitiesList';
 import AddFileModal from './AddFileModal';
 import { useBrand } from '../../../../hooks/useBrand';
-import { useLicenseEntitlement } from '../../../../hooks/useLicenseEntitlement';
 import { getErrorMessage } from '../../../../utils/api';
 import InspectionsTab from '../../Inspections/InspectionsTab';
 import WorkOrderPrintView from './WorkOrderPrintView';
@@ -127,7 +129,6 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
   const { t }: { t: any } = useTranslation();
   const { user, hasEditPermission, hasDeletePermission } = useAuth();
   const brandConfig = useBrand();
-  const hasWOHistoryEntitlement = useLicenseEntitlement('WORK_ORDER_HISTORY');
   const [openAddTimeModal, setOpenAddTimeModal] = useState<boolean>(false);
   const [openAddFileModal, setOpenAddFileModal] = useState<boolean>(false);
   const [openAddCostModal, setOpenAddCostModal] = useState<boolean>(false);
@@ -171,6 +172,8 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
   const [primaryTimeHours, setPrimaryTimeHours] = useState<number>();
   const [primaryTimeMinutes, setPrimaryTimeMinutes] = useState<number>();
   const [savingPrimaryTime, setSavingPrimaryTime] = useState<boolean>(false);
+  const [newUpdate, setNewUpdate] = useState<string>('');
+  const [savingUpdate, setSavingUpdate] = useState<boolean>(false);
   useEffect(() => {
     [workOrder.createdBy, workOrder.parentRequest?.createdBy].forEach(
       (createdBy) => {
@@ -439,6 +442,21 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
     setCurrentTab(value);
     if (value === 'updates' && !currentWorkOrderHistories.length)
       dispatch(getWorkOrderHistories(workOrder.id));
+  };
+  const saveUpdate = async () => {
+    const update = newUpdate.trim();
+    if (!update || savingUpdate) return;
+
+    setSavingUpdate(true);
+    try {
+      await dispatch(addWorkOrderHistory(workOrder.id, update));
+      setNewUpdate('');
+      showSnackBar(t('work_order_update_saved'), 'success');
+    } catch (error) {
+      showSnackBar(getErrorMessage(error, t('work_order_update_save_failure')), 'error');
+    } finally {
+      setSavingUpdate(false);
+    }
   };
   const detailsFieldsToRender = (
     workOrder: WorkOrder
@@ -1352,14 +1370,37 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
             </Box>
           </Box>
         )}
-        {currentTab == 'updates' &&
-          (hasWOHistoryEntitlement ? (
-            <List>
+        {currentTab == 'updates' && (
+            <Box>
+              {hasEditPermission(PermissionEntity.WORK_ORDERS, workOrder) && (
+                <Box sx={{ mb: 2 }}>
+                  <TextField
+                    fullWidth
+                    multiline
+                    minRows={3}
+                    label={t('add_work_order_update')}
+                    placeholder={t('work_order_update_placeholder')}
+                    value={newUpdate}
+                    inputProps={{ maxLength: 255 }}
+                    onChange={(event) => setNewUpdate(event.target.value)}
+                    disabled={savingUpdate}
+                  />
+                  <Button
+                    sx={{ mt: 1 }}
+                    variant="contained"
+                    onClick={saveUpdate}
+                    disabled={!newUpdate.trim() || savingUpdate}
+                  >
+                    {savingUpdate ? <CircularProgress size={22} /> : t('save_update')}
+                  </Button>
+                </Box>
+              )}
+              <List>
               {[...currentWorkOrderHistories]
                 .reverse()
-                .map((workOrderHistory) => (
+                .map((workOrderHistory, index) => (
                   <ListItem
-                    key={workOrderHistory.id}
+                    key={workOrderHistory.id ?? `audit-${index}`}
                     secondaryAction={getFormattedDate(
                       workOrderHistory.createdAt
                     )}
@@ -1370,12 +1411,9 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
                     />
                   </ListItem>
                 ))}
-            </List>
-          ) : (
-            <Typography textAlign={'center'}>
-              You need a license to see Work Order history
-            </Typography>
-          ))}
+              </List>
+            </Box>
+          )}
         {currentTab === 'inspections' && (
           <InspectionsTab workOrderId={workOrder.id} />
         )}
