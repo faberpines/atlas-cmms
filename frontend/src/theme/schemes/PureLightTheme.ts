@@ -60,16 +60,16 @@ const colors = {
       bodyBg: '#f4f6f1'
     },
     sidebar: {
-      background: themeColors.white,
-      textColor: themeColors.secondary,
-      dividerBg: '#e7ebE2',
-      menuItemColor: '#1e3a10',
-      menuItemColorActive: themeColors.primary,
-      menuItemBg: themeColors.white,
-      menuItemBgActive: '#edf3e9',
-      menuItemIconColor: lighten(themeColors.secondary, 0.3),
-      menuItemIconColorActive: themeColors.primary,
-      menuItemHeadingColor: darken(themeColors.secondary, 0.3)
+      background: '#173d2a',
+      textColor: '#eef7f0',
+      dividerBg: 'rgba(255, 255, 255, 0.12)',
+      menuItemColor: '#dcebe0',
+      menuItemColorActive: '#ffffff',
+      menuItemBg: 'transparent',
+      menuItemBgActive: themeColors.primary,
+      menuItemIconColor: '#a9c9b1',
+      menuItemIconColorActive: '#ffffff',
+      menuItemHeadingColor: '#92b49b'
     }
   },
   alpha: {
@@ -245,7 +245,7 @@ export const PureLightTheme = createTheme({
     menuItemIconColor: colors.layout.sidebar.menuItemIconColor,
     menuItemIconColorActive: colors.layout.sidebar.menuItemIconColorActive,
     menuItemHeadingColor: colors.layout.sidebar.menuItemHeadingColor,
-    boxShadow: '1px 0 0 rgba(26, 46, 16, .08)',
+    boxShadow: '4px 0 24px rgba(13, 43, 29, .16)',
     width: '260px'
   },
   header: {

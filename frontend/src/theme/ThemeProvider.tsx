@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ThemeProvider } from '@mui/material';
 import { themeCreator } from './base';
 import { StylesProvider } from '@mui/styles';
@@ -32,7 +32,7 @@ export const ThemeContext = React.createContext(
 const ThemeProviderWrapper: React.FC = (props) => {
   const curThemeName = localStorage.getItem('appTheme') || 'PureLightTheme';
   const [themeName, _setThemeName] = useState(curThemeName);
-  const theme = themeCreator(themeName);
+  const theme = useMemo(() => themeCreator(themeName), [themeName]);
   const { i18n } = useTranslation();
   const rtl = i18n.dir() === 'rtl';
   const setThemeName = (themeName: string): void => {

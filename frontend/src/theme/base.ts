@@ -1,12 +1,97 @@
 import React from 'react';
 
-import { Theme } from '@mui/material';
+import { alpha, createTheme, Theme } from '@mui/material';
 import { PureLightTheme } from './schemes/PureLightTheme';
 import { GreyGooseTheme } from './schemes/GreyGooseTheme';
 import { PurpleFlowTheme } from './schemes/PurpleFlowTheme';
 
 export function themeCreator(theme: string): Theme {
-  return themeMap[theme];
+  const selectedTheme = themeMap[theme] || PureLightTheme;
+
+  // The application chrome is part of the Atlas identity, rather than a colour
+  // scheme.  Apply it after the user's selected scheme so an existing
+  // localStorage preference cannot leave them on the legacy white shell.
+  return createTheme(
+    selectedTheme,
+    {
+      sidebar: {
+        ...selectedTheme.sidebar,
+        background: '#173d2a',
+        boxShadow: '4px 0 24px rgba(13, 43, 29, 0.16)',
+        textColor: '#eef7f0',
+        dividerBg: 'rgba(255, 255, 255, 0.12)',
+        menuItemColor: '#dcebe0',
+        menuItemColorActive: '#ffffff',
+        menuItemBg: 'transparent',
+        menuItemBgActive: '#4a7c2f',
+        menuItemIconColor: '#a9c9b1',
+        menuItemIconColorActive: '#ffffff',
+        menuItemHeadingColor: '#92b49b'
+      },
+      header: {
+        ...selectedTheme.header,
+        background: '#fffefb',
+        boxShadow:
+          '0 1px 0 rgba(23, 61, 42, 0.10), 0 8px 24px rgba(23, 61, 42, 0.05)',
+        textColor: '#173d2a'
+      },
+      palette: {
+        background: {
+          default: '#f2f5ef',
+          paper: '#fffefb'
+        }
+      },
+      components: {
+        MuiCssBaseline: {
+          styleOverrides: {
+            body: {
+              backgroundColor: '#f2f5ef'
+            }
+          }
+        },
+        MuiCard: {
+          styleOverrides: {
+            root: {
+              backgroundColor: '#fffefb',
+              border: '1px solid rgba(23, 61, 42, 0.10)',
+              boxShadow:
+                '0 1px 2px rgba(23, 61, 42, 0.04), 0 10px 28px rgba(23, 61, 42, 0.06)'
+            }
+          }
+        },
+        MuiPaper: {
+          styleOverrides: {
+            outlined: {
+              borderColor: 'rgba(23, 61, 42, 0.12)'
+            }
+          }
+        },
+        MuiTableRow: {
+          styleOverrides: {
+            head: {
+              backgroundColor: '#e9efe6'
+            }
+          }
+        },
+        MuiTableCell: {
+          styleOverrides: {
+            head: {
+              color: '#315340',
+              fontWeight: 700,
+              letterSpacing: '0.05em'
+            }
+          }
+        },
+        MuiButton: {
+          styleOverrides: {
+            containedPrimary: {
+              boxShadow: `0 4px 12px ${alpha('#4a7c2f', 0.2)}`
+            }
+          }
+        }
+      }
+    } as any
+  );
 }
 
 declare module '@mui/material/styles' {
