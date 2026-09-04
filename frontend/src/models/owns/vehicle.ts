@@ -8,6 +8,7 @@ export default interface Vehicle extends Audit {
   id: number;
   name: string;
   assetNumber: string;
+  asset: { id: number; name?: string } | null;
   vin: string;
   make: string;
   model: string;

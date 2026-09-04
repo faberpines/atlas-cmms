@@ -100,16 +100,11 @@ export default function VehicleDetailDrawer({ vehicle, onClose }: Props) {
   useEffect(() => {
     if (!vehicle || tab !== 2) return;
     setWoLoading(true);
-    api
-      .post<any>('work-orders/search', {
-        filterFields: [{ field: 'title', value: vehicle.name, operation: 'cn' }],
-        pageSize: 100,
-        pageNum: 0
-      })
-      .then((res) => {
-        const list: WorkOrder[] = res?.content ?? res ?? [];
-        setWorkOrders(list);
-      })
+    const request = vehicle.asset?.id
+      ? api.get<WorkOrder[]>(`work-orders/asset/${vehicle.asset.id}`)
+      : Promise.resolve([] as WorkOrder[]);
+    request
+      .then((list) => setWorkOrders(list || []))
       .catch(() => setWorkOrders([]))
       .finally(() => setWoLoading(false));
   }, [vehicle?.id, tab]);

@@ -341,6 +341,7 @@ function Fleet() {
         const payload = {
           name: asset.name,
           assetNumber: asset.barCode || '',
+          asset: { id: asset.id },
           vin: asset.serialNumber || '',
           model: asset.model || '',
           notes: asset.description || '',
@@ -430,7 +431,13 @@ function Fleet() {
     }
     setWoSaving(true);
     try {
-      await dispatch(addWorkOrder({ title: woForm.title, description: woForm.description, priority: woForm.priority, dueDate: woForm.dueDate || null }));
+      await dispatch(addWorkOrder({
+        title: woForm.title,
+        description: woForm.description,
+        priority: woForm.priority,
+        dueDate: woForm.dueDate || null,
+        asset: woVehicle.asset ? { id: woVehicle.asset.id } : undefined
+      }));
       showSnackBar(t('wo_created_success'), 'success');
       setWoVehicle(null);
     } catch {

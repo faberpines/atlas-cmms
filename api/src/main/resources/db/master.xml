@@ -204,4 +204,6 @@
              relativeToChangelogFile="true"/>
     <include file="changelog/2026_03_05_1772702000_wash_tank_turbidity_pass.xml"
              relativeToChangelogFile="true"/>
+    <include file="changelog/2026_09_04_1788510000_link_fleet_vehicle_asset.xml"
+             relativeToChangelogFile="true"/>
 </databaseChangeLog>

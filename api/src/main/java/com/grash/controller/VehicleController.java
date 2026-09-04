@@ -4,6 +4,7 @@ import com.grash.advancedsearch.SearchCriteria;
 import com.grash.dto.SuccessResponse;
 import com.grash.exception.CustomException;
 import com.grash.model.LoraDevice;
+import com.grash.model.Asset;
 import com.grash.model.OwnUser;
 import com.grash.model.Vehicle;
 import com.grash.model.VehicleLocation;
@@ -11,6 +12,7 @@ import com.grash.model.VehicleUsageLog;
 import com.grash.model.enums.PermissionEntity;
 import com.grash.model.enums.RoleType;
 import com.grash.service.LoraDeviceService;
+import com.grash.service.AssetService;
 import com.grash.service.UserService;
 import com.grash.service.VehicleLocationService;
 import com.grash.service.VehicleService;
@@ -39,6 +41,7 @@ import java.util.Map;
 public class VehicleController {
 
     private final VehicleService vehicleService;
+    private final AssetService assetService;
     private final VehicleLocationService vehicleLocationService;
     private final LoraDeviceService loraDeviceService;
     private final UserService userService;
@@ -86,6 +89,7 @@ public class VehicleController {
         if (!user.getRole().getCreatePermissions().contains(PermissionEntity.FLEET)) {
             throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
         }
+        attachCompanyAsset(vehicle, user);
         return ResponseEntity.ok(vehicleService.create(vehicle));
     }
 
@@ -100,7 +104,18 @@ public class VehicleController {
                 && !existing.getCreatedBy().equals(user.getId())) {
             throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
         }
+        attachCompanyAsset(vehicle, user);
         return ResponseEntity.ok(vehicleService.update(id, vehicle));
+    }
+
+    private void attachCompanyAsset(Vehicle vehicle, OwnUser user) {
+        if (vehicle.getAsset() == null || vehicle.getAsset().getId() == null) {
+            return;
+        }
+        Asset asset = assetService.findById(vehicle.getAsset().getId())
+                .filter(candidate -> candidate.getCompany().getId().equals(user.getCompany().getId()))
+                .orElseThrow(() -> new CustomException("Asset not found", HttpStatus.NOT_FOUND));
+        vehicle.setAsset(asset);
     }
 
     @DeleteMapping("/{id}")

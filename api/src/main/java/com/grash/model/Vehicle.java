@@ -19,6 +19,9 @@ public class Vehicle extends CompanyAudit {
 
     private String assetNumber;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Asset asset;
+
     @Column(unique = false)
     private String vin;
 

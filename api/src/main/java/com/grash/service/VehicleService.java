@@ -39,6 +39,7 @@ public class VehicleService {
                 .orElseThrow(() -> new CustomException("Vehicle not found", HttpStatus.NOT_FOUND));
         if (patch.getName() != null) existing.setName(patch.getName());
         if (patch.getAssetNumber() != null) existing.setAssetNumber(patch.getAssetNumber());
+        if (patch.getAsset() != null) existing.setAsset(patch.getAsset());
         if (patch.getVin() != null) existing.setVin(patch.getVin());
         if (patch.getMake() != null) existing.setMake(patch.getMake());
         if (patch.getModel() != null) existing.setModel(patch.getModel());
