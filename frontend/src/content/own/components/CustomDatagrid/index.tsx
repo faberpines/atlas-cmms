@@ -104,7 +104,9 @@ function CustomDataGrid(props: CustomDatagridProps) {
           color: theme.palette.text.primary,
           '& .MuiDataGrid-columnHeaders': {
             borderBottom: `1px solid ${theme.palette.divider}`,
-            backgroundColor: theme.colors.alpha.black[5]
+            backgroundColor: '#eef3eb',
+            minHeight: '50px !important',
+            maxHeight: '50px !important'
           },
           '& .MuiDataGrid-columnHeader': {
             fontWeight: 700,
@@ -122,14 +124,19 @@ function CustomDataGrid(props: CustomDatagridProps) {
           },
           '& .MuiDataGrid-row': {
             cursor: notClickable ? 'auto' : 'pointer',
-            transition: 'background-color 120ms ease',
-            '&:hover': { backgroundColor: theme.colors.primary.lighter },
+            transition: 'background-color 120ms cubic-bezier(0.16, 1, 0.3, 1)',
+            '&:nth-of-type(even)': { backgroundColor: '#fbfcfa' },
+            '&:hover': {
+              backgroundColor: '#edf5e9',
+              boxShadow: 'inset 4px 0 0 #4a7c2f'
+            },
             '&:last-of-type .MuiDataGrid-cell': { borderBottom: 0 }
           },
           '& .MuiDataGrid-cell': {
             borderColor: theme.palette.divider,
             display: 'flex',
-            alignItems: 'center'
+            alignItems: 'center',
+            fontSize: theme.typography.pxToRem(13)
           },
           '& .MuiDataGrid-footerContainer': {
             minHeight: 52,

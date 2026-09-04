@@ -19,7 +19,7 @@ const ExtendedSidebarLayout: FC<ExtendedSidebarLayoutProps> = () => {
         sx={{
           flex: 1,
           minHeight: '100vh',
-          backgroundColor: 'background.default',
+          backgroundColor: '#edf2ea',
 
           '.MuiPageTitle-wrapper': {
             background:

@@ -90,6 +90,9 @@ import {
 } from '../../../models/owns/page';
 import WorkOrderCalendar from './Calendar';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
+import AssignmentTwoToneIcon from '@mui/icons-material/AssignmentTwoTone';
+import CalendarMonthTwoToneIcon from '@mui/icons-material/CalendarMonthTwoTone';
+import ViewListTwoToneIcon from '@mui/icons-material/ViewListTwoTone';
 import { exportEntity } from '../../../slices/exports';
 import FilterAltTwoToneIcon from '@mui/icons-material/FilterAltTwoTone';
 import MoreFilters from './Filters/MoreFilters';
@@ -888,83 +891,175 @@ function WorkOrders() {
       <Box
         justifyContent="center"
         alignItems="stretch"
-        sx={{ px: { xs: 1.5, sm: 2.5, md: 4 }, pb: 3 }}
+        sx={{ px: { xs: 1.5, sm: 2.5, md: 4 }, pb: 4, pt: { xs: 1.5, md: 2.5 } }}
       >
         <Box
-          my={1}
-          display="flex"
-          flexDirection={{ xs: 'column', sm: 'row' }}
-          justifyContent="space-between"
-          alignItems={{ xs: 'stretch', sm: 'center' }}
-          gap={1}
+          sx={{
+            position: 'relative',
+            overflow: 'hidden',
+            mb: 2,
+            px: { xs: 2, sm: 3 },
+            py: { xs: 2.25, sm: 2.75 },
+            color: 'common.white',
+            bgcolor: '#183d22',
+            borderRadius: 2,
+            borderLeft: '5px solid #e27039',
+            boxShadow: '0 14px 32px rgba(24, 61, 34, 0.18)'
+          }}
         >
-          <Tabs
-            onChange={handleTabsChange}
-            value={currentTab}
-            variant="scrollable"
-            scrollButtons="auto"
-            textColor="primary"
-            indicatorColor="primary"
-          >
-            {tabs.map((tab) =>
-              tab.disabled ? (
-                <Tooltip title={t('Coming Soon')} placement="top">
-                  <span>
-                    <Tab
-                      key={tab.value}
-                      label={tab.label}
-                      value={tab.value}
-                      disabled={tab.disabled}
-                    />
-                  </span>
-                </Tooltip>
-              ) : (
-                <Tab key={tab.value} label={tab.label} value={tab.value} />
-              )
-            )}
-          </Tabs>
           <Stack
-            direction={'row'}
-            alignItems="center"
-            justifyContent="flex-end"
-            spacing={1}
+            direction={{ xs: 'column', md: 'row' }}
+            justifyContent="space-between"
+            alignItems={{ xs: 'stretch', md: 'center' }}
+            spacing={2.5}
           >
-            <IconButton
-              onClick={handleOpenMenu}
-              color="primary"
-              aria-label={t('more')}
-            >
-              <MoreVertTwoToneIcon />
-            </IconButton>
-            {hasCreatePermission(PermissionEntity.WORK_ORDERS) && (
-              <Button
-                onClick={() => setOpenAddModal(true)}
-                startIcon={<AddTwoToneIcon />}
-                sx={{ my: 0.5 }}
-                variant="contained"
+            <Stack direction="row" spacing={2} alignItems="center">
+              <Box
+                sx={{
+                  width: 52,
+                  height: 52,
+                  display: { xs: 'none', sm: 'grid' },
+                  placeItems: 'center',
+                  bgcolor: 'rgba(255,255,255,0.1)',
+                  border: '1px solid rgba(255,255,255,0.15)',
+                  borderRadius: 1.5
+                }}
               >
-                {t('work_order')}
-              </Button>
-            )}
+                <AssignmentTwoToneIcon sx={{ fontSize: 29, color: '#f0b28d' }} />
+              </Box>
+              <Box>
+                <Typography
+                  sx={{
+                    mb: 0.25,
+                    color: 'rgba(255,255,255,0.66)',
+                    fontSize: 11,
+                    fontWeight: 800,
+                    letterSpacing: '0.13em',
+                    textTransform: 'uppercase'
+                  }}
+                >
+                  Maintenance operations
+                </Typography>
+                <Typography
+                  component="h1"
+                  sx={{
+                    color: 'common.white',
+                    fontFamily: 'Georgia, serif',
+                    fontSize: { xs: 26, sm: 32 },
+                    lineHeight: 1.1,
+                    fontWeight: 600
+                  }}
+                >
+                  {t('work_orders')}
+                </Typography>
+                <Typography sx={{ mt: 0.75, color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>
+                  {workOrders.totalElements || 0} records · review, assign, and keep work moving
+                </Typography>
+              </Box>
+            </Stack>
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <IconButton
+                onClick={handleOpenMenu}
+                aria-label={t('more')}
+                sx={{
+                  width: 44,
+                  height: 44,
+                  color: 'common.white',
+                  border: '1px solid rgba(255,255,255,0.22)',
+                  '&:hover': { bgcolor: 'rgba(255,255,255,0.1)' }
+                }}
+              >
+                <MoreVertTwoToneIcon />
+              </IconButton>
+              {hasCreatePermission(PermissionEntity.WORK_ORDERS) && (
+                <Button
+                  onClick={() => setOpenAddModal(true)}
+                  startIcon={<AddTwoToneIcon />}
+                  variant="contained"
+                  sx={{
+                    minHeight: 44,
+                    bgcolor: '#e27039',
+                    color: '#fff',
+                    boxShadow: 'none',
+                    '&:hover': { bgcolor: '#c85b2a', boxShadow: 'none' }
+                  }}
+                >
+                  {t('work_order')}
+                </Button>
+              )}
+            </Stack>
           </Stack>
         </Box>
         <Card
           sx={{
-            pt: 1.5,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'stretch',
             borderRadius: 2,
-            overflow: 'hidden'
+            overflow: 'hidden',
+            border: '1px solid',
+            borderColor: 'divider',
+            boxShadow: '0 12px 30px rgba(35, 58, 42, 0.08)'
           }}
         >
+          <Box
+            sx={{
+              px: { xs: 1.25, sm: 2 },
+              py: 1.25,
+              display: 'flex',
+              flexDirection: { xs: 'column', md: 'row' },
+              alignItems: { xs: 'stretch', md: 'center' },
+              justifyContent: 'space-between',
+              gap: 1.5,
+              bgcolor: '#f7f9f5'
+            }}
+          >
+            <Tabs
+              onChange={handleTabsChange}
+              value={currentTab}
+              variant="scrollable"
+              scrollButtons="auto"
+              sx={{
+                minHeight: 42,
+                '& .MuiTabs-flexContainer': { gap: 0.5 },
+                '& .MuiTabs-indicator': { display: 'none' },
+                '& .MuiTab-root': {
+                  minHeight: 42,
+                  px: 2,
+                  borderRadius: 1.25,
+                  fontSize: 13,
+                  fontWeight: 700,
+                  color: 'text.secondary'
+                },
+                '& .Mui-selected': {
+                  color: '#fff !important',
+                  bgcolor: '#2e6338'
+                }
+              }}
+            >
+              {tabs.map((tab) => {
+                const icon = tab.value === 'calendar' ? <CalendarMonthTwoToneIcon /> : <ViewListTwoToneIcon />;
+                return tab.disabled ? (
+                  <Tooltip key={tab.value} title={t('Coming Soon')} placement="top">
+                    <span><Tab icon={icon} iconPosition="start" label={tab.label} value={tab.value} disabled /></span>
+                  </Tooltip>
+                ) : (
+                  <Tab key={tab.value} icon={icon} iconPosition="start" label={tab.label} value={tab.value} />
+                );
+              })}
+            </Tabs>
+            <Typography sx={{ display: { xs: 'none', md: 'block' }, color: 'text.secondary', fontSize: 12 }}>
+              Updated records appear first
+            </Typography>
+          </Box>
           {currentTab !== 'calendar' && (
             <Stack
               sx={{
                 px: { xs: 1.5, sm: 2 },
-                pb: 1.5,
+                py: 1.5,
                 flexWrap: 'wrap',
-                rowGap: 1
+                rowGap: 1,
+                bgcolor: 'background.paper'
               }}
               direction="row"
               spacing={1}
@@ -983,7 +1078,9 @@ function WorkOrders() {
                     : 'contained'
                 }
                 startIcon={<FilterAltTwoToneIcon />}
-              />
+              >
+                <Box component="span" sx={{ display: { xs: 'none', sm: 'inline' } }}>{t('filter')}</Box>
+              </Button>
               <EnumFilter
                 filterFields={criteria.filterFields}
                 onChange={onFilterChange}

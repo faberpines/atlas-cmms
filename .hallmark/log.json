@@ -1,5 +1,14 @@
 [
   {
+    "date": "2026-09-04",
+    "scope": "app",
+    "macrostructure": "Workbench",
+    "theme": "custom",
+    "theme_axes": "warm-white / sturdy-editorial / leaf-green",
+    "enrichment": "none",
+    "brief": "Work orders operations masthead, command bar, and dense professional grid"
+  },
+  {
     "date": "2026-09-02",
     "scope": "app",
     "macrostructure": "Workbench",
