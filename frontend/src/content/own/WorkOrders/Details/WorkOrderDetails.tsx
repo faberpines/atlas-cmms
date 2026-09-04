@@ -227,7 +227,8 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
     dispatch(getAdditionalCosts(workOrder.id));
     dispatch(getTasksByWorkOrder(workOrder.id));
     dispatch(getRelations(workOrder.id));
-  }, []);
+    dispatch(getWorkOrderHistories(workOrder.id));
+  }, [workOrder.id]);
   useEffect(() => {
     const [hours, minutes] = getHoursAndMinutesAndSeconds(
       primaryTime?.duration
@@ -519,6 +520,7 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
         labors={labors}
         additionalCosts={additionalCosts}
         partQuantities={partQuantities}
+        updates={currentWorkOrderHistories}
       />
       <Grid
         data-print-screen-only="true"
@@ -957,6 +959,33 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
                 </Grid>
               )}
             </Grid>
+            {!!currentWorkOrderHistories.length && (
+              <Box>
+                <Divider sx={{ mt: 2 }} />
+                <Typography sx={{ mt: 2, mb: 1 }} variant="h3">
+                  {t('updates')}
+                </Typography>
+                <List disablePadding>
+                  {[...currentWorkOrderHistories]
+                    .reverse()
+                    .map((workOrderHistory, index) => (
+                      <ListItem
+                        key={workOrderHistory.id ?? `detail-update-${index}`}
+                        divider={index < currentWorkOrderHistories.length - 1}
+                        sx={{ px: 0, alignItems: 'flex-start' }}
+                      >
+                        <ListItemText
+                          primary={workOrderHistory.name}
+                          secondary={`${workOrderHistory.user.firstName} ${workOrderHistory.user.lastName} · ${getFormattedDate(workOrderHistory.createdAt)}`}
+                          primaryTypographyProps={{
+                            sx: { whiteSpace: 'pre-wrap', fontWeight: 600 }
+                          }}
+                        />
+                      </ListItem>
+                    ))}
+                </List>
+              </Box>
+            )}
             {!!tasks.length && (
               <Box>
                 <Divider sx={{ mt: 2 }} />

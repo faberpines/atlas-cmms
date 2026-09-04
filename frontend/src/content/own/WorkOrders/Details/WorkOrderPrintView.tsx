@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { durationToHours, getHoursAndMinutesAndSeconds } from '../../../../utils/formatters';
 import AdditionalCost from '../../../../models/owns/additionalCost';
 import PartQuantity from '../../../../models/owns/partQuantity';
+import WorkOrderHistory from '../../../../models/owns/workOrderHistories';
 
 interface WorkOrderPrintViewProps {
   workOrder: WorkOrder;
@@ -14,6 +15,7 @@ interface WorkOrderPrintViewProps {
   labors: Labor[];
   additionalCosts: AdditionalCost[];
   partQuantities: PartQuantity[];
+  updates: WorkOrderHistory[];
 }
 
 const FOOD_SAFETY_CHECKS = [
@@ -72,7 +74,8 @@ export default function WorkOrderPrintView({
   tasks,
   labors,
   additionalCosts,
-  partQuantities
+  partQuantities,
+  updates
 }: WorkOrderPrintViewProps) {
   const { getFormattedDate, getUserNameById, getFormattedCurrency } =
     useContext(CompanySettingsContext);
@@ -231,6 +234,31 @@ export default function WorkOrderPrintView({
           </div>
         )}
       </div>
+
+      {/* ── Updates ── */}
+      {updates.length > 0 && (
+        <>
+          <div style={sectionTitle}>Updates</div>
+          <table style={tableStyle}>
+            <thead>
+              <tr>
+                <th style={thStyle}>Update</th>
+                <th style={{ ...thStyle, width: 150 }}>Added By</th>
+                <th style={{ ...thStyle, width: 130 }}>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[...updates].reverse().map((update, index) => (
+                <tr key={update.id ?? `print-update-${index}`}>
+                  <td style={{ ...tdStyle, whiteSpace: 'pre-wrap' }}>{update.name}</td>
+                  <td style={tdStyle}>{`${update.user.firstName} ${update.user.lastName}`}</td>
+                  <td style={tdStyle}>{getFormattedDate(update.createdAt)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      )}
 
       {/* ── Tasks ── */}
       {tasks.length > 0 && (
