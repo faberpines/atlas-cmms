@@ -1,3 +1,6 @@
+/* Hallmark · genre: modern-minimal · macrostructure: Workbench · design-system: design.md · designed-as-app
+ * tone: sturdy technical · anchor hue: leaf-green · pre-emit critique: P5 H5 E4 S5 R4 V5
+ */
 import React from 'react';
 
 import { alpha, createTheme, Theme } from '@mui/material';
@@ -16,7 +19,7 @@ export function themeCreator(theme: string): Theme {
     {
       sidebar: {
         ...selectedTheme.sidebar,
-        background: '#173d2a',
+        background: '#143923',
         boxShadow: '4px 0 24px rgba(13, 43, 29, 0.16)',
         textColor: '#eef7f0',
         dividerBg: 'rgba(255, 255, 255, 0.12)',
@@ -30,39 +33,79 @@ export function themeCreator(theme: string): Theme {
       },
       header: {
         ...selectedTheme.header,
-        background: '#fffefb',
+        background: '#fffdf7',
         boxShadow:
           '0 1px 0 rgba(23, 61, 42, 0.10), 0 8px 24px rgba(23, 61, 42, 0.05)',
         textColor: '#173d2a'
       },
       palette: {
         background: {
-          default: '#f2f5ef',
-          paper: '#fffefb'
+          default: '#edf2e9',
+          paper: '#fffdf7'
         }
       },
       components: {
         MuiCssBaseline: {
           styleOverrides: {
+            html: {
+              overflowX: 'clip'
+            },
             body: {
-              backgroundColor: '#f2f5ef'
+              overflowX: 'clip',
+              backgroundColor: '#edf2e9'
+            },
+            '::selection': {
+              backgroundColor: 'rgba(226, 112, 57, 0.28)',
+              color: '#143923'
             }
           }
         },
         MuiCard: {
           styleOverrides: {
             root: {
-              backgroundColor: '#fffefb',
-              border: '1px solid rgba(23, 61, 42, 0.10)',
+              backgroundColor: '#fffdf7',
+              border: '1px solid rgba(20, 57, 35, 0.14)',
+              borderRadius: 12,
               boxShadow:
-                '0 1px 2px rgba(23, 61, 42, 0.04), 0 10px 28px rgba(23, 61, 42, 0.06)'
+                '0 1px 2px rgba(20, 57, 35, 0.05), 0 14px 36px rgba(20, 57, 35, 0.07)'
             }
           }
         },
         MuiPaper: {
           styleOverrides: {
+            root: {
+              backgroundImage: 'none'
+            },
             outlined: {
-              borderColor: 'rgba(23, 61, 42, 0.12)'
+              borderColor: 'rgba(20, 57, 35, 0.14)'
+            }
+          }
+        },
+        MuiDialog: {
+          styleOverrides: {
+            paper: {
+              borderRadius: 14,
+              borderTop: '5px solid #e27039',
+              boxShadow: '0 26px 80px rgba(9, 35, 21, 0.24)'
+            }
+          }
+        },
+        MuiDialogTitle: {
+          styleOverrides: {
+            root: {
+              padding: '22px 24px 16px',
+              color: '#143923',
+              fontFamily: 'Georgia, serif',
+              fontSize: 24,
+              fontWeight: 600
+            }
+          }
+        },
+        MuiDrawer: {
+          styleOverrides: {
+            paper: {
+              backgroundColor: '#fffdf7',
+              borderLeft: '1px solid rgba(20, 57, 35, 0.14)'
             }
           }
         },
@@ -84,8 +127,123 @@ export function themeCreator(theme: string): Theme {
         },
         MuiButton: {
           styleOverrides: {
+            root: {
+              minHeight: 42,
+              borderRadius: 8,
+              fontWeight: 700,
+              letterSpacing: '-0.01em',
+              textTransform: 'none',
+              whiteSpace: 'nowrap'
+            },
             containedPrimary: {
-              boxShadow: `0 4px 12px ${alpha('#4a7c2f', 0.2)}`
+              backgroundColor: '#376f3d',
+              boxShadow: `0 5px 14px ${alpha('#376f3d', 0.22)}`,
+              '&:hover': {
+                backgroundColor: '#285a31',
+                boxShadow: `0 7px 18px ${alpha('#285a31', 0.25)}`
+              },
+              '&:active': {
+                transform: 'translateY(1px)'
+              }
+            },
+            outlinedPrimary: {
+              borderColor: 'rgba(20, 57, 35, 0.28)',
+              backgroundColor: '#fffdf7',
+              '&:hover': {
+                borderColor: '#376f3d',
+                backgroundColor: '#edf5e9'
+              }
+            }
+          }
+        },
+        MuiIconButton: {
+          styleOverrides: {
+            root: {
+              borderRadius: 8,
+              '&:focus-visible': {
+                outline: '2px solid #376f3d',
+                outlineOffset: 2
+              }
+            }
+          }
+        },
+        MuiOutlinedInput: {
+          styleOverrides: {
+            root: {
+              minHeight: 44,
+              borderRadius: 8,
+              backgroundColor: '#fffdf7',
+              '&:hover .MuiOutlinedInput-notchedOutline': {
+                borderColor: '#769376'
+              },
+              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                borderWidth: 1,
+                borderColor: '#376f3d'
+              },
+              '&.Mui-focused': {
+                boxShadow: '0 0 0 3px rgba(55, 111, 61, 0.16)'
+              }
+            },
+            notchedOutline: {
+              borderColor: 'rgba(20, 57, 35, 0.22)'
+            }
+          }
+        },
+        MuiInputLabel: {
+          styleOverrides: {
+            root: {
+              color: '#526c58',
+              fontWeight: 600
+            }
+          }
+        },
+        MuiFormHelperText: {
+          styleOverrides: {
+            root: {
+              minHeight: '1lh'
+            }
+          }
+        },
+        MuiTabs: {
+          styleOverrides: {
+            root: {
+              minHeight: 44
+            },
+            indicator: {
+              height: 3,
+              backgroundColor: '#e27039'
+            }
+          }
+        },
+        MuiTab: {
+          styleOverrides: {
+            root: {
+              minHeight: 44,
+              borderRadius: 8,
+              color: '#526c58',
+              fontWeight: 700,
+              textTransform: 'none',
+              whiteSpace: 'nowrap',
+              '&.Mui-selected': {
+                color: '#143923',
+                backgroundColor: '#e7efe3'
+              }
+            }
+          }
+        },
+        MuiChip: {
+          styleOverrides: {
+            root: {
+              borderRadius: 6,
+              fontWeight: 700
+            }
+          }
+        },
+        MuiTableContainer: {
+          styleOverrides: {
+            root: {
+              borderRadius: 10,
+              border: '1px solid rgba(20, 57, 35, 0.12)'
             }
           }
         }

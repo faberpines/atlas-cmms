@@ -5,12 +5,14 @@ screen should feel like part of one calm, dependable operations console.
 
 ## Genre
 
-Modern-minimal, operational, and agricultural without becoming decorative.
+Modern-minimal with a distinctive field-equipment character: operational,
+agricultural, tactile, and unmistakably Bay Baby without becoming decorative.
 
 ## Macrostructure family
 
 - Marketing and sign-in pages: restrained brand frame with one photographic moment.
-- App pages: compact workbench shell with a clear title/action row and full-width work surface.
+- App pages: compact Workbench shell with an evergreen chassis, orange datum line,
+  title/action instrument panel, faint field grid, and full-width work surface.
 - Content pages: structured long-form layout with strong typographic hierarchy.
 
 ## Theme
@@ -24,6 +26,7 @@ Modern-minimal, operational, and agricultural without becoming decorative.
 - `--color-accent-dark`: existing Atlas evergreen `#1e4d0f`.
 - `--color-seasonal`: Bay Baby pumpkin orange `#e27039`, used sparingly.
 - `--color-focus`: dark leaf green with a clearly visible outer ring.
+- `--color-chassis`: very deep evergreen used consistently for navigation and title panels.
 
 ## Typography
 
@@ -66,9 +69,11 @@ compact end of the scale; page gutters and section separation use the larger end
 ## What pages MUST share
 
 - Existing Atlas green palette and brand identity.
-- Compact header, navigation rhythm, surface treatment, typography, and CTA voice.
+- Evergreen chassis, orange datum line, compact header, navigation rhythm, surface treatment,
+  typography, and CTA voice.
 - Consistent list toolbar, grid, form, drawer, empty, loading, and focus states.
-- Warm white surfaces, restrained borders, subtle shadows, and 6–8px corners.
+- Warm paper surfaces, green-tinted field grid, restrained borders, deliberate shadows,
+  and 8–12px corners.
 
 ## What pages MAY differ on
 

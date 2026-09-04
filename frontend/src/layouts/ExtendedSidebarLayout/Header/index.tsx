@@ -31,6 +31,7 @@ const HeaderWrapper = styled(Box)(
         background-color: ${alpha(theme.header.background, 0.98)};
         backdrop-filter: blur(10px);
         border-bottom: 1px solid ${theme.palette.divider};
+        border-top: 4px solid #e27039;
         position: fixed;
         justify-content: space-between;
         width: 100%;
@@ -73,6 +74,18 @@ function Header() {
         </IconButton>
         <Typography variant="h2" noWrap sx={{ fontSize: { xs: 18, sm: 21 }, fontWeight: 700 }}>
           {title}
+        </Typography>
+        <Typography
+          sx={{
+            display: { xs: 'none', md: 'block' },
+            color: 'text.secondary',
+            fontSize: 11,
+            fontWeight: 800,
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase'
+          }}
+        >
+          Atlas operations
         </Typography>
       </Stack>
       <Box display="flex" alignItems="center">

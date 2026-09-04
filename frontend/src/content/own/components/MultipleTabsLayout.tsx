@@ -1,7 +1,7 @@
 import { ChangeEvent, ReactNode } from 'react';
 import { Helmet } from 'react-helmet-async';
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
-import { Box, Button, Card, Stack, styled, Tab, Tabs } from '@mui/material';
+import { Box, Button, Card, Stack, styled, Tab, Tabs, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
@@ -109,17 +109,37 @@ function MultipleTabsLayout(props: SettingsLayoutProps) {
   };
 
   return (
-    <Box mt={1}>
+    <Box sx={{ pt: { xs: 1.5, md: 2.5 }, pb: 4 }}>
       <Helmet>
         <title>{title}</title>
       </Helmet>
+      <Box
+        sx={{
+          mx: { xs: 1.5, sm: 3, md: 4 },
+          mb: 2,
+          px: { xs: 2, md: 3 },
+          py: 2,
+          borderRadius: 2,
+          color: 'common.white',
+          bgcolor: '#143923',
+          borderLeft: '5px solid #e27039',
+          boxShadow: '0 14px 32px rgba(20, 57, 35, 0.16)'
+        }}
+      >
+        <Typography
+          component="h1"
+          sx={{ fontFamily: 'Georgia, serif', fontSize: { xs: 25, md: 30 }, fontWeight: 600 }}
+        >
+          {title}
+        </Typography>
+      </Box>
       <Box
         display="flex"
         justifyContent="space-between"
         alignItems="center"
         gap={2}
         sx={{
-          px: { xs: 2, sm: 3, md: 4 },
+          px: { xs: 1.5, sm: 3, md: 4 },
           flexWrap: { xs: 'wrap', md: 'nowrap' }
         }}
       >
@@ -168,7 +188,7 @@ function MultipleTabsLayout(props: SettingsLayoutProps) {
         <Card
           variant="outlined"
           sx={{
-            mx: { xs: 2, sm: 3, md: 4 },
+            mx: { xs: 1.5, sm: 3, md: 4 },
             borderRadius: 2,
             overflow: 'hidden'
           }}

@@ -19,7 +19,10 @@ const ExtendedSidebarLayout: FC<ExtendedSidebarLayoutProps> = () => {
         sx={{
           flex: 1,
           minHeight: '100vh',
-          backgroundColor: '#edf2ea',
+          backgroundColor: '#edf2e9',
+          backgroundImage:
+            'linear-gradient(90deg, rgba(20,57,35,0.025) 1px, transparent 1px)',
+          backgroundSize: '48px 48px',
 
           '.MuiPageTitle-wrapper': {
             background:
@@ -54,7 +57,8 @@ const ExtendedSidebarLayout: FC<ExtendedSidebarLayoutProps> = () => {
             flex: 1,
             pt: `${theme.header.height}`,
             [theme.breakpoints.up('lg')]: {
-              ml: `${theme.sidebar.width}`
+              ml: `${theme.sidebar.width}`,
+              borderLeft: '4px solid rgba(226, 112, 57, 0.72)'
             },
             '@media print': {
               ml: '0 !important',

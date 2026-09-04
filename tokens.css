@@ -9,6 +9,8 @@
   --color-rule: oklch(89% 0.018 135);
   --color-accent: oklch(53% 0.115 135);
   --color-accent-dark: oklch(37% 0.12 135);
+  --color-chassis: oklch(31% 0.085 142);
+  --color-field-grid: oklch(31% 0.085 142 / 0.025);
   --color-accent-ink: oklch(99% 0.006 95);
   --color-seasonal: oklch(66% 0.16 48);
   --color-focus: oklch(42% 0.11 135);

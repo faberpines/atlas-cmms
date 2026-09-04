@@ -4,6 +4,15 @@
     "scope": "app",
     "macrostructure": "Workbench",
     "theme": "custom",
+    "theme_axes": "warm-paper / field-equipment / evergreen-orange",
+    "enrichment": "none",
+    "brief": "Product-wide Atlas field equipment design system across every shared surface"
+  },
+  {
+    "date": "2026-09-04",
+    "scope": "app",
+    "macrostructure": "Workbench",
+    "theme": "custom",
     "theme_axes": "warm-white / sturdy-editorial / leaf-green",
     "enrichment": "none",
     "brief": "Work orders operations masthead, command bar, and dense professional grid"
