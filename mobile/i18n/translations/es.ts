@@ -1578,7 +1578,17 @@ const locale = {
   nfc_scan_help: 'Acerca el dispositivo a la etiqueta NFC del activo.',
   what_happens_next: 'Qué sucede después',
   requester_scan_next: 'Abriremos el registro del activo con un botón para enviar una solicitud vinculada.',
-  technician_scan_next: 'Abriremos el registro del activo con acciones para ver detalles y crear una orden vinculada.'
+  technician_scan_next: 'Abriremos el registro del activo con acciones para ver detalles y crear una orden vinculada.',
+  app_updates: 'Actualizaciones de la Aplicación',
+  check_updates_description: 'Busca la aplicación Android más reciente en el servidor Atlas.',
+  check_for_updates: 'Buscar Actualizaciones',
+  app_is_up_to_date: 'Tienes la versión más reciente.',
+  update_available: 'La versión {{version}} está lista para instalar.',
+  download_and_install: 'Descargar e Instalar',
+  downloading_update: 'Descargando Actualización...',
+  current_version: 'Versión actual: {{version}}',
+  update_check_failure: 'No se pudieron buscar actualizaciones. Confirma que Wi-Fi o Tailscale esté conectado.',
+  update_download_failure: 'No se pudo instalar la actualización. Verifica la conexión y permite instalaciones desde esta aplicación.'
 };
 
 export default locale;

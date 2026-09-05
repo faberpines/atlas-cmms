@@ -1548,6 +1548,16 @@ const locale = {
   nfc_scan_help: 'Hold your device near the asset NFC tag.',
   what_happens_next: 'What happens next',
   requester_scan_next: 'We will open the asset record with a button to submit a linked request.',
-  technician_scan_next: 'We will open the asset record with actions for details and a linked work order.'
+  technician_scan_next: 'We will open the asset record with actions for details and a linked work order.',
+  app_updates: 'App Updates',
+  check_updates_description: 'Check the Atlas server for the newest Android app.',
+  check_for_updates: 'Check for Updates',
+  app_is_up_to_date: 'You have the newest version.',
+  update_available: 'Version {{version}} is ready to install.',
+  download_and_install: 'Download & Install',
+  downloading_update: 'Downloading Update...',
+  current_version: 'Current version: {{version}}',
+  update_check_failure: 'Could not check for updates. Confirm Wi-Fi or Tailscale is connected.',
+  update_download_failure: 'Could not install the update. Check the connection and allow installs from this app.'
 };
 export default locale;
