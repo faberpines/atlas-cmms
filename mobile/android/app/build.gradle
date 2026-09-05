@@ -92,8 +92,8 @@ android {
         applicationId 'com.baybabyproduce.maintenance'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 3
-        versionName "1.1.1"
+        versionCode 4
+        versionName "1.1.2"
         manifestPlaceholders = [usesCleartextTraffic: "true"]
     }
     signingConfigs {
@@ -119,6 +119,7 @@ android {
         }
         release {
             signingConfig project.hasProperty('ATLAS_UPLOAD_STORE_FILE') ? signingConfigs.release : signingConfigs.debug
+            manifestPlaceholders = [usesCleartextTraffic: "true"]
             shrinkResources (findProperty('android.enableShrinkResourcesInReleaseBuilds')?.toBoolean() ?: false)
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
