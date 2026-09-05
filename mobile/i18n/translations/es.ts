@@ -946,8 +946,6 @@ const locale = {
   asset_required: 'El activo es requerido',
   COMPLETED: 'Completado',
   FAILED: 'Fallido',
-  ai_assistant: 'Asistente de Mantenimiento IA',
-  type_message: 'Escribe un mensaje...',
   multiple_choices: 'Opciones múltiples',
   meter_reading: 'Lectura del medidor',
   select_user: 'Seleccionar usuario',

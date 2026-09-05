@@ -4,7 +4,6 @@ import { Outlet } from 'react-router-dom';
 
 import Sidebar from './Sidebar';
 import Header from './Header';
-import AssistantWidget from '../../content/own/components/AssistantWidget';
 
 interface ExtendedSidebarLayoutProps {
   children?: ReactNode;
@@ -71,9 +70,6 @@ const ExtendedSidebarLayout: FC<ExtendedSidebarLayoutProps> = () => {
           </Box>
           {/*<ThemeSettings />*/}
         </Box>
-      </Box>
-      <Box data-print-hide="true">
-        <AssistantWidget />
       </Box>
     </>
   );

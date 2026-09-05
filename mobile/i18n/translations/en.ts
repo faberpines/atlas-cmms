@@ -921,8 +921,6 @@ const locale = {
   asset_required: 'Asset is required',
   COMPLETED: 'Completed',
   FAILED: 'Failed',
-  ai_assistant: 'AI Maintenance Assistant',
-  type_message: 'Type a message...',
   multiple_choices: 'Multiple Choices',
   meter_reading: 'Meter Reading',
   select_user: 'Select User',

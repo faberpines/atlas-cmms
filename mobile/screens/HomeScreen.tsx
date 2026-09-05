@@ -20,7 +20,6 @@ import { useNetInfo } from '@react-native-community/netinfo';
 import { CustomSnackBarContext } from '../contexts/CustomSnackBarContext';
 import { PermissionEntity } from '../models/role';
 import { useAppTheme } from '../custom-theme';
-import AssistantWidget from '../components/AssistantWidget';
 
 export default function HomeScreen({ navigation }: RootTabScreenProps<'Home'>) {
   const theme = useAppTheme();
@@ -350,7 +349,6 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'Home'>) {
         </View>
       ))}
     </ScrollView>
-    <AssistantWidget />
     </View>
   );
 }
