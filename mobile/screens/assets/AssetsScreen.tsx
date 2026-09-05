@@ -88,6 +88,12 @@ const AssetCard = ({
           </Text>
         </View>
         <View style={{ marginBottom: 10 }}>
+          {!!asset.barCode && (
+            <IconWithLabel
+              label={`${t('barcode')}: ${asset.barCode}`}
+              icon="barcode-scan"
+            />
+          )}
           {asset.location && (
             <IconWithLabel
               label={asset.location.name}
@@ -184,7 +190,7 @@ export default function AssetsScreen({
       criteria,
       setCriteria,
       setSearchQuery,
-      ['name', 'model', 'description', 'additionalInfos']
+      ['name', 'barCode', 'model', 'description', 'additionalInfos']
     );
     setView('list');
   };
