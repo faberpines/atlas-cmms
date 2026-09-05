@@ -106,9 +106,9 @@ android {
         release {
             if (project.hasProperty('ATLAS_UPLOAD_STORE_FILE')) {
                 storeFile file(ATLAS_UPLOAD_STORE_FILE)
-                storePassword ATLAS_UPLOAD_STORE_PASSWORD
+                storePassword file(ATLAS_UPLOAD_STORE_PASSWORD_FILE).text.trim()
                 keyAlias ATLAS_UPLOAD_KEY_ALIAS
-                keyPassword ATLAS_UPLOAD_KEY_PASSWORD
+                keyPassword file(ATLAS_UPLOAD_KEY_PASSWORD_FILE).text.trim()
             }
         }
     }
