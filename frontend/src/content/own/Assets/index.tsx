@@ -13,6 +13,7 @@ import {
   Menu,
   MenuItem,
   Stack,
+  Tooltip,
   Typography,
   useTheme
 } from '@mui/material';
@@ -33,7 +34,9 @@ import CustomDataGrid, {
   CustomDatagridColumn
 } from '../components/CustomDatagrid';
 import {
+  GridActionsCellItem,
   GridRenderCellParams,
+  GridRowParams,
   GridValueGetterParams
 } from '@mui/x-data-grid';
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
@@ -66,6 +69,7 @@ import Category from '../../../models/owns/category';
 import { exportEntity } from '../../../slices/exports';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 import QrCode2TwoToneIcon from '@mui/icons-material/QrCode2TwoTone';
+import BuildTwoToneIcon from '@mui/icons-material/BuildTwoTone';
 import BarcodePrintDialog from '../components/BarcodePrintDialog';
 import {
   FilterField,
@@ -398,6 +402,30 @@ function Assets() {
           </IconButton>
         );
       }
+    },
+    {
+      field: 'actions',
+      type: 'actions',
+      headerName: t('actions'),
+      width: 110,
+      getActions: (params: GridRowParams<AssetDTO>) =>
+        hasCreatePermission(PermissionEntity.WORK_ORDERS)
+          ? [
+              <GridActionsCellItem
+                key="create-work-order"
+                icon={
+                  <Tooltip title={t('create_work_order')}>
+                    <BuildTwoToneIcon color="primary" />
+                  </Tooltip>
+                }
+                label={t('create_work_order')}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  navigate(`/app/work-orders?asset=${params.row.id}`);
+                }}
+              />
+            ]
+          : []
     }
   ];
 
