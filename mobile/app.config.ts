@@ -6,7 +6,7 @@ const googleServicesJson = process.env.GOOGLE_SERVICES_JSON;
 const easProjectId = process.env.EAS_PROJECT_ID;
 
 const appName = 'Bay Baby Maintenance';
-const appVersion = '1.0.0';
+const appVersion = '1.1.0';
 const androidPackage = 'com.baybabyproduce.maintenance';
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
@@ -45,7 +45,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       foregroundImage: './assets/images/adaptive-icon.png',
       backgroundColor: '#ffffff'
     },
-    versionCode: 1,
+    versionCode: 2,
     package: androidPackage,
     jsEngine: 'hermes',
     permissions: [
@@ -98,7 +98,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
           compileSdkVersion: 36,
           targetSdkVersion: 36,
           buildToolsVersion: '36.0.0',
-          usesCleartextTraffic: false
+          // The privately hosted Atlas API currently uses HTTP over the secured
+          // company network/Tailscale connection.
+          usesCleartextTraffic: true
         }
       }
     ]
