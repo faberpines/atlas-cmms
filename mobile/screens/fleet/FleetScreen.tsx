@@ -61,13 +61,16 @@ export default function FleetScreen({ navigation }: any) {
               {!!vehicle.licensePlate && <Text>{t('license_plate')}: {vehicle.licensePlate}</Text>}
               {!!vehicle.assetNumber && <Text>{t('asset_number')}: {vehicle.assetNumber}</Text>}
             </Card.Content>
-            {!!vehicle.asset && (
-              <Card.Actions>
+            <Card.Actions>
+                <Button icon="speedometer" onPress={() => navigation.navigate('LogVehicleUsage', { vehicle })}>
+                  {t('log_usage')}
+                </Button>
+              {!!vehicle.asset && (
                 <Button icon="clipboard-plus-outline" onPress={() => navigation.navigate('AddWorkOrder', { asset: vehicle.asset })}>
                   {t('work_order')}
                 </Button>
-              </Card.Actions>
-            )}
+              )}
+            </Card.Actions>
           </Card>
         ))}
         {!loading && !shown.length && (

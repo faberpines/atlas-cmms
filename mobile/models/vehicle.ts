@@ -22,3 +22,12 @@ export default interface Vehicle {
   notes?: string;
   usageUnit?: 'MILES' | 'HOURS';
 }
+
+export interface VehicleUsageLog {
+  id: number;
+  weekOf: string;
+  unitType: 'MILES' | 'HOURS';
+  value: number;
+  notes?: string;
+  createdAt: string;
+}

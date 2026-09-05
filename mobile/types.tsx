@@ -22,6 +22,7 @@ import Category from './models/category';
 import { FilterField } from './models/page';
 import Request from './models/request';
 import Meter, { MeterMiniDTO } from './models/meter';
+import Vehicle from './models/vehicle';
 
 declare global {
   namespace ReactNavigation {
@@ -146,6 +147,7 @@ export type RootStackParamList = {
   ScanAsset: undefined;
   ScannedAsset: { asset: AssetDTO };
   AddVehicle: undefined;
+  LogVehicleUsage: { vehicle: Vehicle };
   AddTagout: undefined;
   Inspections: undefined;
   InspectionDetails: { id: number; inspectionProp?: any };

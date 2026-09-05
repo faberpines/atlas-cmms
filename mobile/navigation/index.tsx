@@ -111,6 +111,7 @@ import { Fragment, ReactElement, ReactNode } from 'react';
 import { useAppTheme } from '../custom-theme';
 import FleetScreen from '../screens/fleet/FleetScreen';
 import CreateVehicleScreen from '../screens/fleet/CreateVehicleScreen';
+import LogVehicleUsageScreen from '../screens/fleet/LogVehicleUsageScreen';
 import TagoutScreen from '../screens/tagout/TagoutScreen';
 import CreateTagoutScreen from '../screens/tagout/CreateTagoutScreen';
 import ScannedAssetScreen from '../screens/assets/ScannedAssetScreen';
@@ -373,11 +374,16 @@ function RootNavigator() {
         component={ScannedAssetScreen}
         options={{ title: t('asset_scan_result') }}
       />
-      <Stack.Screen
-        name="AddVehicle"
-        component={CreateVehicleScreen}
-        options={{ title: t('add_vehicle') }}
-      />
+        <Stack.Screen
+          name="AddVehicle"
+          component={CreateVehicleScreen}
+          options={{ title: t('add_vehicle') }}
+        />
+        <Stack.Screen
+          name="LogVehicleUsage"
+          component={LogVehicleUsageScreen}
+          options={{ title: t('log_usage') }}
+        />
       <Stack.Screen
         name="AddTagout"
         component={CreateTagoutScreen}
