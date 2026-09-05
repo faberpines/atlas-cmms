@@ -13,7 +13,8 @@ import {
   Searchbar,
   Text,
   useTheme,
-  Avatar
+  Avatar,
+  FAB
 } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import WorkOrder from '../../models/workOrder';
@@ -51,7 +52,12 @@ export default function WorkOrdersScreen({
   const { getFormattedDate, getUserNameById } = useContext(
     CompanySettingsContext
   );
-  const { hasViewPermission, user, hasViewOtherPermission } = useAuth();
+  const {
+    hasViewPermission,
+    user,
+    hasViewOtherPermission,
+    hasCreatePermission
+  } = useAuth();
   const defaultFilterFields: FilterField[] = [
     {
       field: 'priority',
@@ -420,6 +426,15 @@ export default function WorkOrdersScreen({
           )}
         </ScrollView>
       </Fragment>
+      {hasCreatePermission(PermissionEntity.WORK_ORDERS) && (
+        <FAB
+          icon="plus"
+          label={t('create')}
+          color={theme.colors.paper}
+          style={[styles.fab, { backgroundColor: theme.colors.primary }]}
+          onPress={() => navigation.navigate('AddWorkOrder', {})}
+        />
+      )}
     </View>
   );
 }
@@ -489,5 +504,6 @@ const styles = StyleSheet.create({
   assigneeContainer: {
     flexDirection: 'row',
     alignItems: 'center'
-  }
+  },
+  fab: { position: 'absolute', right: 18, bottom: 96, borderRadius: 8 }
 });

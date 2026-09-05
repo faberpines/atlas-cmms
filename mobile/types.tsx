@@ -43,7 +43,7 @@ export type RootStackParamList = {
   EditCustomer: { customer: Customer };
   EditVendor: { vendor: Vendor };
   EditTeam: { team: Team };
-  AddRequest: undefined;
+  AddRequest: { asset?: AssetDTO } | undefined;
   AddAsset: {
     location?: Location;
     parentAsset?: AssetDTO;
@@ -144,6 +144,9 @@ export type RootStackParamList = {
   AddAdditionalCost: { workOrderId: number };
   AddAdditionalTime: { workOrderId: number };
   ScanAsset: undefined;
+  ScannedAsset: { asset: AssetDTO };
+  AddVehicle: undefined;
+  AddTagout: undefined;
   Inspections: undefined;
   InspectionDetails: { id: number; inspectionProp?: any };
   CreateInspection: { assetId?: number };
@@ -156,8 +159,13 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
 export type RootTabParamList = {
   Home: undefined;
   WorkOrders: { filterFields: FilterField[]; fromHome?: boolean };
-  AddEntities: undefined;
+  Parts: undefined;
+  Assets: undefined;
+  Fleet: undefined;
+  Tagout: undefined;
   Requests: undefined;
+  Scan: undefined;
+  AddEntities: undefined;
   MoreEntities: undefined;
 };
 export type RootParamList = RootStackParamList & RootTabParamList;

@@ -12,7 +12,7 @@ import useAuth from '../../hooks/useAuth';
 import { PermissionEntity } from '../../models/role';
 import { getAssetChildren, getAssets, getMoreAssets } from '../../slices/asset';
 import { FilterField, SearchCriteria } from '../../models/page';
-import { Button, Card, Searchbar, Text } from 'react-native-paper';
+import { Button, Card, FAB, Searchbar, Text } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import {
   AssetDTO,
@@ -132,7 +132,7 @@ export default function AssetsScreen({
   const [view, setView] = useState<'hierarchy' | 'list'>('hierarchy');
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState('');
-  const { hasViewPermission } = useAuth();
+  const { hasViewPermission, hasCreatePermission } = useAuth();
   const defaultFilterFields: FilterField[] = [];
   const getCriteriaFromFilterFields = (filterFields: FilterField[]) => {
     const initialCriteria: SearchCriteria = {
@@ -292,6 +292,15 @@ export default function AssetsScreen({
             ))}
         </ScrollView>
       )}
+      {hasCreatePermission(PermissionEntity.ASSETS) && (
+        <FAB
+          icon="plus"
+          label={t('create')}
+          color={theme.colors.paper}
+          style={[styles.fab, { backgroundColor: theme.colors.primary }]}
+          onPress={() => navigation.navigate('AddAsset', {})}
+        />
+      )}
     </View>
   );
 }
@@ -321,5 +330,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     paddingHorizontal: 12,
     paddingBottom: 10
-  }
+  },
+  fab: { position: 'absolute', right: 18, bottom: 96, borderRadius: 8 }
 });

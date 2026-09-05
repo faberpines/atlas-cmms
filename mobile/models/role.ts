@@ -30,7 +30,9 @@ export enum PermissionEntity {
   LOCATIONS = 'LOCATIONS',
   SETTINGS = 'SETTINGS',
   REQUESTS = 'REQUESTS',
-  ANALYTICS = 'ANALYTICS'
+  ANALYTICS = 'ANALYTICS',
+  FLEET = 'FLEET',
+  LOTO = 'LOTO'
 }
 
 export const createEntities: PermissionEntity[] = [

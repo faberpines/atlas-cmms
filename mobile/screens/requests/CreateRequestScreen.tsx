@@ -38,7 +38,15 @@ export default function CreateRequestScreen({
         validation={Yup.object().shape(getRequestFieldsAndShapes()[1])}
         navigation={navigation}
         submitText={t('save')}
-        values={{ dueDate: null }}
+        values={{
+          dueDate: null,
+          asset: route.params?.asset
+            ? {
+                label: route.params.asset.name,
+                value: route.params.asset.id.toString()
+              }
+            : null
+        }}
         onChange={({ field, e }) => {
         }}
         onSubmit={async (values) => {

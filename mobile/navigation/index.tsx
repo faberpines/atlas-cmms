@@ -109,6 +109,11 @@ import SwitchAccountScreen from '../screens/superUser/SwitchAccountScreen';
 import { FontAwesome, Ionicons, Feather } from '@expo/vector-icons';
 import { Fragment, ReactElement, ReactNode } from 'react';
 import { useAppTheme } from '../custom-theme';
+import FleetScreen from '../screens/fleet/FleetScreen';
+import CreateVehicleScreen from '../screens/fleet/CreateVehicleScreen';
+import TagoutScreen from '../screens/tagout/TagoutScreen';
+import CreateTagoutScreen from '../screens/tagout/CreateTagoutScreen';
+import ScannedAssetScreen from '../screens/assets/ScannedAssetScreen';
 
 export default function Navigation({
   colorScheme
@@ -364,6 +369,21 @@ function RootNavigator() {
         options={{ title: t('to_scan') }}
       />
       <Stack.Screen
+        name="ScannedAsset"
+        component={ScannedAssetScreen}
+        options={{ title: t('asset_scan_result') }}
+      />
+      <Stack.Screen
+        name="AddVehicle"
+        component={CreateVehicleScreen}
+        options={{ title: t('add_vehicle') }}
+      />
+      <Stack.Screen
+        name="AddTagout"
+        component={CreateTagoutScreen}
+        options={{ title: t('add_tagout') }}
+      />
+      <Stack.Screen
         name="Inspections"
         component={InspectionsScreen}
         options={{ title: t('inspections') }}
@@ -529,64 +549,26 @@ function SuperUserNavigator() {
  */
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
-function CreateTabBarButton(props: {
-  onPress: (
-    e: React.MouseEvent<HTMLAnchorElement, MouseEvent> | GestureResponderEvent
-  ) => void;
-  children: React.ReactNode;
-}): ReactElement {
-  const theme = useTheme();
-
-  return (
-    <TouchableOpacity
-      style={{
-        top: -25,
-        justifyContent: 'center',
-        alignItems: 'center'
-      }}
-      onPress={props.onPress}
-    >
-      <View
-        style={{
-          width: 20
-        }}
-      >
-        {props.children}
-      </View>
-    </TouchableOpacity>
-  );
-}
-
-function BottomTabNavigator({ navigation }: RootTabScreenProps<'Home'>) {
+function BottomTabNavigator({ navigation }: any) {
   const theme = useAppTheme();
   const { t } = useTranslation();
-  const { hasViewPermission, hasCreatePermission, user } = useAuth();
-  const uiConfiguration = user.uiConfiguration;
-  let leftButtonsCount = user.role.code !== 'REQUESTER' ? 1 : 0;
-  let rightButtonsCount = 0;
-  if (createEntities.some((entity) => hasCreatePermission(entity))) {
-    leftButtonsCount++;
-  }
-  if (
-    hasViewPermission(PermissionEntity.REQUESTS) &&
-    uiConfiguration.requests
-  ) {
-    rightButtonsCount++;
-  }
-  if (viewMoreEntities.some((entity) => hasViewPermission(entity))) {
-    rightButtonsCount++;
-  }
-
-  // Determine whether to show the create button big in the center
-  const showBigCreateButton = leftButtonsCount === rightButtonsCount;
+  const { hasViewPermission, user } = useAuth();
+  const isRequester = user.role.code === 'REQUESTER';
 
   return (
     <BottomTab.Navigator
-      initialRouteName={user.role.code === 'REQUESTER' ? 'Requests' : 'Home'}
-      screenOptions={{
+      initialRouteName={isRequester ? 'Requests' : 'WorkOrders'}
+      screenOptions={({ navigation: tabNavigation }) => ({
         headerStyle: { backgroundColor: theme.colors.chassis },
         headerTintColor: theme.colors.paper,
         headerShadowVisible: false,
+        headerTitleStyle: { fontWeight: '700' },
+        headerRight: () => (
+          <View style={{ flexDirection: 'row' }}>
+            <IconButton icon="barcode-scan" iconColor={theme.colors.paper} onPress={() => tabNavigation.getParent()?.navigate('ScanAsset')} />
+            <IconButton icon="cog-outline" iconColor={theme.colors.paper} onPress={() => tabNavigation.getParent()?.navigate('Settings')} />
+          </View>
+        ),
         tabBarActiveTintColor: theme.colors.paper,
         tabBarInactiveTintColor: theme.colors.outline,
         tabBarStyle: {
@@ -610,123 +592,23 @@ function BottomTabNavigator({ navigation }: RootTabScreenProps<'Home'>) {
         tabBarItemStyle: {
           justifyContent: 'center',
           alignItems: 'center'
-        }
-      }}
+        },
+        tabBarLabelStyle: { fontSize: 11, fontWeight: '600' }
+      })}
     >
-      {user.role.code !== 'REQUESTER' && (
-        <BottomTab.Screen
-          name="Home"
-          component={HomeScreen}
-          options={({ navigation }: RootTabScreenProps<'Home'>) => ({
-            headerTitle: (props) => (
-              <Text
-                style={{
-                  color: theme.colors.paper,
-                  fontSize: 22,
-                  fontWeight: 'bold'
-                }}
-              >
-                Atlas
-              </Text>
-            ),
-            title: t('home'),
-            tabBarIcon: ({ color, focused }) => (
-              <Ionicons
-                name={focused ? 'home' : 'home-outline'}
-                color={color}
-                size={30}
-              />
-            ),
-            headerRight: () => (
-              <Pressable
-                onPress={() => {
-                  navigation.navigate('Settings');
-                }}
-              >
-                <IconButton icon="cog-outline" />
-              </Pressable>
-            )
-          })}
-        />
-      )}
-      <BottomTab.Screen
-        name="WorkOrders"
-        component={WorkOrdersScreen}
-        options={{
-          title: t('work_orders'),
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? 'clipboard' : 'clipboard-outline'}
-              size={30}
-              color={color}
-            />
-          )
-        }}
-      />
-      {createEntities.some((entity) => hasCreatePermission(entity)) && (
-        <BottomTab.Screen
-          name="AddEntities"
-          component={View}
-          listeners={{
-            tabPress: (e) => {
-              e.preventDefault();
-              if (user.role.code === 'REQUESTER')
-                navigation.navigate('AddRequest');
-              else
-                SheetManager.show('create-entities-sheet', {
-                  payload: { navigation }
-                });
-            }
-          }}
-          options={{
-            title: showBigCreateButton ? '' : t('create'),
-            tabBarIcon: ({ focused }) => (
-              <IconButton
-                icon={'plus-circle'}
-                iconColor={theme.colors.primary}
-                size={showBigCreateButton ? 60 : 35}
-              />
-            ),
-            ...(showBigCreateButton
-              ? {
-                  tabBarButton: (props) => (
-                    <CreateTabBarButton onPress={props.onPress}>
-                      {props.children}
-                    </CreateTabBarButton>
-                  )
-                }
-              : {})
-          }}
-        />
-      )}
-      {hasViewPermission(PermissionEntity.REQUESTS) &&
-        uiConfiguration.requests && (
-          <BottomTab.Screen
-            name="Requests"
-            component={RequestsScreen}
-            options={{
-              title: t('requests'),
-              tabBarIcon: ({ color, focused }) => (
-                <Feather name="inbox" color={color} size={30} />
-              )
-            }}
-          />
-        )}
-      {viewMoreEntities.some((entity) => hasViewPermission(entity)) && (
-        <BottomTab.Screen
-          name="MoreEntities"
-          component={MoreEntitiesScreen}
-          options={{
-            title: t('more'),
-            tabBarIcon: ({ color, focused }) => (
-              <Ionicons
-                name={focused ? 'menu' : 'menu-outline'}
-                size={30}
-                color={color}
-              />
-            )
-          }}
-        />
+      {isRequester ? (
+        <>
+          <BottomTab.Screen name="Requests" component={RequestsScreen} options={{ title: t('requests'), tabBarIcon: ({ color }) => <Feather name="inbox" color={color} size={25} /> }} />
+          <BottomTab.Screen name="Scan" component={ScanAssetScreen} options={{ title: t('scan'), tabBarIcon: ({ color }) => <Ionicons name="barcode-outline" color={color} size={27} /> }} />
+        </>
+      ) : (
+        <>
+          {hasViewPermission(PermissionEntity.WORK_ORDERS) && <BottomTab.Screen name="WorkOrders" component={WorkOrdersScreen} options={{ title: t('work_orders'), tabBarIcon: ({ color }) => <Ionicons name="clipboard-outline" color={color} size={25} /> }} />}
+          {hasViewPermission(PermissionEntity.PARTS_AND_MULTIPARTS) && <BottomTab.Screen name="Parts" component={PartsScreen} options={{ title: t('parts'), tabBarIcon: ({ color }) => <Ionicons name="cube-outline" color={color} size={25} /> }} />}
+          {hasViewPermission(PermissionEntity.ASSETS) && <BottomTab.Screen name="Assets" component={AssetsScreen} options={{ title: t('assets'), tabBarIcon: ({ color }) => <Ionicons name="barcode-outline" color={color} size={25} /> }} />}
+          {hasViewPermission(PermissionEntity.FLEET) && <BottomTab.Screen name="Fleet" component={FleetScreen} options={{ title: t('fleet'), tabBarIcon: ({ color }) => <Ionicons name="car-outline" color={color} size={25} /> }} />}
+          {hasViewPermission(PermissionEntity.LOTO) && <BottomTab.Screen name="Tagout" component={TagoutScreen} options={{ title: t('tagout'), tabBarIcon: ({ color }) => <Ionicons name="lock-closed-outline" color={color} size={25} /> }} />}
+        </>
       )}
     </BottomTab.Navigator>
   );

@@ -13,7 +13,7 @@ import useAuth from '../../hooks/useAuth';
 import { PermissionEntity } from '../../models/role';
 import { getMoreParts, getParts } from '../../slices/part';
 import { FilterField, SearchCriteria } from '../../models/page';
-import { Card, List, Searchbar, Text, useTheme } from 'react-native-paper';
+import { Card, FAB, List, Searchbar, Text, useTheme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import Part from '../../models/part';
 import { isCloseToBottom, onSearchQueryChange } from '../../utils/overall';
@@ -41,7 +41,7 @@ export default function PartsScreen({
   const { getFormattedDate, getUserNameById } = useContext(
     CompanySettingsContext
   );
-  const { hasViewPermission } = useAuth();
+  const { hasViewPermission, hasCreatePermission } = useAuth();
   const defaultFilterFields: FilterField[] = [];
   const getCriteriaFromFilterFields = (filterFields: FilterField[]) => {
     const initialCriteria: SearchCriteria = {
@@ -172,6 +172,15 @@ export default function PartsScreen({
           </View>
         )}
       </ScrollView>
+      {hasCreatePermission(PermissionEntity.PARTS_AND_MULTIPARTS) && (
+        <FAB
+          icon="plus"
+          label={t('create')}
+          color={theme.colors.surface}
+          style={[styles.fab, { backgroundColor: theme.colors.primary }]}
+          onPress={() => navigation.navigate('AddPart')}
+        />
+      )}
     </View>
   );
 }
@@ -195,5 +204,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center'
-  }
+  },
+  fab: { position: 'absolute', right: 18, bottom: 96, borderRadius: 8 }
 });
