@@ -23,6 +23,7 @@ import {
   ProgressBar,
   Provider,
   Text,
+  TextInput,
   useTheme
 } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
@@ -65,6 +66,11 @@ import Labor from '../../models/labor';
 import { AudioPlayer } from '../../components/AudioPlayer';
 import { Task } from '../../models/tasks';
 import { getErrorMessage } from '../../utils/api';
+import { customTheme } from '../../custom-theme';
+import {
+  addWorkOrderHistory,
+  getWorkOrderHistories
+} from '../../slices/workOrderHistory';
 
 const getRemainingTasksLength = (tasks: Task[]): number => {
   const SECONDS_MS = 5_000;
@@ -109,6 +115,8 @@ export default function WODetailsScreen({
   const [runningTimerDuration, setRunningTimerDuration] = useState<string>();
   const { workOrderConfiguration, generalPreferences } = companySettings;
   const [loading, setLoading] = useState<boolean>(false);
+  const [newUpdate, setNewUpdate] = useState('');
+  const [savingUpdate, setSavingUpdate] = useState(false);
   const theme = useTheme();
   const dispatch = useDispatch();
   const { partQuantitiesByWorkOrder, loadingPartQuantities } = useSelector(
@@ -143,9 +151,13 @@ export default function WODetailsScreen({
   const { getFormattedDate, getUserNameById, getFormattedCurrency } =
     useContext(CompanySettingsContext);
   const [isExtended, setIsExtended] = React.useState(true);
-  const statuses = ['OPEN', 'ON_HOLD', 'IN_PROGRESS', 'COMPLETE'].map(
-    (status) => ({ value: status, label: t(status) })
-  );
+  const statuses = [
+    'OPEN',
+    'IN_PROGRESS',
+    'ON_HOLD',
+    'PARTS_ORDERED',
+    'COMPLETE'
+  ].map((status) => ({ value: status, label: t(status) }));
   const [openDelete, setOpenDelete] = React.useState(false);
   const [openArchive, setOpenArchive] = React.useState(false);
   const remainingTasksLength = getRemainingTasksLength(tasks);
@@ -230,6 +242,25 @@ export default function WODetailsScreen({
       dispatch(getRelations(id));
     }
     dispatch(getTasks(id));
+    dispatch(getWorkOrderHistories(id));
+  };
+
+  const saveUpdate = async () => {
+    const name = newUpdate.trim();
+    if (!name || savingUpdate) return;
+    setSavingUpdate(true);
+    try {
+      await dispatch(addWorkOrderHistory(id, name));
+      setNewUpdate('');
+      showSnackBar(t('work_order_update_saved'), 'success');
+    } catch (err) {
+      showSnackBar(
+        getErrorMessage(err, t('work_order_update_save_failure')),
+        'error'
+      );
+    } finally {
+      setSavingUpdate(false);
+    }
   };
   useEffect(() => {
     navigation.setOptions({
@@ -977,6 +1008,65 @@ export default function WODetailsScreen({
                   </View>
                 </View>
               )}
+              <View style={[styles.shadowedCard, styles.updatesCard]}>
+                <View style={styles.sectionHeadingRow}>
+                  <View>
+                    <Text variant="titleLarge" style={styles.sectionTitle}>
+                      {t('updates')}
+                    </Text>
+                    <Text style={{ color: theme.colors.onSurfaceVariant }}>
+                      {currentWorkOrderHistories.length
+                        ? `${currentWorkOrderHistories.length}`
+                        : t('no_work_order_updates')}
+                    </Text>
+                  </View>
+                </View>
+                {hasEditPermission(PermissionEntity.WORK_ORDERS, workOrder) && (
+                  <View style={styles.updateComposer}>
+                    <TextInput
+                      mode="outlined"
+                      label={t('add_work_order_update')}
+                      value={newUpdate}
+                      onChangeText={setNewUpdate}
+                      multiline
+                      maxLength={255}
+                      disabled={savingUpdate}
+                      style={styles.updateInput}
+                    />
+                    <Button
+                      mode="contained"
+                      icon="send"
+                      loading={savingUpdate}
+                      disabled={!newUpdate.trim() || savingUpdate}
+                      onPress={saveUpdate}
+                      contentStyle={styles.updateButtonContent}
+                    >
+                      {t('save_update')}
+                    </Button>
+                  </View>
+                )}
+                {[...currentWorkOrderHistories]
+                  .reverse()
+                  .map((workOrderHistory, index) => (
+                    <View
+                      key={workOrderHistory.id}
+                      style={[
+                        styles.updateItem,
+                        index === 0 && styles.latestUpdateItem
+                      ]}
+                    >
+                      <Text variant="bodyLarge" style={styles.updateText}>
+                        {workOrderHistory.name}
+                      </Text>
+                      <Text
+                        variant="bodySmall"
+                        style={{ color: theme.colors.onSurfaceVariant }}
+                      >
+                        {`${workOrderHistory.user.firstName} ${workOrderHistory.user.lastName} · ${getFormattedDate(workOrderHistory.createdAt)}`}
+                      </Text>
+                    </View>
+                  ))}
+              </View>
               {!!tasks.length && (
                 <View style={styles.shadowedCard}>
                   <Text
@@ -1132,27 +1222,6 @@ export default function WODetailsScreen({
                       </Fragment>
                     )}
                   </View>
-                  {!!currentWorkOrderHistories.length && (
-                    <View style={styles.shadowedCard}>
-                      <Text
-                        style={{
-                          marginBottom: 10,
-                          color: theme.colors.onSurfaceVariant
-                        }}
-                      >
-                        {t('history')}
-                      </Text>
-                      {currentWorkOrderHistories.map((workOrderHistory) => (
-                        <List.Item
-                          key={workOrderHistory.id}
-                          title={`${workOrderHistory.user.firstName} ${workOrderHistory.user.lastName}`}
-                          description={getFormattedDate(
-                            workOrderHistory.createdAt
-                          )}
-                        />
-                      ))}
-                    </View>
-                  )}
                 </View>
               )}
             </View>
@@ -1198,15 +1267,48 @@ const styles = StyleSheet.create({
   startButton: { position: 'absolute', bottom: 20, right: '10%' },
   row: { display: 'flex', flexDirection: 'row', alignItems: 'center' },
   shadowedCard: {
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    marginVertical: 10,
-    marginHorizontal: 5,
-    elevation: 5
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    backgroundColor: customTheme.colors.paper,
+    borderColor: customTheme.colors.rule,
+    borderWidth: 1,
+    marginVertical: 8
+  },
+  updatesCard: {
+    gap: 12
+  },
+  sectionHeadingRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  sectionTitle: {
+    fontWeight: '700',
+    color: customTheme.colors.primaryAlt
+  },
+  updateComposer: {
+    gap: 8
+  },
+  updateInput: {
+    minHeight: 96,
+    backgroundColor: customTheme.colors.paperMuted
+  },
+  updateButtonContent: {
+    minHeight: 44
+  },
+  updateItem: {
+    borderTopColor: customTheme.colors.outlineVariant,
+    borderTopWidth: 1,
+    paddingTop: 12,
+    gap: 4
+  },
+  latestUpdateItem: {
+    borderTopColor: customTheme.colors.seasonal
+  },
+  updateText: {
+    fontWeight: '600',
+    color: customTheme.colors.onSurface
   },
   fabStyle: {
     bottom: 16,

@@ -63,7 +63,7 @@ export default function WorkOrdersScreen({
     {
       field: 'status',
       operation: 'in',
-      values: ['OPEN', 'IN_PROGRESS', 'ON_HOLD'],
+      values: ['OPEN', 'IN_PROGRESS', 'ON_HOLD', 'PARTS_ORDERED'],
       value: '',
       enumName: 'STATUS'
     },
@@ -174,7 +174,12 @@ export default function WorkOrdersScreen({
         >
           <ScrollView
             horizontal
-            style={{ backgroundColor: 'white', borderRadius: 5 }}
+            style={{
+              backgroundColor: theme.colors.paper,
+              borderRadius: 10,
+              borderColor: theme.colors.rule,
+              borderWidth: 1
+            }}
             showsHorizontalScrollIndicator={false}
           >
             <IconButton
@@ -225,8 +230,19 @@ export default function WorkOrdersScreen({
             <EnumFilter
               filterFields={criteria.filterFields}
               onChange={onFilterChange}
-              completeOptions={['OPEN', 'IN_PROGRESS', 'ON_HOLD', 'COMPLETE']}
-              initialOptions={['OPEN', 'IN_PROGRESS', 'ON_HOLD']}
+              completeOptions={[
+                'OPEN',
+                'IN_PROGRESS',
+                'ON_HOLD',
+                'PARTS_ORDERED',
+                'COMPLETE'
+              ]}
+              initialOptions={[
+                'OPEN',
+                'IN_PROGRESS',
+                'ON_HOLD',
+                'PARTS_ORDERED'
+              ]}
               fieldName="status"
               icon="circle-double"
             />
@@ -266,10 +282,8 @@ export default function WorkOrdersScreen({
                   style={[
                     styles.card,
                     {
-                      borderLeftColor: getPriorityColor(
-                        workOrder.priority,
-                        theme
-                      )
+                      backgroundColor: theme.colors.paper,
+                      borderColor: theme.colors.rule
                     }
                   ]}
                   key={workOrder.id}
@@ -281,7 +295,7 @@ export default function WorkOrdersScreen({
                   }
                 >
                   <Card.Content>
-                    {/* Header: Title, ID, and Status */}
+                    {/* Header: operational identity and status */}
                     <View style={styles.cardHeader}>
                       <View>
                         <Text variant="titleMedium" style={styles.cardTitle}>
@@ -289,18 +303,41 @@ export default function WorkOrdersScreen({
                         </Text>
                         <Text
                           variant={'bodySmall'}
-                          style={{ color: 'grey' }}
+                          style={{ color: theme.colors.onSurfaceVariant }}
                         >{`#${workOrder.customId}`}</Text>
                       </View>
                       <Tag
                         text={t(workOrder.status)}
-                        color="white"
+                        color={theme.colors.paper}
                         backgroundColor={getStatusColor(
                           workOrder.status,
                           theme
                         )}
                       />
                     </View>
+                    {workOrder.priority !== 'NONE' && (
+                      <View style={styles.priorityRow}>
+                        <View
+                          style={[
+                            styles.priorityDatum,
+                            {
+                              backgroundColor: getPriorityColor(
+                                workOrder.priority,
+                                theme
+                              )
+                            }
+                          ]}
+                        />
+                        <Text
+                          variant="labelMedium"
+                          style={{ color: theme.colors.onSurfaceVariant }}
+                        >
+                          {t('priority_label', {
+                            priority: t(workOrder.priority)
+                          })}
+                        </Text>
+                      </View>
+                    )}
                     {/* Body: Asset and Location */}
                     <View style={styles.cardBody}>
                       {workOrder.asset && (
@@ -371,7 +408,7 @@ export default function WorkOrdersScreen({
           ) : loadingGet ? null : (
             <View
               style={{
-                backgroundColor: 'white',
+                backgroundColor: theme.colors.paper,
                 padding: 20,
                 borderRadius: 10
               }}
@@ -409,14 +446,20 @@ const styles = StyleSheet.create({
   },
   card: {
     marginVertical: 8,
-    backgroundColor: 'white',
-    borderRadius: 8,
-    borderLeftWidth: 5,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22
+    borderRadius: 12,
+    borderWidth: 1,
+    elevation: 0
+  },
+  priorityRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginTop: 8
+  },
+  priorityDatum: {
+    width: 8,
+    height: 8,
+    borderRadius: 2
   },
   cardHeader: {
     flexDirection: 'row',

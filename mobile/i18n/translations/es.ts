@@ -1,4 +1,10 @@
 const locale = {
+  no_work_order_updates: 'No updates yet',
+  PARTS_ORDERED: 'Parts Ordered',
+  add_work_order_update: 'Add a work order update',
+  save_update: 'Save update',
+  work_order_update_saved: 'Work order update saved',
+  work_order_update_save_failure: 'Could not save the work order update',
   DUPLICATE_OF: 'Duplicado de',
   DUPLICATED_BY: 'Duplicado por',
   RELATED_TO: 'Relacionado con',

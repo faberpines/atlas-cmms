@@ -5,21 +5,19 @@
 
 import { Text as DefaultText, View as DefaultView } from 'react-native';
 
-import Colors from '../constants/Colors';
-import useColorScheme from '../hooks/useColorScheme';
+import { customTheme } from '../custom-theme';
 
 export function useThemeColor(
   props: { light?: string; dark?: string },
-  colorName: keyof typeof Colors.light & keyof typeof Colors.dark
+  colorName: 'text' | 'background'
 ) {
-  const theme = useColorScheme();
-  const colorFromProps = props[theme];
-
-  if (colorFromProps) {
-    return colorFromProps;
-  } else {
-    return Colors[theme][colorName];
-  }
+  return (
+    props.light ??
+    props.dark ??
+    (colorName === 'text'
+      ? customTheme.colors.onSurface
+      : customTheme.colors.background)
+  );
 }
 
 type ThemeProps = {
@@ -46,7 +44,7 @@ export function View(props: ViewProps) {
 
   return (
     <DefaultView
-      style={[{ backgroundColor: 'white' }, style]}
+      style={[{ backgroundColor }, style]}
       {...otherProps}
     />
   );

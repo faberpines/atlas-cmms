@@ -137,6 +137,8 @@ export const getStatusColor = (
     case 'ON_HOLD':
       // @ts-ignore
       return theme.colors.warning;
+    case 'PARTS_ORDERED':
+      return theme.colors.secondary;
     case 'LATE_WO':
       return theme.colors.error;
     case 'TODAY_WO':

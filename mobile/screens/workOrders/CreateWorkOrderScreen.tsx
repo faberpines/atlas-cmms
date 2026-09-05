@@ -16,6 +16,7 @@ import { assetStatuses } from '../../models/asset';
 import { useTheme } from 'react-native-paper';
 import { useAppTheme } from '../../custom-theme';
 import { getErrorMessage } from '../../utils/api';
+import WorkOrder from '../../models/workOrder';
 
 export default function CreateWorkOrderScreen({
   navigation,
@@ -33,9 +34,12 @@ export default function CreateWorkOrderScreen({
     title: Yup.string().required(t('required_wo_title'))
   };
 
-  const onCreationSuccess = () => {
+  const onCreationSuccess = (workOrder: WorkOrder) => {
     showSnackBar(t('wo_create_success'), 'success');
-    navigation.goBack();
+    navigation.replace('WODetails', {
+      id: workOrder.id,
+      workOrderProp: workOrder
+    });
   };
   const onCreationFailure = (err) =>
     showSnackBar(getErrorMessage(err, t('wo_create_failure')), 'error');
@@ -91,8 +95,8 @@ export default function CreateWorkOrderScreen({
                   files: imageAndFiles.files
                 };
                 dispatch(addWorkOrder(formattedValues))
-                  .then(() => {
-                    onCreationSuccess();
+                  .then((workOrder: WorkOrder) => {
+                    onCreationSuccess(workOrder);
                     resolve();
                   })
                   .catch((err) => {

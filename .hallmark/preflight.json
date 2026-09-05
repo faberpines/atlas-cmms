@@ -1,0 +1,12 @@
+{
+  "date": "2026-09-05",
+  "scope": "mobile",
+  "designSystem": "design.md",
+  "framework": "Expo 54 / React Native 0.81",
+  "componentSystem": "React Native Paper 5",
+  "navigation": "React Navigation 6",
+  "fontStack": "system sans with Space Mono asset",
+  "palette": "Atlas leaf green, evergreen chassis, warm paper, seasonal orange",
+  "motion": "motion-cut; no dedicated motion library",
+  "spacing": "4-point design scale applied through shared mobile styles"
+}

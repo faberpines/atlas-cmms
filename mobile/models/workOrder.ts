@@ -11,7 +11,12 @@ import PreventiveMaintenance from './preventiveMaintenance';
 import { WorkOrderBase } from './workOrderBase';
 
 export type Priority = 'HIGH' | 'MEDIUM' | 'LOW' | 'NONE';
-export type WorkOrderStatus = 'OPEN' | 'ON_HOLD' | 'IN_PROGRESS' | 'COMPLETE';
+export type WorkOrderStatus =
+  | 'OPEN'
+  | 'ON_HOLD'
+  | 'PARTS_ORDERED'
+  | 'IN_PROGRESS'
+  | 'COMPLETE';
 
 export default interface WorkOrder extends WorkOrderBase {
   category: Category | null;

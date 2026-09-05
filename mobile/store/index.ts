@@ -12,6 +12,7 @@ import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Inspection } from '../models/inspection';
+import WorkOrder from '../models/workOrder';
 
 const persistConfig = {
   key: 'root',
@@ -37,6 +38,7 @@ export type StoreReturnType =
   | number
   | number[]
   | string
+  | WorkOrder
   | Inspection
   | ImportResponse;
 export type AppThunk = ThunkAction<

@@ -1,4 +1,4 @@
-import User, { users } from './user';
+import User from './user';
 
 export default interface WorkOrderHistory {
   id: number;
@@ -6,18 +6,3 @@ export default interface WorkOrderHistory {
   name: string;
   createdAt: string;
 }
-
-export const workOrderHistories: WorkOrderHistory[] = [
-  {
-    id: 75,
-    user: users[1],
-    name: 'fhgskd',
-    createdAt: 'fdsdfvac'
-  },
-  {
-    id: 421,
-    user: users[0],
-    name: 'gjhgaf fahgdhabf fagk',
-    createdAt: 'fdsdfvac'
-  }
-];

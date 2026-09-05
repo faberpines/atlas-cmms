@@ -1,5 +1,14 @@
 [
   {
+    "date": "2026-09-05",
+    "scope": "app",
+    "macrostructure": "Workbench",
+    "theme": "custom",
+    "theme_axes": "warm-paper / field-equipment / evergreen-orange",
+    "enrichment": "none",
+    "brief": "Mobile parity and asset-to-work-order update workflow redesign"
+  },
+  {
     "date": "2026-09-04",
     "scope": "app",
     "macrostructure": "Workbench",

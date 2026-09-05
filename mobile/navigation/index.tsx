@@ -108,6 +108,7 @@ import RequestsScreen from '../screens/requests/RequestsScreen';
 import SwitchAccountScreen from '../screens/superUser/SwitchAccountScreen';
 import { FontAwesome, Ionicons, Feather } from '@expo/vector-icons';
 import { Fragment, ReactElement, ReactNode } from 'react';
+import { useAppTheme } from '../custom-theme';
 
 export default function Navigation({
   colorScheme
@@ -146,8 +147,17 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   const { t } = useTranslation();
+  const theme = useAppTheme();
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: theme.colors.chassis },
+        headerTintColor: theme.colors.paper,
+        headerTitleStyle: { fontWeight: '700' },
+        headerShadowVisible: false,
+        contentStyle: { backgroundColor: theme.colors.background }
+      }}
+    >
       <Stack.Screen
         name="Root"
         component={BottomTabNavigator}
@@ -548,7 +558,7 @@ function CreateTabBarButton(props: {
 }
 
 function BottomTabNavigator({ navigation }: RootTabScreenProps<'Home'>) {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const { t } = useTranslation();
   const { hasViewPermission, hasCreatePermission, user } = useAuth();
   const uiConfiguration = user.uiConfiguration;
@@ -574,22 +584,27 @@ function BottomTabNavigator({ navigation }: RootTabScreenProps<'Home'>) {
     <BottomTab.Navigator
       initialRouteName={user.role.code === 'REQUESTER' ? 'Requests' : 'Home'}
       screenOptions={{
-        tabBarActiveTintColor: theme.colors.primary,
+        headerStyle: { backgroundColor: theme.colors.chassis },
+        headerTintColor: theme.colors.paper,
+        headerShadowVisible: false,
+        tabBarActiveTintColor: theme.colors.paper,
+        tabBarInactiveTintColor: theme.colors.outline,
         tabBarStyle: {
           position: 'absolute',
           bottom: 17,
           left: 20,
           right: 20,
-          elevation: 8,
-          borderRadius: 15,
+          elevation: 6,
+          borderRadius: 12,
           zIndex: 10,
           height: 70,
           paddingTop: 6,
           paddingBottom: Platform.OS === 'ios' ? 18 : 10,
           borderTopWidth: 0,
-          shadowColor: '#000',
-          shadowOpacity: 0.15,
-          shadowRadius: 8,
+          backgroundColor: theme.colors.chassis,
+          shadowColor: theme.colors.black,
+          shadowOpacity: 0.18,
+          shadowRadius: 6,
           shadowOffset: { width: 0, height: -2 }
         },
         tabBarItemStyle: {
@@ -606,7 +621,7 @@ function BottomTabNavigator({ navigation }: RootTabScreenProps<'Home'>) {
             headerTitle: (props) => (
               <Text
                 style={{
-                  color: theme.colors.primary,
+                  color: theme.colors.paper,
                   fontSize: 22,
                   fontWeight: 'bold'
                 }}

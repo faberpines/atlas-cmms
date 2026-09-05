@@ -12,7 +12,7 @@ import useAuth from '../../hooks/useAuth';
 import { PermissionEntity } from '../../models/role';
 import { getAssetChildren, getAssets, getMoreAssets } from '../../slices/asset';
 import { FilterField, SearchCriteria } from '../../models/page';
-import { Button, Card, Searchbar, Text, useTheme } from 'react-native-paper';
+import { Button, Card, Searchbar, Text } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import {
   AssetDTO,
@@ -41,13 +41,15 @@ const AssetCard = ({
 }) => {
   const { t } = useTranslation();
   const theme = useAppTheme();
+  const { hasCreatePermission } = useAuth();
 
   return (
     <Card
       style={{
-        padding: 2,
-        marginVertical: 5,
-        backgroundColor: 'white'
+        marginVertical: 6,
+        backgroundColor: theme.colors.paper,
+        borderColor: theme.colors.rule,
+        borderWidth: 1
       }}
       key={asset.id}
       onPress={() =>
@@ -58,19 +60,12 @@ const AssetCard = ({
       }
     >
       <Card.Content>
-        <View style={{ ...styles.row, justifyContent: 'space-between' }}>
-          <View style={{ ...styles.row, justifyContent: 'space-between' }}>
-            <View style={{ marginRight: 10 }}>
-              <Tag
-                text={`#${asset.customId}`}
-                color="white"
-                backgroundColor="#545454"
-              />
-            </View>
+        <View style={{ ...styles.row, justifyContent: 'flex-end' }}>
+          <View style={styles.row}>
             <Tag
               text={t(asset?.status)}
               backgroundColor={getAssetStatusConfig(asset?.status).color(theme)}
-              color="white"
+              color={theme.colors.paper}
             />
           </View>
         </View>
@@ -85,7 +80,12 @@ const AssetCard = ({
                 : require('../../assets/images/no-image.png')
             }
           />
-          <Text variant="titleMedium">{asset.name}</Text>
+          <Text
+            variant="titleMedium"
+            style={{ color: theme.colors.onSurface, fontWeight: '700', flex: 1 }}
+          >
+            {asset.name}
+          </Text>
         </View>
         <View style={{ marginBottom: 10 }}>
           {asset.location && (
@@ -96,11 +96,20 @@ const AssetCard = ({
           )}
         </View>
       </Card.Content>
-      {showChildrenButton && asset.hasChildren && (
-        <Card.Actions>
+      <Card.Actions style={styles.cardActions}>
+        {showChildrenButton && asset.hasChildren && (
           <Button onPress={onViewChildren}>{t('view_children')}</Button>
-        </Card.Actions>
-      )}
+        )}
+        {hasCreatePermission(PermissionEntity.WORK_ORDERS) && (
+          <Button
+            mode="contained-tonal"
+            icon="clipboard-plus-outline"
+            onPress={() => navigation.push('AddWorkOrder', { asset })}
+          >
+            {t('work_order')}
+          </Button>
+        )}
+      </Card.Actions>
     </Card>
   );
 };
@@ -113,7 +122,7 @@ export default function AssetsScreen({
   const [startedSearch, setStartedSearch] = useState<boolean>(false);
   const { assets, assetsHierarchy, loadingGet, currentPageNum, lastPage } =
     useSelector((state) => state.assets);
-  const theme = useTheme();
+  const theme = useAppTheme();
   const [view, setView] = useState<'hierarchy' | 'list'>('hierarchy');
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState('');
@@ -217,7 +226,7 @@ export default function AssetsScreen({
         onFocus={() => setStartedSearch(true)}
         onChangeText={setSearchQuery}
         value={searchQuery}
-        style={{ backgroundColor: theme.colors.background }}
+        style={{ backgroundColor: theme.colors.paperMuted }}
       />
       {view === 'list' ? (
         <ScrollView
@@ -244,7 +253,7 @@ export default function AssetsScreen({
           ) : loadingGet ? null : (
             <View
               style={{
-                backgroundColor: 'white',
+                backgroundColor: theme.colors.paper,
                 padding: 20,
                 borderRadius: 10
               }}
@@ -300,5 +309,11 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center'
+  },
+  cardActions: {
+    minHeight: 52,
+    justifyContent: 'flex-end',
+    paddingHorizontal: 12,
+    paddingBottom: 10
   }
 });

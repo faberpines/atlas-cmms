@@ -11,6 +11,7 @@ const locale = {
   OPEN: 'يفتح',
   IN_PROGRESS: 'في تَقَدم',
   ON_HOLD: 'قيد الانتظار',
+  PARTS_ORDERED: 'تم طلب القطع',
   COMPLETE: 'مكتمل',
   'home.built': 'تم تصميمه لتسهيل إدارة الصيانة',
   home_description:
@@ -1404,7 +1405,12 @@ const locale = {
   top_level: 'المستوى الأعلى',
   no_results_found: 'لم يتم العثور على نتائج',
   no_sub_assets: 'لا توجد أصول فرعية',
-  no_assets_available: 'لا توجد أصول متاحة'
+  no_assets_available: 'لا توجد أصول متاحة',
+  add_work_order_update: 'Add a work order update',
+  save_update: 'Save update',
+  work_order_update_saved: 'Work order update saved',
+  work_order_update_save_failure: 'Could not save the work order update',
+  no_work_order_updates: 'No updates yet'
 };
 
 export default locale;

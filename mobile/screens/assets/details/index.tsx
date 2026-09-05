@@ -11,8 +11,7 @@ import {
   Dialog,
   IconButton,
   Portal,
-  Text,
-  useTheme
+  Text
 } from 'react-native-paper';
 import { SheetManager } from 'react-native-actions-sheet';
 import { deleteAsset, getAssetDetails } from '../../../slices/asset';
@@ -24,6 +23,9 @@ import AssetFiles from './AssetFiles';
 import AssetParts from './AssetParts';
 import AssetInspections from './AssetInspections';
 import { CustomSnackBarContext } from '../../../contexts/CustomSnackBarContext';
+import useAuth from '../../../hooks/useAuth';
+import { PermissionEntity } from '../../../models/role';
+import { useAppTheme } from '../../../custom-theme';
 
 export default function AssetDetailsHome({
                                            navigation,
@@ -35,11 +37,12 @@ export default function AssetDetailsHome({
   const { assetInfos, loadingGet } = useSelector((state) => state.assets);
   const asset = assetInfos[id]?.asset ?? assetProp;
   const dispatch = useDispatch();
-  const theme = useTheme();
+  const theme = useAppTheme();
   const layout = useWindowDimensions();
   const [tabIndex, setTabIndex] = useState(0);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
   const { showSnackBar } = useContext(CustomSnackBarContext);
+  const { hasCreatePermission } = useAuth();
   const [tabs] = useState([
     { key: 'details', title: t('details') },
     { key: 'work-orders', title: t('work_orders') },
@@ -65,8 +68,10 @@ export default function AssetDetailsHome({
     <TabBar
       {...props}
       scrollEnabled
-      indicatorStyle={{ backgroundColor: 'white' }}
-      style={{ backgroundColor: theme.colors.primary }}
+      indicatorStyle={{ backgroundColor: theme.colors.seasonal, height: 3 }}
+      style={{ backgroundColor: theme.colors.chassisRaised }}
+      activeColor={theme.colors.paper}
+      inactiveColor={theme.colors.outline}
     />
   );
 
@@ -78,23 +83,37 @@ export default function AssetDetailsHome({
     navigation.setOptions({
       title: asset?.name ?? t('loading'),
       headerRight: () => (
-        <Pressable
-          onPress={() => {
-            SheetManager.show('asset-details-sheet', {
-              payload: {
-                onEdit: () => navigation.navigate('EditAsset', { asset }),
-                onDelete: () => setOpenDelete(true),
-                onCreateWorkOrder: () =>
-                  navigation.push('AddWorkOrder', { asset }),
-                onCreateChildAsset: () =>
-                  navigation.push('AddAsset', { parentAsset: asset }),
-                asset
-              }
-            });
-          }}
-        >
-          <IconButton icon='dots-vertical' />
-        </Pressable>
+        <View style={styles.headerActions}>
+          {hasCreatePermission(PermissionEntity.WORK_ORDERS) && (
+            <IconButton
+              icon="clipboard-plus-outline"
+              iconColor={theme.colors.onPrimary}
+              accessibilityLabel={t('create_work_order')}
+              onPress={() => navigation.push('AddWorkOrder', { asset })}
+            />
+          )}
+          <Pressable
+            onPress={() => {
+              SheetManager.show('asset-details-sheet', {
+                payload: {
+                  onEdit: () => navigation.navigate('EditAsset', { asset }),
+                  onDelete: () => setOpenDelete(true),
+                  onCreateWorkOrder: () =>
+                    navigation.push('AddWorkOrder', { asset }),
+                  onCreateChildAsset: () =>
+                    navigation.push('AddAsset', { parentAsset: asset }),
+                  asset
+                }
+              });
+            }}
+          >
+            <IconButton
+              icon="dots-vertical"
+              iconColor={theme.colors.onPrimary}
+              accessibilityLabel={t('more')}
+            />
+          </Pressable>
+        </View>
       )
     });
   }, [asset]);
@@ -147,5 +166,10 @@ export default function AssetDetailsHome({
 const styles = StyleSheet.create({
   container: {
     flex: 1
+  },
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'transparent'
   }
 });

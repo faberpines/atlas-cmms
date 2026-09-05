@@ -11,6 +11,7 @@ const locale = {
   OPEN: 'Open',
   IN_PROGRESS: 'In Progress',
   ON_HOLD: 'On Hold',
+  PARTS_ORDERED: 'Parts Ordered',
   COMPLETE: 'Complete',
   'home.built': 'Built to Make Managing Maintenance Easier',
   home_description:
@@ -1483,6 +1484,11 @@ const locale = {
   no_results_found: 'No results found',
   no_sub_assets: 'No sub-assets',
   no_assets_available: 'No assets available',
-  you_need_a_license: 'You need a license to access this feature'
+  you_need_a_license: 'You need a license to access this feature',
+  add_work_order_update: 'Add a work order update',
+  save_update: 'Save update',
+  work_order_update_saved: 'Work order update saved',
+  work_order_update_save_failure: 'Could not save the work order update',
+  no_work_order_updates: 'No updates yet'
 };
 export default locale;
