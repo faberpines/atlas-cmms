@@ -206,4 +206,6 @@
              relativeToChangelogFile="true"/>
     <include file="changelog/2026_09_04_1788510000_link_fleet_vehicle_asset.xml"
              relativeToChangelogFile="true"/>
+    <include file="changelog/2026_09_04_1788511000_parts_ordered_status.xml"
+             relativeToChangelogFile="true"/>
 </databaseChangeLog>

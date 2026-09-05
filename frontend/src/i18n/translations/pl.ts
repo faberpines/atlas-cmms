@@ -11,6 +11,7 @@ const plJSON = {
   OPEN: 'Otwarte',
   IN_PROGRESS: 'W toku',
   ON_HOLD: 'Wstrzymane',
+  PARTS_ORDERED: 'Części zamówione',
   COMPLETE: 'Zakończone',
   'home.built': 'Stworzony, aby ułatwić zarządzanie konserwacją',
   home_description:

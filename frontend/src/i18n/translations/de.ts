@@ -11,6 +11,7 @@ const deJSON = {
   OPEN: 'Offen',
   IN_PROGRESS: 'In Bearbeitung',
   ON_HOLD: 'In Wartestellung',
+  PARTS_ORDERED: 'Teile bestellt',
   COMPLETE: 'Abgeschlossen',
   'home.built': 'Entwickelt, um die Wartungsverwaltung zu erleichtern',
   home_description:

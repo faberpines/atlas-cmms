@@ -11,6 +11,7 @@ const locale = {
   OPEN: 'Öppna',
   IN_PROGRESS: 'Pågår',
   ON_HOLD: 'På vänteläge',
+  PARTS_ORDERED: 'Delar beställda',
   COMPLETE: 'Komplett',
   'home.built': 'Byggd för att göra underhållshantering enklare',
   home_description:

@@ -11,6 +11,7 @@ const locale = {
   OPEN: 'Nyitott',
   IN_PROGRESS: 'Folyamatban',
   ON_HOLD: 'Várakozik',
+  PARTS_ORDERED: 'Alkatrészek megrendelve',
   COMPLETE: 'Befejezett',
   'home.built': 'Karbantartás-kezelés Egyszerűsítésére Építve',
   home_description:

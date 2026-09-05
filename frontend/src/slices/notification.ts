@@ -164,7 +164,7 @@ export const newReceivedNotification =
             {
               field: 'status',
               operation: 'in',
-              values: ['OPEN', 'IN_PROGRESS', 'ON_HOLD'],
+              values: ['OPEN', 'IN_PROGRESS', 'ON_HOLD', 'PARTS_ORDERED'],
               value: '',
               enumName: 'STATUS'
             },

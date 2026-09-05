@@ -181,7 +181,7 @@ function WorkOrders() {
       {
         field: 'status',
         operation: 'in',
-        values: ['OPEN', 'IN_PROGRESS', 'ON_HOLD'],
+        values: ['OPEN', 'IN_PROGRESS', 'ON_HOLD', 'PARTS_ORDERED'],
         value: '',
         enumName: 'STATUS'
       },
@@ -1091,7 +1091,13 @@ function WorkOrders() {
               <EnumFilter
                 filterFields={criteria.filterFields}
                 onChange={onFilterChange}
-                completeOptions={['OPEN', 'IN_PROGRESS', 'ON_HOLD', 'COMPLETE']}
+                completeOptions={[
+                  'OPEN',
+                  'IN_PROGRESS',
+                  'ON_HOLD',
+                  'PARTS_ORDERED',
+                  'COMPLETE'
+                ]}
                 fieldName="status"
                 icon={<CircleTwoToneIcon />}
               />

@@ -11,6 +11,7 @@ const locale = {
   OPEN: '开放',
   IN_PROGRESS: '进行中',
   ON_HOLD: '暂停',
+  PARTS_ORDERED: '零件已订购',
   COMPLETE: '完成',
   'home.built': '为简化维护管理而构建',
   home_description:

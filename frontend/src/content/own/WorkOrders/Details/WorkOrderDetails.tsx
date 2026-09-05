@@ -380,7 +380,13 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
     const [hours, minutes] = getHoursAndMinutesAndSeconds(labor.duration);
     return Number((labor.hourlyRate * (hours + minutes / 60)).toFixed(2));
   };
-  const workOrderStatuses = ['OPEN', 'IN_PROGRESS', 'ON_HOLD', 'COMPLETE'];
+  const workOrderStatuses = [
+    'OPEN',
+    'IN_PROGRESS',
+    'ON_HOLD',
+    'PARTS_ORDERED',
+    'COMPLETE'
+  ];
   const tabs = [
     { value: 'details', label: t('details') },
     { value: 'updates', label: t('updates') },
@@ -656,7 +662,8 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
                               backgroundColor:
                                 workOrder.status === 'IN_PROGRESS'
                                   ? theme.colors.success.main
-                                  : workOrder.status === 'ON_HOLD'
+                                  : workOrder.status === 'ON_HOLD' ||
+                                    workOrder.status === 'PARTS_ORDERED'
                                   ? theme.colors.warning.main
                                   : theme.colors.alpha.black[30],
                               color: 'white',

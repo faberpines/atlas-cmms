@@ -11,6 +11,7 @@ const locale = {
   OPEN: 'Open',
   IN_PROGRESS: 'In Progress',
   ON_HOLD: 'On Hold',
+  PARTS_ORDERED: 'Parts Ordered',
   COMPLETE: 'Complete',
   fetch_more: 'Fetch More',
   'home.built': 'Built to Make Managing Maintenance Easier',

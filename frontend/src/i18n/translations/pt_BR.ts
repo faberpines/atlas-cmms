@@ -11,6 +11,7 @@ const ptBRJSON = {
   OPEN: 'Aberto',
   IN_PROGRESS: 'Em Progresso',
   ON_HOLD: 'Em Espera',
+  PARTS_ORDERED: 'Peças encomendadas',
   COMPLETE: 'Concluído',
   'home.built': 'Construído para Facilitar a Gestão de Manutenção',
   home_description:

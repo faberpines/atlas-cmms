@@ -11,6 +11,7 @@ const locale = {
   OPEN: 'Open',
   IN_PROGRESS: 'Bezig',
   ON_HOLD: 'In wacht',
+  PARTS_ORDERED: 'Onderdelen besteld',
   COMPLETE: 'Voltooid',
   'home.built': 'Ontworpen om onderhoud eenvoudiger te beheren',
   home_description:

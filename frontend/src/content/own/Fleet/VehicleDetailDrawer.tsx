@@ -52,6 +52,7 @@ const woStatusColor = (status: string): string => {
     OPEN: '#2196F3',
     IN_PROGRESS: '#FFA319',
     ON_HOLD: '#9C27B0',
+    PARTS_ORDERED: '#E67E22',
     COMPLETE: '#57CA22'
   };
   return map[status?.toUpperCase()] ?? '#9E9E9E';

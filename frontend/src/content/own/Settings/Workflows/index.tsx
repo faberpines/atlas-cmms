@@ -275,7 +275,7 @@ function Workflows() {
     QUANTITY_INFERIOR: { type: 'number', accessor: 'numberValue' },
     STATUS_IS: {
       type: 'select',
-      items: ['OPEN', 'IN_PROGRESS', 'ON_HOLD', 'COMPLETE'],
+      items: ['OPEN', 'IN_PROGRESS', 'ON_HOLD', 'PARTS_ORDERED', 'COMPLETE'],
       accessor: 'workOrderStatus',
       formatter: (status: string) => ({ label: t(status), value: status })
     },

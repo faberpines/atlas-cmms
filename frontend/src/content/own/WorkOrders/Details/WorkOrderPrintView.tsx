@@ -102,6 +102,7 @@ export default function WorkOrderPrintView({
     OPEN: 'Open',
     IN_PROGRESS: 'In Progress',
     ON_HOLD: 'On Hold',
+    PARTS_ORDERED: 'Parts Ordered',
     COMPLETE: 'Complete'
   };
 

@@ -118,6 +118,7 @@ const frJSON = {
   OPEN: 'Ouvert',
   IN_PROGRESS: 'En cours',
   ON_HOLD: 'En attente',
+  PARTS_ORDERED: 'Pièces commandées',
   COMPLETE: 'Terminé',
   fetch_more: 'Charger plus',
   'home.built': 'Conçu pour faciliter la gestion de la maintenance',

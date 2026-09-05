@@ -11,6 +11,7 @@ const esJSON = {
   OPEN: 'Abierta',
   IN_PROGRESS: 'En progreso',
   ON_HOLD: 'En espera',
+  PARTS_ORDERED: 'Piezas pedidas',
   COMPLETE: 'Completa',
   'home.built': 'Diseñado para facilitar la gestión del mantenimiento',
   home_description:

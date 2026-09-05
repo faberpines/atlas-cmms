@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="2026_09_04_parts_ordered_status" author="openai">
+        <!-- Status is persisted by enum ordinal. Move the existing COMPLETE value
+             from 3 to 4 before ordinal 3 is assigned to PARTS_ORDERED. -->
+        <update tableName="work_order">
+            <column name="status" valueNumeric="4"/>
+            <where>status = 3</where>
+        </update>
+        <update tableName="work_order_aud">
+            <column name="status" valueNumeric="4"/>
+            <where>status = 3</where>
+        </update>
+        <update tableName="workflow_condition">
+            <column name="work_order_status" valueNumeric="4"/>
+            <where>work_order_status = 3</where>
+        </update>
+
+        <rollback>
+            <update tableName="work_order">
+                <column name="status" valueNumeric="3"/>
+                <where>status = 4</where>
+            </update>
+            <update tableName="work_order_aud">
+                <column name="status" valueNumeric="3"/>
+                <where>status = 4</where>
+            </update>
+            <update tableName="workflow_condition">
+                <column name="work_order_status" valueNumeric="3"/>
+                <where>work_order_status = 4</where>
+            </update>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

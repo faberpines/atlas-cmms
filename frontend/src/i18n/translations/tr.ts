@@ -11,6 +11,7 @@ const trJSON = {
   OPEN: 'Açık',
   IN_PROGRESS: 'Devam etmekte',
   ON_HOLD: 'Beklemede',
+  PARTS_ORDERED: 'Parçalar sipariş edildi',
   COMPLETE: 'Tamamlanmış',
   'home.built': 'Bakım Yönetimini Kolaylaştırmak için Tasarlandı',
   home_description:

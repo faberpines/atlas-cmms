@@ -11,6 +11,7 @@ const locale = {
   OPEN: 'Aprire',
   IN_PROGRESS: 'In corso',
   ON_HOLD: 'In attesa',
+  PARTS_ORDERED: 'Ricambi ordinati',
   COMPLETE: 'Completare',
   'home.built': 'Progettato per semplificare la gestione della manutenzione',
   home_description:

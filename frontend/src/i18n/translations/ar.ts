@@ -11,6 +11,7 @@ const locale = {
   OPEN: 'يفتح',
   IN_PROGRESS: 'في تَقَدم',
   ON_HOLD: 'قيد الانتظار',
+  PARTS_ORDERED: 'تم طلب القطع',
   COMPLETE: 'مكتمل',
   fetch_more: 'جلب المزيد',
   'home.built': 'تم تصميمه لتسهيل إدارة الصيانة',
