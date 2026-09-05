@@ -53,7 +53,13 @@ export default function LoginScreen({
             setSubmitting(true);
             return login(values.email, values.password)
               .catch((err) => {
-                showSnackBar(t('wrong_credentials'), 'error');
+                const isConnectionFailure =
+                  err instanceof TypeError ||
+                  String(err?.message).toLowerCase().includes('network request failed');
+                showSnackBar(
+                  t(isConnectionFailure ? 'server_unreachable' : 'wrong_credentials'),
+                  'error'
+                );
                 setStatus({ success: false });
               })
               .finally(() => {

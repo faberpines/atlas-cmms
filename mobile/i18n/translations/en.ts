@@ -186,6 +186,7 @@ const locale = {
   no_account_yet: 'Don’t have an account, yet?',
   signup_here: 'Sign up here',
   wrong_credentials: 'Wrong credentials provided',
+  server_unreachable: 'Cannot reach the Atlas server. Check your Wi-Fi or Tailscale connection.',
   lost_password: 'Lost password ?',
   //work-orders
   link_wo: 'Link Work Orders',
