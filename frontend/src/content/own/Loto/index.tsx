@@ -527,7 +527,6 @@ function Loto() {
                     {assetsMini.map((a) => (
                       <MenuItem key={a.id} value={a.id}>
                         {a.name}
-                        {a.customId ? ` (${a.customId})` : ''}
                       </MenuItem>
                     ))}
                   </Select>

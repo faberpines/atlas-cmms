@@ -257,12 +257,6 @@ function Assets() {
   );
   const columns: CustomDatagridColumn[] = [
     {
-      field: 'customId',
-      headerName: t('id'),
-      description: t('id'),
-      width: 150
-    },
-    {
       field: 'name',
       headerName: t('name'),
       description: t('name'),
@@ -389,7 +383,7 @@ function Assets() {
       sortable: false,
       filterable: false,
       renderCell: (params: GridRenderCellParams<any, AssetDTO>) => {
-        const val = params.row.barCode || params.row.customId || params.row.serialNumber;
+        const val = params.row.barCode || params.row.serialNumber;
         return (
           <IconButton
             size="small"
@@ -409,7 +403,6 @@ function Assets() {
 
   // Mapping for column fields to API field names for sorting
   const fieldMapping: Record<string, string> = {
-    customId: 'customId',
     name: 'name',
     status: 'status',
     location: 'location.name',
@@ -710,9 +703,8 @@ function Assets() {
           <BarcodePrintDialog
             open={!!barcodePrintAsset}
             onClose={() => setBarcodePrintAsset(null)}
-            value={barcodePrintAsset.barCode || barcodePrintAsset.customId || barcodePrintAsset.serialNumber || ''}
+            value={barcodePrintAsset.barCode || barcodePrintAsset.serialNumber || ''}
             label={barcodePrintAsset.name}
-            sublabel={barcodePrintAsset.customId ? `ID: ${barcodePrintAsset.customId}` : undefined}
           />
         )}
         <Helmet>

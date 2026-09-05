@@ -326,9 +326,6 @@ export default function ScanAsset() {
             <Stack direction="row" alignItems="flex-start" justifyContent="space-between" mb={2}>
               <Box>
                 <Typography variant="h5" fontWeight={700}>{asset.name}</Typography>
-                {asset.customId && (
-                  <Typography variant="caption" color="text.secondary">ID: {asset.customId}</Typography>
-                )}
               </Box>
               {asset.status && (
                 <Chip

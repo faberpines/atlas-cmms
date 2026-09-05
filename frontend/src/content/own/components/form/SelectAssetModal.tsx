@@ -147,11 +147,6 @@ const SelectAssetModal: React.FC<SelectAssetModalProps> = ({
 
   const columns: CustomDatagridColumn[] = [
     {
-      field: 'customId',
-      headerName: t('id'),
-      flex: 1
-    },
-    {
       field: 'name',
       headerName: t('name'),
       flex: 1,
@@ -242,7 +237,7 @@ const SelectAssetModal: React.FC<SelectAssetModalProps> = ({
           {selectedAssets.map((asset) => (
             <Chip
               key={asset.id}
-              label={`${asset.customId}: ${asset.name}`}
+              label={asset.name}
               onDelete={() => handleRemoveSelection(asset.id)}
               color="primary"
               variant="outlined"
