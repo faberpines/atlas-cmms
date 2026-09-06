@@ -14,4 +14,6 @@ public class WorkOrderChangeStatusDTO {
     private Status status;
     private String signature;
     private String feedback;
+    private String partsTrackingNumber;
+    private String partsCarrier;
 }

@@ -16,4 +16,6 @@ public class WorkOrderPatchDTO extends WorkOrderBasePatchDTO {
     private OwnUser completedBy;
     private Date completedOn;
     private boolean archived;
+    private String partsTrackingNumber;
+    private String partsCarrier;
 }

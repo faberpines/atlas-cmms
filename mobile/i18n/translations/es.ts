@@ -1,6 +1,9 @@
 const locale = {
   no_work_order_updates: 'No updates yet',
   PARTS_ORDERED: 'Parts Ordered',
+  parts_tracking: 'Seguimiento de Piezas',
+  tracking_number: 'Número de Seguimiento',
+  carrier: 'Transportista',
   add_work_order_update: 'Add a work order update',
   save_update: 'Save update',
   work_order_update_saved: 'Work order update saved',

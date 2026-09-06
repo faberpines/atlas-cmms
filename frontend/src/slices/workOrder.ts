@@ -284,7 +284,13 @@ export const removeFileFromWorkOrder =
 export const changeWorkOrderStatus =
   (
     id: number,
-    body: { status: string; feedback?: string; signature?: string }
+    body: {
+      status: string;
+      feedback?: string;
+      signature?: string;
+      partsTrackingNumber?: string | null;
+      partsCarrier?: string | null;
+    }
   ): AppThunk =>
   async (dispatch) => {
     const workOrderResponse = await api.patch<WorkOrder>(

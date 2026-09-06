@@ -2,6 +2,10 @@ import {
   Box,
   Button,
   CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   debounce,
   Divider,
   Grid,
@@ -101,6 +105,7 @@ import { useBrand } from '../../../../hooks/useBrand';
 import { getErrorMessage } from '../../../../utils/api';
 import InspectionsTab from '../../Inspections/InspectionsTab';
 import WorkOrderPrintView from './WorkOrderPrintView';
+import { getTrackingUrl, trackingCarriers } from '../../../../utils/tracking';
 
 const LabelWrapper = styled(Box)(
   ({ theme }) => `
@@ -174,6 +179,30 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
   const [savingPrimaryTime, setSavingPrimaryTime] = useState<boolean>(false);
   const [newUpdate, setNewUpdate] = useState<string>('');
   const [savingUpdate, setSavingUpdate] = useState<boolean>(false);
+  const [openTracking, setOpenTracking] = useState(false);
+  const [trackingNumber, setTrackingNumber] = useState(
+    workOrder.partsTrackingNumber ?? ''
+  );
+  const [trackingCarrier, setTrackingCarrier] = useState(
+    workOrder.partsCarrier ?? 'UPS'
+  );
+  const openTrackingDialog = () => {
+    setTrackingNumber(workOrder.partsTrackingNumber ?? '');
+    setTrackingCarrier(workOrder.partsCarrier ?? 'UPS');
+    setOpenTracking(true);
+  };
+  const savePartsTracking = () => {
+    setChangingStatus(true);
+    dispatch(
+      changeWorkOrderStatus(workOrder.id, {
+        status: 'PARTS_ORDERED',
+        partsTrackingNumber: trackingNumber.trim() || null,
+        partsCarrier: trackingNumber.trim() ? trackingCarrier : null
+      })
+    )
+      .then(() => setOpenTracking(false))
+      .finally(() => setChangingStatus(false));
+  };
   useEffect(() => {
     [workOrder.createdBy, workOrder.parentRequest?.createdBy].forEach(
       (createdBy) => {
@@ -619,6 +648,10 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
                   ) : (
                     <Select
                       onChange={(event) => {
+                        if (event.target.value === 'PARTS_ORDERED') {
+                          openTrackingDialog();
+                          return;
+                        }
                         if (event.target.value === 'COMPLETE') {
                           if (canComplete()) {
                             if (
@@ -963,6 +996,27 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
                       </Link>
                     </Box>
                   ))}
+                </Grid>
+              )}
+              {workOrder.partsTrackingNumber && (
+                <Grid item xs={12} lg={6}>
+                  <Typography variant="h6" sx={{ color: theme.colors.alpha.black[70] }}>
+                    {t('parts_tracking')} · {workOrder.partsCarrier || t('other')}
+                  </Typography>
+                  <Link
+                    variant="h6"
+                    href={getTrackingUrl(workOrder.partsCarrier, workOrder.partsTrackingNumber)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    sx={{ fontWeight: 700 }}
+                  >
+                    {workOrder.partsTrackingNumber}
+                  </Link>
+                  {hasEditPermission(PermissionEntity.WORK_ORDERS, workOrder) && (
+                    <Button size="small" onClick={openTrackingDialog} sx={{ ml: 1 }}>
+                      {t('edit')}
+                    </Button>
+                  )}
                 </Grid>
               )}
             </Grid>
@@ -1499,6 +1553,37 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
         }}
         onComplete={onCompleteWO}
       />
+      <Dialog open={openTracking} onClose={() => setOpenTracking(false)} fullWidth maxWidth="xs">
+        <DialogTitle>{t('parts_tracking')}</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            fullWidth
+            margin="normal"
+            label={t('tracking_number')}
+            value={trackingNumber}
+            onChange={(event) => setTrackingNumber(event.target.value)}
+          />
+          <TextField
+            select
+            fullWidth
+            margin="normal"
+            label={t('carrier')}
+            value={trackingCarrier}
+            onChange={(event) => setTrackingCarrier(event.target.value)}
+          >
+            {trackingCarriers.map((carrier) => (
+              <MenuItem key={carrier} value={carrier}>
+                {carrier === 'OTHER' ? t('other') : carrier}
+              </MenuItem>
+            ))}
+          </TextField>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenTracking(false)}>{t('cancel')}</Button>
+          <Button variant="contained" onClick={savePartsTracking}>{t('save')}</Button>
+        </DialogActions>
+      </Dialog>
       <Menu anchorEl={anchorEl} open={openMenu} onClose={handleCloseMenu}>
         <MenuItem
           onClick={() => {

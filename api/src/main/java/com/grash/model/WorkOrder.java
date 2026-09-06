@@ -51,6 +51,10 @@ public class WorkOrder extends WorkOrderBase {
 
     private Status status = Status.OPEN;
 
+    private String partsTrackingNumber;
+
+    private String partsCarrier;
+
     @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
     private String signature;
 

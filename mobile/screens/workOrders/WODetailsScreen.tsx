@@ -14,6 +14,7 @@ import { View } from '../../components/Themed';
 import { RootStackParamList, RootStackScreenProps } from '../../types';
 import {
   Button,
+  Chip,
   Dialog,
   Divider,
   FAB,
@@ -74,6 +75,7 @@ import {
 } from '../../slices/workOrderHistory';
 import FileUpload from '../../components/FileUpload';
 import { IFile } from '../../models/file';
+import { getTrackingUrl, trackingCarriers } from '../../utils/tracking';
 
 const getRemainingTasksLength = (tasks: Task[]): number => {
   const SECONDS_MS = 5_000;
@@ -170,6 +172,13 @@ export default function WODetailsScreen({
   ].map((status) => ({ value: status, label: t(status) }));
   const [openDelete, setOpenDelete] = React.useState(false);
   const [openArchive, setOpenArchive] = React.useState(false);
+  const [openTracking, setOpenTracking] = React.useState(false);
+  const [trackingNumber, setTrackingNumber] = useState(
+    workOrder?.partsTrackingNumber ?? ''
+  );
+  const [trackingCarrier, setTrackingCarrier] = useState(
+    workOrder?.partsCarrier ?? 'UPS'
+  );
   const remainingTasksLength = getRemainingTasksLength(tasks);
   const loadingDetails =
     loadingPartQuantities[id] ||
@@ -491,6 +500,12 @@ export default function WODetailsScreen({
     ).then(() => navigation.navigate('Root'));
   };
   const onStatusChange = (status: string) => {
+    if (status === 'PARTS_ORDERED') {
+      setTrackingNumber(workOrder?.partsTrackingNumber ?? '');
+      setTrackingCarrier(workOrder?.partsCarrier ?? 'UPS');
+      setOpenTracking(true);
+      return;
+    }
     if (status === 'COMPLETE') {
       if (canComplete()) {
         if (
@@ -525,6 +540,21 @@ export default function WODetailsScreen({
         status
       })
     ).finally(() => setLoading(false));
+  };
+  const savePartsTracking = () => {
+    setLoading(true);
+    dispatch(
+      changeWorkOrderStatus(id, {
+        status: 'PARTS_ORDERED',
+        partsTrackingNumber: trackingNumber.trim() || null,
+        partsCarrier: trackingNumber.trim() ? trackingCarrier : null
+      })
+    )
+      .then(() => {
+        setDropdownValue('PARTS_ORDERED');
+        setOpenTracking(false);
+      })
+      .finally(() => setLoading(false));
   };
   const groupRelations = (
     relations: Relation[]
@@ -719,6 +749,51 @@ export default function WODetailsScreen({
       </Portal>
     );
   };
+  const renderTrackingDialog = () => (
+    <Portal>
+      <Dialog
+        visible={openTracking}
+        onDismiss={() => {
+          setOpenTracking(false);
+          setDropdownValue(workOrder.status);
+        }}
+      >
+        <Dialog.Title>{t('parts_tracking')}</Dialog.Title>
+        <Dialog.Content style={{ gap: 14 }}>
+          <TextInput
+            mode="outlined"
+            label={t('tracking_number')}
+            value={trackingNumber}
+            onChangeText={setTrackingNumber}
+            autoCapitalize="characters"
+          />
+          <Text variant="labelLarge">{t('carrier')}</Text>
+          <View style={styles.carrierChoices}>
+            {trackingCarriers.map((carrier) => (
+              <Chip
+                key={carrier}
+                selected={trackingCarrier === carrier}
+                onPress={() => setTrackingCarrier(carrier)}
+              >
+                {carrier === 'OTHER' ? t('other') : carrier}
+              </Chip>
+            ))}
+          </View>
+        </Dialog.Content>
+        <Dialog.Actions>
+          <Button
+            onPress={() => {
+              setOpenTracking(false);
+              setDropdownValue(workOrder.status);
+            }}
+          >
+            {t('cancel')}
+          </Button>
+          <Button onPress={savePartsTracking}>{t('save')}</Button>
+        </Dialog.Actions>
+      </Dialog>
+    </Portal>
+  );
 
   if (workOrder)
     return (
@@ -726,6 +801,7 @@ export default function WODetailsScreen({
         <Provider theme={theme}>
           {renderConfirmDelete()}
           {renderConfirmArchive()}
+          {renderTrackingDialog()}
           <ScrollView
             onScroll={onScroll}
             style={{
@@ -1283,6 +1359,30 @@ export default function WODetailsScreen({
                   </View>
                 </View>
               )}
+              {workOrder.partsTrackingNumber && (
+                <TouchableOpacity
+                  style={styles.trackingCard}
+                  onPress={() =>
+                    Linking.openURL(
+                      getTrackingUrl(
+                        workOrder.partsCarrier,
+                        workOrder.partsTrackingNumber
+                      )
+                    )
+                  }
+                  onLongPress={() => setOpenTracking(true)}
+                >
+                  <Text style={{ color: theme.colors.onSurfaceVariant }}>
+                    {t('parts_tracking')} · {workOrder.partsCarrier || t('other')}
+                  </Text>
+                  <View style={styles.trackingLinkRow}>
+                    <Text variant="titleMedium" style={{ color: theme.colors.primary, fontWeight: '700' }}>
+                      {workOrder.partsTrackingNumber}
+                    </Text>
+                    <IconButton icon="open-in-new" iconColor={theme.colors.primary} />
+                  </View>
+                </TouchableOpacity>
+              )}
             </View>
           </ScrollView>
           {!generalPreferences.simplifiedWorkOrder &&
@@ -1371,6 +1471,23 @@ const styles = StyleSheet.create({
     height: 112,
     borderRadius: 12,
     marginRight: 10
+  },
+  carrierChoices: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8
+  },
+  trackingCard: {
+    marginTop: 18,
+    borderRadius: 12,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: customTheme.colors.seasonal
+  },
+  trackingLinkRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
   },
   updateItem: {
     borderTopColor: customTheme.colors.outlineVariant,

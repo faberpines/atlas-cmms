@@ -264,6 +264,10 @@ public class WorkOrderController {
         savedWorkOrder.setSignature(workOrder.getSignature());
         savedWorkOrder.setStatus(workOrder.getStatus());
         savedWorkOrder.setFeedback(workOrder.getFeedback());
+        if (workOrder.getStatus() == Status.PARTS_ORDERED) {
+            savedWorkOrder.setPartsTrackingNumber(workOrder.getPartsTrackingNumber());
+            savedWorkOrder.setPartsCarrier(workOrder.getPartsCarrier());
+        }
 
         if (workOrder.getStatus() != Status.COMPLETE) {
             savedWorkOrder.setCompletedOn(null);

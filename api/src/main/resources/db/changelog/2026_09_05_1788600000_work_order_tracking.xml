@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet id="2026_09_05_work_order_tracking" author="openai">
+        <addColumn tableName="work_order">
+            <column name="parts_tracking_number" type="varchar(255)"/>
+            <column name="parts_carrier" type="varchar(50)"/>
+        </addColumn>
+        <addColumn tableName="work_order_aud">
+            <column name="parts_tracking_number" type="varchar(255)"/>
+            <column name="parts_tracking_number_mod" type="boolean" defaultValueBoolean="false"/>
+            <column name="parts_carrier" type="varchar(50)"/>
+            <column name="parts_carrier_mod" type="boolean" defaultValueBoolean="false"/>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="work_order" columnName="parts_tracking_number"/>
+            <dropColumn tableName="work_order" columnName="parts_carrier"/>
+            <dropColumn tableName="work_order_aud" columnName="parts_tracking_number"/>
+            <dropColumn tableName="work_order_aud" columnName="parts_tracking_number_mod"/>
+            <dropColumn tableName="work_order_aud" columnName="parts_carrier"/>
+            <dropColumn tableName="work_order_aud" columnName="parts_carrier_mod"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

@@ -32,5 +32,7 @@ export default interface WorkOrder extends WorkOrderBase {
   status: WorkOrderStatus;
   audioDescription: File;
   customId: string;
+  partsTrackingNumber?: string;
+  partsCarrier?: string;
   //parentPreventiveMaintenance:
 }

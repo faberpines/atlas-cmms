@@ -1,7 +1,7 @@
 {
-  "version": "1.1.9",
-  "versionCode": 11,
-  "apkUrl": "http://192.168.1.122:3000/downloads/Bay-Baby-Maintenance-1.1.9.apk",
-  "releaseNotes": "Fixes the validation error when attaching photos to work-order updates.",
+  "version": "1.2.0",
+  "versionCode": 12,
+  "apkUrl": "http://192.168.1.122:3000/downloads/Bay-Baby-Maintenance-1.2.0.apk",
+  "releaseNotes": "Adds carrier tracking numbers and clickable tracking links for Parts Ordered work orders.",
   "publishedAt": "2026-09-05"
 }

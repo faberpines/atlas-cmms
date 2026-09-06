@@ -77,6 +77,12 @@ public class WorkOrderAud implements Serializable {
     @Column(name = "status")
     private Status status;
 
+    @Column(name = "parts_tracking_number")
+    private String partsTrackingNumber;
+
+    @Column(name = "parts_carrier")
+    private String partsCarrier;
+
     private String signature;
 
     @Column(name = "archived")

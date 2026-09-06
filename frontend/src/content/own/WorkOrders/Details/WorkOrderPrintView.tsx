@@ -234,6 +234,12 @@ export default function WorkOrderPrintView({
             <div style={valueStyle}>{getUserNameById(workOrder.createdBy)}</div>
           </div>
         )}
+        {workOrder.partsTrackingNumber && (
+          <div>
+            <div style={labelStyle}>Parts Tracking ({workOrder.partsCarrier || 'Other'})</div>
+            <div style={valueStyle}>{workOrder.partsTrackingNumber}</div>
+          </div>
+        )}
       </div>
 
       {/* ── Updates ── */}

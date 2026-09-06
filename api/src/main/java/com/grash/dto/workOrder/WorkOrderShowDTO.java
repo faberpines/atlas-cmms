@@ -30,4 +30,8 @@ public class WorkOrderShowDTO extends WorkOrderBaseShowDTO {
     private FileShowDTO audioDescription;
 
     private String customId;
+
+    private String partsTrackingNumber;
+
+    private String partsCarrier;
 }

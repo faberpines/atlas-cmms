@@ -12,6 +12,9 @@ const locale = {
   IN_PROGRESS: 'In Progress',
   ON_HOLD: 'On Hold',
   PARTS_ORDERED: 'Parts Ordered',
+  parts_tracking: 'Parts Tracking',
+  tracking_number: 'Tracking Number',
+  carrier: 'Carrier',
   COMPLETE: 'Complete',
   'home.built': 'Built to Make Managing Maintenance Easier',
   home_description:
