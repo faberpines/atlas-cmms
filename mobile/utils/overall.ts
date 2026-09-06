@@ -23,12 +23,13 @@ export const getImageAndFiles = (
   files: { id: number; type: FileType }[],
   imageFallback?
 ) => {
+  const primaryImage = files.find((file) => file.type === 'IMAGE');
   return {
-    image: files.find((file) => file.type === 'IMAGE')
-      ? { id: files.find((file) => file.type === 'IMAGE').id }
+    image: primaryImage
+      ? { id: primaryImage.id }
       : imageFallback ?? null,
     files: files
-      .filter((file) => file.type === 'OTHER')
+      .filter((file) => file.type === 'OTHER' || file.id !== primaryImage?.id)
       .map((file) => {
         return { id: file.id };
       })

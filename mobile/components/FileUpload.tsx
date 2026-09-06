@@ -192,8 +192,7 @@ export default function FileUpload({
         const { uri } = asset;
         await checkSize(uri);
       }
-      onChangeInternal(
-        result.assets.map((asset) => {
+      const pickedImages = result.assets.map((asset) => {
           const fileName =
             asset.uri.split('/')[asset.uri.split('/').length - 1];
           return {
@@ -201,7 +200,9 @@ export default function FileUpload({
             name: fileName,
             type: mime.getType(fileName)
           };
-        }),
+        });
+      onChangeInternal(
+        multiple ? [...images, ...pickedImages].slice(0, 10) : pickedImages,
         'image'
       );
     }
@@ -279,7 +280,7 @@ export default function FileUpload({
         {type === 'image' &&
           !!images.length &&
           images.map((image) => (
-            <View>
+            <View key={image.uri}>
               <Image source={{ uri: image.uri }} style={{ height: 200 }} />
               <IconButton
                 style={{ position: 'absolute', top: 10, right: 10 }}

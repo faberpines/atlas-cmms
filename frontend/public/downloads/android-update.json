@@ -1,7 +1,7 @@
 {
-  "version": "1.1.6",
-  "versionCode": 8,
-  "apkUrl": "http://192.168.1.122:3000/downloads/Bay-Baby-Maintenance-1.1.6.apk",
-  "releaseNotes": "Restores the local Atlas server connection and includes in-app updates from Settings.",
+  "version": "1.1.7",
+  "versionCode": 9,
+  "apkUrl": "http://192.168.1.122:3000/downloads/Bay-Baby-Maintenance-1.1.7.apk",
+  "releaseNotes": "Adds camera and photo-library attachments when creating or updating work orders.",
   "publishedAt": "2026-09-05"
 }

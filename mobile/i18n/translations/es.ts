@@ -1588,7 +1588,11 @@ const locale = {
   downloading_update: 'Descargando Actualización...',
   current_version: 'Versión actual: {{version}}',
   update_check_failure: 'No se pudieron buscar actualizaciones. Confirma que Wi-Fi o Tailscale esté conectado.',
-  update_download_failure: 'No se pudo instalar la actualización. Verifica la conexión y permite instalaciones desde esta aplicación.'
+  update_download_failure: 'No se pudo instalar la actualización. Verifica la conexión y permite instalaciones desde esta aplicación.',
+  add_photos: 'Agregar Fotos',
+  take_or_choose_photos: 'Toma una foto o elige fotos de tu teléfono.',
+  work_order_photos: 'Fotos de la Orden de Trabajo',
+  work_order_photo_added: 'Foto agregada a la orden de trabajo'
 };
 
 export default locale;

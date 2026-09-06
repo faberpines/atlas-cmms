@@ -71,6 +71,8 @@ import {
   addWorkOrderHistory,
   getWorkOrderHistories
 } from '../../slices/workOrderHistory';
+import FileUpload from '../../components/FileUpload';
+import { IFile } from '../../models/file';
 
 const getRemainingTasksLength = (tasks: Task[]): number => {
   const SECONDS_MS = 5_000;
@@ -116,6 +118,8 @@ export default function WODetailsScreen({
   const { workOrderConfiguration, generalPreferences } = companySettings;
   const [loading, setLoading] = useState<boolean>(false);
   const [newUpdate, setNewUpdate] = useState('');
+  const [updatePhotos, setUpdatePhotos] = useState<IFile[]>([]);
+  const [updatePhotoKey, setUpdatePhotoKey] = useState(0);
   const [savingUpdate, setSavingUpdate] = useState(false);
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -148,7 +152,12 @@ export default function WODetailsScreen({
   const additionalCosts = costsByWorkOrder[id] ?? [];
   const runningTimer = primaryTime?.status === 'RUNNING';
   const [controllingTime, setControllingTime] = useState<boolean>(false);
-  const { getFormattedDate, getUserNameById, getFormattedCurrency } =
+  const {
+    getFormattedDate,
+    getUserNameById,
+    getFormattedCurrency,
+    uploadFiles
+  } =
     useContext(CompanySettingsContext);
   const [isExtended, setIsExtended] = React.useState(true);
   const statuses = [
@@ -247,11 +256,29 @@ export default function WODetailsScreen({
 
   const saveUpdate = async () => {
     const name = newUpdate.trim();
-    if (!name || savingUpdate) return;
+    if ((!name && !updatePhotos.length) || savingUpdate) return;
     setSavingUpdate(true);
     try {
-      await dispatch(addWorkOrderHistory(id, name));
+      if (updatePhotos.length) {
+        const uploadedPhotos = await uploadFiles([], updatePhotos);
+        await dispatch(
+          editWorkOrder(id, {
+            files: [
+              ...(workOrder.files ?? []).map((file) => ({ id: file.id })),
+              ...uploadedPhotos.map((file) => ({ id: file.id }))
+            ]
+          })
+        );
+      }
+      await dispatch(
+        addWorkOrderHistory(
+          id,
+          name || t('work_order_photo_added')
+        )
+      );
       setNewUpdate('');
+      setUpdatePhotos([]);
+      setUpdatePhotoKey((value) => value + 1);
       showSnackBar(t('work_order_update_saved'), 'success');
     } catch (err) {
       showSnackBar(
@@ -1033,11 +1060,30 @@ export default function WODetailsScreen({
                       disabled={savingUpdate}
                       style={styles.updateInput}
                     />
+                    <View style={styles.photoPicker}>
+                      <FileUpload
+                        key={updatePhotoKey}
+                        title={t('add_photos')}
+                        type="image"
+                        multiple
+                        description={t('take_or_choose_photos')}
+                        onChange={setUpdatePhotos}
+                      />
+                      <Text
+                        variant="bodySmall"
+                        style={{ color: theme.colors.onSurfaceVariant }}
+                      >
+                        {t('take_or_choose_photos')}
+                      </Text>
+                    </View>
                     <Button
                       mode="contained"
                       icon="send"
                       loading={savingUpdate}
-                      disabled={!newUpdate.trim() || savingUpdate}
+                      disabled={
+                        (!newUpdate.trim() && !updatePhotos.length) ||
+                        savingUpdate
+                      }
                       onPress={saveUpdate}
                       contentStyle={styles.updateButtonContent}
                     >
@@ -1066,6 +1112,20 @@ export default function WODetailsScreen({
                       </Text>
                     </View>
                   ))}
+                {!!workOrder.files?.filter((file) => file.type === 'IMAGE').length && (
+                  <View style={styles.photoGallery}>
+                    <Text variant="titleMedium">{t('work_order_photos')}</Text>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                      {workOrder.files
+                        .filter((file) => file.type === 'IMAGE')
+                        .map((file) => (
+                          <Pressable key={file.id} onPress={() => Linking.openURL(file.url)}>
+                            <Image source={{ uri: file.url }} style={styles.photoThumbnail} />
+                          </Pressable>
+                        ))}
+                    </ScrollView>
+                  </View>
+                )}
               </View>
               {!!tasks.length && (
                 <View style={styles.shadowedCard}>
@@ -1296,6 +1356,22 @@ const styles = StyleSheet.create({
   },
   updateButtonContent: {
     minHeight: 44
+  },
+  photoPicker: {
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: customTheme.colors.outlineVariant,
+    padding: 12,
+    gap: 4
+  },
+  photoGallery: {
+    gap: 8
+  },
+  photoThumbnail: {
+    width: 112,
+    height: 112,
+    borderRadius: 12,
+    marginRight: 10
   },
   updateItem: {
     borderTopColor: customTheme.colors.outlineVariant,

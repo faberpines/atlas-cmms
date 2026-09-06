@@ -26,7 +26,8 @@ export const getWorkOrderFields = (t): IField[] => {
       name: 'image',
       type: 'file',
       fileType: 'image',
-      label: t('image')
+      label: t('work_order_photos'),
+      multiple: true
     },
     {
       name: 'dueDate',

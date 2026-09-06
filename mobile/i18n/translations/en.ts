@@ -1558,6 +1558,10 @@ const locale = {
   downloading_update: 'Downloading Update...',
   current_version: 'Current version: {{version}}',
   update_check_failure: 'Could not check for updates. Confirm Wi-Fi or Tailscale is connected.',
-  update_download_failure: 'Could not install the update. Check the connection and allow installs from this app.'
+  update_download_failure: 'Could not install the update. Check the connection and allow installs from this app.',
+  add_photos: 'Add Photos',
+  take_or_choose_photos: 'Take a picture or choose photos from your phone.',
+  work_order_photos: 'Work Order Photos',
+  work_order_photo_added: 'Photo added to work order'
 };
 export default locale;
