@@ -919,7 +919,8 @@ const esJSON = {
   please_wait: 'espera ~20s',
   translation_failed: 'Traducción fallida. Por favor intente de nuevo.',
   language_preferences: 'Preferencias de Idioma',
-  language_preferences_description: 'Elige tu idioma de visualización preferido. Los cambios surten efecto de inmediato.',
+  language_preferences_description:
+    'Elige tu idioma de visualización preferido. Los cambios surten efecto de inmediato.',
   language_saved: 'Idioma actualizado con éxito',
   date_format: 'Formato de fecha',
   time_zone: 'Zona horaria',
@@ -1793,7 +1794,23 @@ const esJSON = {
   'free_cmms.features.join_thousands':
     'Únase a miles de profesionales del mantenimiento que utilizan el GMAO gratuito más intuitivo del mundo.',
   'free_cmms.features.get_started_no_card':
-    'Comience gratis - No se requiere tarjeta de crédito'
+    'Comience gratis - No se requiere tarjeta de crédito',
+  app_download_title: 'Descarga de la aplicación Android',
+  app_download_description:
+    'Envíe la última aplicación Bay Baby Maintenance a un usuario nuevo.',
+  app_download_admin_only_note:
+    'Esta herramienta de descarga solo está visible para el administrador de la empresa.',
+  app_download_send_email: 'Enviar por correo electrónico',
+  app_download_send_text: 'Enviar por mensaje de texto',
+  app_download_link: 'Enlace de descarga actual',
+  app_download_link_copied: 'Enlace de descarga copiado',
+  app_download_phone_required: 'Ingrese un número de teléfono',
+  app_download_email_subject: 'Descarga de la aplicación Bay Baby Maintenance',
+  app_download_invite_message:
+    'Descargue la aplicación Bay Baby Maintenance para Android aquí: {{link}}. Si Android lo solicita, permita la instalación desde esta fuente.',
+  new_user_email: 'Correo electrónico del usuario nuevo',
+  new_user_phone: 'Teléfono del usuario nuevo',
+  copy_link: 'Copiar enlace'
 };
 
 export default esJSON;

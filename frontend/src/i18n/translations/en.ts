@@ -240,7 +240,8 @@ const locale = {
   details: 'Details',
   updates: 'Updates',
   add_work_order_update: 'Add an update',
-  work_order_update_placeholder: 'Enter progress, findings, or other work order information',
+  work_order_update_placeholder:
+    'Enter progress, findings, or other work order information',
   save_update: 'Save update',
   work_order_update_saved: 'Work order update saved',
   work_order_update_save_failure: "The work order update couldn't be saved",
@@ -875,7 +876,8 @@ const locale = {
   please_wait: 'please wait ~20s',
   translation_failed: 'Translation failed. Please try again.',
   language_preferences: 'Language Preferences',
-  language_preferences_description: 'Choose your preferred display language. Changes take effect immediately.',
+  language_preferences_description:
+    'Choose your preferred display language. Changes take effect immediately.',
   language_saved: 'Language updated successfully',
   date_format: 'Date format',
   time_zone: 'Time zone',
@@ -1075,10 +1077,13 @@ const locale = {
   check_mails_for_instructions: 'Check your email for further instructions',
   pdf_report: 'PDF Report',
   fs_checklist_title: 'Food Safety Sign-Off Required',
-  fs_checklist_subtitle: 'All items below must be confirmed before this work order can be closed.',
+  fs_checklist_subtitle:
+    'All items below must be confirmed before this work order can be closed.',
   fs_tools_label: 'All tools have been picked up and accounted for',
-  fs_chemicals_label: 'All chemicals have been cleaned up and properly stored/put away',
-  fs_equipment_label: 'Equipment has been left in a safe and operational readiness condition',
+  fs_chemicals_label:
+    'All chemicals have been cleaned up and properly stored/put away',
+  fs_equipment_label:
+    'Equipment has been left in a safe and operational readiness condition',
   fs_area_label: 'Work area is clean and free from food safety hazards',
   fs_required: 'This food safety item must be confirmed before closing',
   HIGH: 'High',
@@ -1737,7 +1742,8 @@ const locale = {
 
   // Lockout / Tagout (LOTO)
   loto: 'Lockout / Tagout',
-  loto_subtitle: 'OSHA-compliant lockout/tagout management — control hazardous energy during maintenance',
+  loto_subtitle:
+    'OSHA-compliant lockout/tagout management — control hazardous energy during maintenance',
   add_lockout: 'Add Lockout/Tagout',
   edit_lockout: 'Edit Lockout/Tagout',
   active_lockouts: 'Active Lockouts',
@@ -1746,7 +1752,8 @@ const locale = {
   loto_title_isolation_required: 'Title and isolation point are required',
   isolation_point: 'Isolation Point',
   isolation_point_placeholder: 'e.g. Breaker 12B, Valve V-101, Main Disconnect',
-  isolation_point_hint: 'Describe the specific breaker, valve, or disconnect being isolated',
+  isolation_point_hint:
+    'Describe the specific breaker, valve, or disconnect being isolated',
   energy_type: 'Energy Type',
   electrical: 'Electrical',
   hydraulic: 'Hydraulic',
@@ -1762,21 +1769,25 @@ const locale = {
   loto_released: 'Lockout released successfully',
   loto_created: 'Lockout/tagout record created',
   loto_updated: 'Lockout/tagout record updated',
-  loto_delete_confirm: 'Are you sure you want to delete this lockout/tagout record? This action cannot be undone.',
+  loto_delete_confirm:
+    'Are you sure you want to delete this lockout/tagout record? This action cannot be undone.',
   released: 'Released',
   expired: 'Expired',
   loto_procedure: 'Isolation Procedure (Steps)',
-  loto_procedure_placeholder: 'Step 1: Notify affected personnel\nStep 2: Shut down equipment\nStep 3: Apply lockout device\nStep 4: Verify zero energy state',
+  loto_procedure_placeholder:
+    'Step 1: Notify affected personnel\nStep 2: Shut down equipment\nStep 3: Apply lockout device\nStep 4: Verify zero energy state',
   loto_reason_placeholder: 'e.g. Scheduled maintenance on conveyor belt motor',
   reason_and_procedure: 'Reason & Procedure',
-  loto_osha_note: 'OSHA 29 CFR 1910.147 requires a written energy control program. Ensure all personnel are trained before performing lockout/tagout.',
+  loto_osha_note:
+    'OSHA 29 CFR 1910.147 requires a written energy control program. Ensure all personnel are trained before performing lockout/tagout.',
   select_breaker: 'Select Breaker / Isolation Point',
   enter_manually: 'Enter manually (breaker not listed)',
   enter_manually_instead: 'Enter manually instead',
   select_from_breakers: 'Select from breaker list',
   unknown_panel: 'Unknown Panel',
   breaker_panels: 'Breaker Panels',
-  breaker_panels_subtitle: 'Manage electrical panels and breakers for use in lockout/tagout procedures',
+  breaker_panels_subtitle:
+    'Manage electrical panels and breakers for use in lockout/tagout procedures',
   add_panel: 'Add Panel',
   edit_panel: 'Edit Panel',
   panel_name: 'Panel Name',
@@ -1786,7 +1797,8 @@ const locale = {
   panel_location_placeholder: 'e.g. Main Electrical Room',
   panel_created: 'Panel created successfully',
   panel_updated: 'Panel updated successfully',
-  panel_delete_confirm: 'Delete this panel and all its breakers? This cannot be undone.',
+  panel_delete_confirm:
+    'Delete this panel and all its breakers? This cannot be undone.',
   no_panels_yet: 'No panels configured yet. Add a panel to get started.',
   add_your_first_panel: 'Add Your First Panel',
   breakers: 'Breakers',
@@ -1803,9 +1815,11 @@ const locale = {
   breaker_created: 'Breaker added successfully',
   breaker_updated: 'Breaker updated successfully',
   breaker_delete_confirm: 'Delete this breaker?',
-  no_breakers_in_panel: 'No breakers added yet. Click "Add Breaker" to add one.',
+  no_breakers_in_panel:
+    'No breakers added yet. Click "Add Breaker" to add one.',
   wash_tanks: 'Wash Tanks',
-  wash_tanks_subtitle: 'Log daily water quality readings for Washtank 1 and Washtank 2 (4 shifts/day)',
+  wash_tanks_subtitle:
+    'Log daily water quality readings for Washtank 1 and Washtank 2 (4 shifts/day)',
   washtank_1: 'Washtank 1',
   washtank_2: 'Washtank 2',
   tank: 'Tank',
@@ -1852,7 +1866,8 @@ const locale = {
   vin_search_hint:
     'Enter a 17-character VIN to automatically load vehicle specs from the NHTSA database.',
   decode_vin: 'Decode VIN',
-  vin_decoded_successfully: 'VIN decoded — fields populated from NHTSA database',
+  vin_decoded_successfully:
+    'VIN decoded — fields populated from NHTSA database',
   vin_decode_failed: 'VIN decode failed. Please check the VIN and try again.',
   vin_too_short: 'VIN must be at least 11 characters',
   asset_number: 'Asset Number',
@@ -1900,10 +1915,12 @@ const locale = {
   lora_device_created: 'LoRa device registered successfully',
   lora_device_updated: 'LoRa device updated successfully',
   lora_device_deleted: 'LoRa device removed successfully',
-  confirm_delete_lora_device: 'Are you sure you want to remove this LoRa device?',
+  confirm_delete_lora_device:
+    'Are you sure you want to remove this LoRa device?',
   device_eui: 'Device EUI',
   device_eui_required: 'Device EUI is required',
-  device_eui_hint: '16-character hex identifier printed on the device (e.g. 0102030405060708)',
+  device_eui_hint:
+    '16-character hex identifier printed on the device (e.g. 0102030405060708)',
   device_name: 'Device Name',
   assign_to_vehicle: 'Assign to Vehicle',
   no_vehicle: '— No vehicle —',
@@ -1913,7 +1930,8 @@ const locale = {
     'Configure your LoRa network server (TTN v3, ChirpStack, etc.) to POST uplinks to the endpoint below. The server will automatically decode GPS coordinates and update vehicle locations in real time. Supports both TTN v3 and ChirpStack payload formats.',
   operation_failed: 'Operation failed. Please try again.',
   hearing_conservation: 'Hearing Conservation',
-  hearing_conservation_subtitle: 'WAC 296-817 Hearing Loss Prevention Program — Washington State L&I compliance',
+  hearing_conservation_subtitle:
+    'WAC 296-817 Hearing Loss Prevention Program — Washington State L&I compliance',
   hcp_program_info: 'Program Information',
   hcp_noise_areas: 'Noise Areas & Measurements',
   hcp_hearing_protection: 'Hearing Protection',
@@ -1955,8 +1973,10 @@ const locale = {
   hcp_created: 'Hearing Conservation record created',
   hcp_updated: 'Hearing Conservation record updated',
   hcp_deleted: 'Hearing Conservation record deleted',
-  hcp_delete_confirm: 'Are you sure you want to delete this Hearing Conservation record? This action cannot be undone.',
-  hcp_wac_note: 'WAC 296-817 requires a written Hearing Loss Prevention Program for employees exposed to noise at or above 85 dBA as an 8-hour TWA. Keep this program on file and make it available to employees upon request.',
+  hcp_delete_confirm:
+    'Are you sure you want to delete this Hearing Conservation record? This action cannot be undone.',
+  hcp_wac_note:
+    'WAC 296-817 requires a written Hearing Loss Prevention Program for employees exposed to noise at or above 85 dBA as an 8-hour TWA. Keep this program on file and make it available to employees upon request.',
   hcp_view_record: 'View HCP Record',
   view: 'View',
   log_usage: 'Log Usage',
@@ -1973,21 +1993,26 @@ const locale = {
   fleet_create_wo_title: 'Create Work Order for',
   wo_created_success: 'Work order created successfully',
   jha: 'Job Hazard Analysis',
-  jha_subtitle: 'Job Hazard Analysis (JHA) forms library — upload and manage all your JHA documents',
-  jha_info: 'Upload your Job Hazard Analysis forms here to keep them organized and accessible to all personnel. Supports Word documents (.doc, .docx), PDFs, Excel files, and more.',
+  jha_subtitle:
+    'Job Hazard Analysis (JHA) forms library — upload and manage all your JHA documents',
+  jha_info:
+    'Upload your Job Hazard Analysis forms here to keep them organized and accessible to all personnel. Supports Word documents (.doc, .docx), PDFs, Excel files, and more.',
   jha_upload: 'Upload JHA Document',
   jha_upload_first: 'Upload your first JHA document',
   jha_no_documents: 'No JHA documents yet. Upload your forms to get started.',
   jha_uploaded: 'JHA document uploaded successfully',
   jha_updated: 'JHA document updated',
   jha_deleted: 'JHA document deleted',
-  jha_delete_confirm: 'Are you sure you want to delete this JHA document? This cannot be undone.',
+  jha_delete_confirm:
+    'Are you sure you want to delete this JHA document? This cannot be undone.',
   jha_document_title: 'Document Title',
   jha_category: 'Category / Job Type',
-  jha_category_placeholder: 'e.g. Washline Operations, Forklift, Chemical Handling',
+  jha_category_placeholder:
+    'e.g. Washline Operations, Forklift, Chemical Handling',
   jha_description_placeholder: 'Brief description of this JHA form (optional)',
   jha_drop_hint: 'Click to select a file',
-  jha_accepted_types: 'Supported: .doc, .docx, .pdf, .xls, .xlsx, .ppt, .pptx, .txt',
+  jha_accepted_types:
+    'Supported: .doc, .docx, .pdf, .xls, .xlsx, .ppt, .pptx, .txt',
   jha_upload_required: 'A file and title are required',
   jha_edit_document: 'Edit JHA Document',
   uploaded: 'Uploaded',
@@ -1997,14 +2022,16 @@ const locale = {
   uncategorized: 'Uncategorized',
   // Scan Asset
   scan_asset: 'Scan Asset',
-  scan_asset_subtitle: 'Scan an asset barcode to view details, create a work order, or log fleet usage',
+  scan_asset_subtitle:
+    'Scan an asset barcode to view details, create a work order, or log fleet usage',
   scan_enter_barcode: 'Scan or Enter Barcode',
   scan_barcode_label: 'Asset Barcode',
   scan_barcode_placeholder: 'Scan barcode or type it in, then press Enter',
   scan_search: 'Search',
   scan_use_camera: 'Use Camera to Scan',
   scan_stop_camera: 'Stop Camera',
-  scan_no_asset_found: 'No asset found with that barcode. Make sure the asset has a barcode assigned in the Assets section.',
+  scan_no_asset_found:
+    'No asset found with that barcode. Make sure the asset has a barcode assigned in the Assets section.',
   scan_lookup_error: 'Error looking up asset. Please try again.',
   fleet_asset: 'Fleet Asset',
   recent_usage_logs: 'Recent Usage Logs',
@@ -2017,7 +2044,23 @@ const locale = {
   no_work_orders_for_vehicle: 'No work orders found for this vehicle.',
   make: 'Make',
   transmission: 'Transmission',
-  assigned_driver: 'Assigned Driver'
+  assigned_driver: 'Assigned Driver',
+  app_download_title: 'Android App Download',
+  app_download_description:
+    'Send the latest Bay Baby Maintenance app to a new user.',
+  app_download_admin_only_note:
+    'This download tool is visible only to the company administrator.',
+  app_download_send_email: 'Send by email',
+  app_download_send_text: 'Send by text message',
+  app_download_link: 'Current download link',
+  app_download_link_copied: 'App download link copied',
+  app_download_phone_required: 'Enter a phone number',
+  app_download_email_subject: 'Bay Baby Maintenance app download',
+  app_download_invite_message:
+    'Download the Bay Baby Maintenance app for Android here: {{link}}. If Android asks, allow installation from this source.',
+  new_user_email: 'New user email',
+  new_user_phone: 'New user phone number',
+  copy_link: 'Copy link'
 };
 
 export default locale;

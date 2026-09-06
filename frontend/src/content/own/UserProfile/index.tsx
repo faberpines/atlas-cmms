@@ -13,6 +13,7 @@ import useAuth from '../../../hooks/useAuth';
 import api from '../../../utils/api';
 import WorkOrder from '../../../models/owns/workOrder';
 import { useNavigate } from 'react-router-dom';
+import AppDownloadInvite from './AppDownloadInvite';
 
 function UserProfile() {
   const isMountedRef = useRefMounted();
@@ -63,6 +64,11 @@ function UserProfile() {
         <Grid item xs={12}>
           <ProfileDetails />
         </Grid>
+        {user.ownsCompany && (
+          <Grid item xs={12}>
+            <AppDownloadInvite />
+          </Grid>
+        )}
         <Grid item xs={12}>
           <Button
             sx={{ mb: 2 }}
