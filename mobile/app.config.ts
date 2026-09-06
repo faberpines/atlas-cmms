@@ -1,12 +1,12 @@
 import 'dotenv/config';
 import { ExpoConfig, ConfigContext } from 'expo/config';
 
-const apiUrl = process.env.API_URL;
+const apiUrl = process.env.MOBILE_API_URL || process.env.API_URL;
 const googleServicesJson = process.env.GOOGLE_SERVICES_JSON;
 const easProjectId = process.env.EAS_PROJECT_ID;
 
 const appName = 'Bay Baby Maintenance';
-const appVersion = '1.1.5';
+const appVersion = '1.1.6';
 const androidPackage = 'com.baybabyproduce.maintenance';
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
@@ -45,7 +45,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       foregroundImage: './assets/images/adaptive-icon.png',
       backgroundColor: '#ffffff'
     },
-    versionCode: 7,
+    versionCode: 8,
     package: androidPackage,
     jsEngine: 'hermes',
     permissions: [
