@@ -67,7 +67,7 @@ export default function SettingsScreen({
   const [downloadingUpdate, setDownloadingUpdate] = useState(false);
   const [availableUpdate, setAvailableUpdate] = useState<AndroidUpdate | null>(null);
   const [updateChecked, setUpdateChecked] = useState(false);
-  const currentVersion = Constants.expoConfig?.version || '1.1.7';
+  const currentVersion = Constants.expoConfig?.version || '1.1.8';
 
   const checkForUpdate = async () => {
     if (!UPDATE_MANIFEST_URL) {
