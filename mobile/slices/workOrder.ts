@@ -208,6 +208,12 @@ export const editWorkOrder =
     );
     dispatch(slice.actions.editWorkOrder({ workOrder: workOrderResponse }));
   };
+export const addFilesToWorkOrder =
+  (id: number, files: { id: number }[]): AppThunk =>
+  async (dispatch) => {
+    await api.patch(`${basePath}/files/${id}/add`, files);
+    await dispatch(getWorkOrderDetails(id));
+  };
 export const deleteWorkOrder =
   (id: number): AppThunk =>
   async (dispatch) => {

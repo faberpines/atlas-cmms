@@ -1,7 +1,7 @@
 {
-  "version": "1.1.8",
-  "versionCode": 10,
-  "apkUrl": "http://192.168.1.122:3000/downloads/Bay-Baby-Maintenance-1.1.8.apk",
-  "releaseNotes": "Improves photo-upload label visibility using the app's primary green.",
+  "version": "1.1.9",
+  "versionCode": 11,
+  "apkUrl": "http://192.168.1.122:3000/downloads/Bay-Baby-Maintenance-1.1.9.apk",
+  "releaseNotes": "Fixes the validation error when attaching photos to work-order updates.",
   "publishedAt": "2026-09-05"
 }

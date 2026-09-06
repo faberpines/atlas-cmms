@@ -51,6 +51,7 @@ import { getTasks } from '../../slices/task';
 import { CustomSnackBarContext } from '../../contexts/CustomSnackBarContext';
 import {
   changeWorkOrderStatus,
+  addFilesToWorkOrder,
   deleteWorkOrder,
   editWorkOrder,
   getPDFReport,
@@ -262,12 +263,10 @@ export default function WODetailsScreen({
       if (updatePhotos.length) {
         const uploadedPhotos = await uploadFiles([], updatePhotos);
         await dispatch(
-          editWorkOrder(id, {
-            files: [
-              ...(workOrder.files ?? []).map((file) => ({ id: file.id })),
-              ...uploadedPhotos.map((file) => ({ id: file.id }))
-            ]
-          })
+          addFilesToWorkOrder(
+            id,
+            uploadedPhotos.map((file) => ({ id: file.id }))
+          )
         );
       }
       await dispatch(
