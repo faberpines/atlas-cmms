@@ -2060,7 +2060,15 @@ const locale = {
     'Download the Bay Baby Maintenance app for Android here: {{link}}. If Android asks, allow installation from this source.',
   new_user_email: 'New user email',
   new_user_phone: 'New user phone number',
-  copy_link: 'Copy link'
+  copy_link: 'Copy link',
+  equipment_section: 'Equipment section',
+  select_equipment_section: 'Select an equipment section',
+  warehouse_equipment: 'Warehouse Equipment',
+  fleet_vehicle: 'Fleet Vehicles',
+  trailers: 'Trailers',
+  trailer: 'Trailer',
+  farm_implements: 'Farm Implements',
+  farm_implement: 'Farm Implement'
 };
 
 export default locale;

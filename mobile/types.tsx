@@ -17,7 +17,7 @@ import { Vendor, VendorMiniDTO } from './models/vendor';
 import User, { OwnUser, UserMiniDTO } from './models/user';
 import Team, { TeamMiniDTO } from './models/team';
 import Location, { LocationMiniDTO } from './models/location';
-import { AssetDTO, AssetMiniDTO } from './models/asset';
+import { AssetDTO, AssetMiniDTO, EquipmentType } from './models/asset';
 import Category from './models/category';
 import { FilterField } from './models/page';
 import Request from './models/request';
@@ -50,6 +50,7 @@ export type RootStackParamList = {
     parentAsset?: AssetDTO;
     nfcId?: string;
     barCode?: string;
+    equipmentType?: EquipmentType;
   };
   AddLocation: undefined;
   AddPart: undefined;

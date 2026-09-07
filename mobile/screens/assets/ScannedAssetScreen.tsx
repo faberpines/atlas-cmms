@@ -15,35 +15,102 @@ export default function ScannedAssetScreen({ navigation, route }: any) {
   const isRequester = user.role.code === 'REQUESTER';
 
   return (
-    <ScrollView style={{ backgroundColor: theme.colors.background }} contentContainerStyle={styles.content}>
-      <Card style={[styles.card, { backgroundColor: theme.colors.paper, borderColor: theme.colors.rule }]}>
+    <ScrollView
+      style={{ backgroundColor: theme.colors.background }}
+      contentContainerStyle={styles.content}
+    >
+      <Card
+        style={[
+          styles.card,
+          {
+            backgroundColor: theme.colors.paper,
+            borderColor: theme.colors.rule
+          }
+        ]}
+      >
         <Card.Content style={styles.cardContent}>
-          <Image style={styles.image} source={asset.image?.url ? { uri: asset.image.url } : require('../../assets/images/no-image.png')} />
+          <Image
+            style={styles.image}
+            source={
+              asset.image?.url
+                ? { uri: asset.image.url }
+                : require('../../assets/images/no-image.png')
+            }
+          />
           <View style={{ flex: 1, gap: 4 }}>
-            <Text variant="headlineSmall" style={{ fontWeight: '700' }}>{asset.name}</Text>
-            {!!asset.barCode && <Text>{t('barcode')}: {asset.barCode}</Text>}
-            {!!asset.serialNumber && <Text>{t('serial_number')}: {asset.serialNumber}</Text>}
-            {!!asset.location && <Text>{t('location')}: {asset.location.name}</Text>}
-            {!!asset.status && <Text style={{ color: theme.colors.primary }}>{t(asset.status)}</Text>}
+            <Text variant="headlineSmall" style={{ fontWeight: '700' }}>
+              {asset.name}
+            </Text>
+            {!!asset.equipmentType && (
+              <Text>
+                {t('equipment_section')}: {t(asset.equipmentType.toLowerCase())}
+              </Text>
+            )}
+            {!!asset.barCode && (
+              <Text>
+                {t('barcode')}: {asset.barCode}
+              </Text>
+            )}
+            {!!asset.serialNumber && (
+              <Text>
+                {t('serial_number')}: {asset.serialNumber}
+              </Text>
+            )}
+            {!!asset.location && (
+              <Text>
+                {t('location')}: {asset.location.name}
+              </Text>
+            )}
+            {!!asset.status && (
+              <Text style={{ color: theme.colors.primary }}>
+                {t(asset.status)}
+              </Text>
+            )}
           </View>
         </Card.Content>
       </Card>
       <View style={styles.actions}>
         {isRequester ? (
-          <Button mode="contained" icon="inbox-arrow-down-outline" onPress={() => navigation.navigate('AddRequest', { asset })} contentStyle={styles.button}>
+          <Button
+            mode="contained"
+            icon="inbox-arrow-down-outline"
+            onPress={() => navigation.navigate('AddRequest', { asset })}
+            contentStyle={styles.button}
+          >
             {t('submit_request_for_asset')}
           </Button>
         ) : hasCreatePermission(PermissionEntity.WORK_ORDERS) ? (
-          <Button mode="contained" icon="clipboard-plus-outline" onPress={() => navigation.navigate('AddWorkOrder', { asset })} contentStyle={styles.button}>
+          <Button
+            mode="contained"
+            icon="clipboard-plus-outline"
+            onPress={() => navigation.navigate('AddWorkOrder', { asset })}
+            contentStyle={styles.button}
+          >
             {t('create_work_order_for_asset')}
           </Button>
         ) : null}
         {hasViewPermission(PermissionEntity.ASSETS) && (
-          <Button mode="outlined" icon="information-outline" onPress={() => navigation.replace('AssetDetails', { id: asset.id, assetProp: asset })} contentStyle={styles.button}>
+          <Button
+            mode="outlined"
+            icon="information-outline"
+            onPress={() =>
+              navigation.replace('AssetDetails', {
+                id: asset.id,
+                assetProp: asset
+              })
+            }
+            contentStyle={styles.button}
+          >
             {t('view_asset_details')}
           </Button>
         )}
-        <Button mode="text" icon="barcode-scan" onPress={() => navigation.replace('ScanAsset')}>{t('scan_another_asset')}</Button>
+        <Button
+          mode="text"
+          icon="barcode-scan"
+          onPress={() => navigation.replace('ScanAsset')}
+        >
+          {t('scan_another_asset')}
+        </Button>
       </View>
     </ScrollView>
   );

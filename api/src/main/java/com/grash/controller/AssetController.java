@@ -58,6 +58,7 @@ public class AssetController {
     private final MessageSource messageSource;
     private final EntityManager em;
     private final LicenseService licenseService;
+    private final VehicleService vehicleService;
 
     @PostMapping("/search")
     @PreAuthorize("permitAll()")
@@ -175,6 +176,7 @@ public class AssetController {
                 }
             }
             Asset createdAsset = assetService.create(assetReq, user);
+            vehicleService.ensureVehicleForAsset(createdAsset);
             String message = messageSource.getMessage("notification_asset_assigned",
                     new Object[]{createdAsset.getName()}, Helper.getLocale(user));
             assetService.notify(createdAsset, messageSource.getMessage("new_assignment", null,
@@ -218,6 +220,7 @@ public class AssetController {
                 if (asset.getParentAsset() != null && asset.getParentAsset().getId().equals(id))
                     throw new CustomException("Parent asset cannot be the same id", HttpStatus.NOT_ACCEPTABLE);
                 Asset patchedAsset = assetService.update(id, asset);
+                vehicleService.ensureVehicleForAsset(patchedAsset);
                 assetService.patchNotify(savedAsset, patchedAsset, Helper.getLocale(user));
                 return assetMapper.toShowDto(patchedAsset, assetService);
             } else throw new CustomException("Forbidden", HttpStatus.FORBIDDEN);

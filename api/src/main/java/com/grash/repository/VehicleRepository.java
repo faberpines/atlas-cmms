@@ -14,4 +14,5 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long>, JpaSpec
     List<Vehicle> findByCompany_Id(Long id, Sort sort);
     Optional<Vehicle> findByIdAndCompany_Id(Long id, Long companyId);
     Optional<Vehicle> findByVinAndCompany_Id(String vin, Long companyId);
+    Optional<Vehicle> findByAsset_Id(Long assetId);
 }

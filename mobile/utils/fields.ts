@@ -165,6 +165,18 @@ export const getAssetFields = (t): Array<IField> => {
       required: true
     },
     {
+      name: 'equipmentType',
+      type: 'select',
+      label: t('equipment_section'),
+      required: true,
+      items: [
+        { label: t('warehouse_equipment'), value: 'WAREHOUSE_EQUIPMENT' },
+        { label: t('fleet_vehicle'), value: 'FLEET_VEHICLE' },
+        { label: t('trailers'), value: 'TRAILER' },
+        { label: t('farm_implements'), value: 'FARM_IMPLEMENT' }
+      ]
+    },
+    {
       name: 'location',
       type: 'select',
       type2: 'location',

@@ -12,11 +12,19 @@ import useAuth from '../../hooks/useAuth';
 import { PermissionEntity } from '../../models/role';
 import { getAssetChildren, getAssets, getMoreAssets } from '../../slices/asset';
 import { FilterField, SearchCriteria } from '../../models/page';
-import { Button, Card, FAB, Searchbar, Text } from 'react-native-paper';
+import {
+  Button,
+  Card,
+  FAB,
+  Searchbar,
+  SegmentedButtons,
+  Text
+} from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import {
   AssetDTO,
   AssetRow,
+  EquipmentType,
   assetStatuses,
   getAssetStatusConfig
 } from '../../models/asset';
@@ -82,7 +90,11 @@ const AssetCard = ({
           />
           <Text
             variant="titleMedium"
-            style={{ color: theme.colors.onSurface, fontWeight: '700', flex: 1 }}
+            style={{
+              color: theme.colors.onSurface,
+              fontWeight: '700',
+              flex: 1
+            }}
           >
             {asset.name}
           </Text>
@@ -129,11 +141,16 @@ export default function AssetsScreen({
   const { assets, assetsHierarchy, loadingGet, currentPageNum, lastPage } =
     useSelector((state) => state.assets);
   const theme = useAppTheme();
+  const [equipmentType, setEquipmentType] = useState<EquipmentType>(
+    'WAREHOUSE_EQUIPMENT'
+  );
   const [view, setView] = useState<'hierarchy' | 'list'>('hierarchy');
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState('');
   const { hasViewPermission, hasCreatePermission } = useAuth();
-  const defaultFilterFields: FilterField[] = [];
+  const defaultFilterFields: FilterField[] = [
+    { field: 'equipmentType', operation: 'eq', value: equipmentType }
+  ];
   const getCriteriaFromFilterFields = (filterFields: FilterField[]) => {
     const initialCriteria: SearchCriteria = {
       filterFields: defaultFilterFields,
@@ -163,6 +180,9 @@ export default function AssetsScreen({
       );
     }
   }, [criteria]);
+  useEffect(() => {
+    setCriteria(getCriteriaFromFilterFields([]));
+  }, [equipmentType]);
   const [currentAssets, setCurrentAssets] = useState<AssetRow[]>([]);
   useEffect(() => {
     if (
@@ -208,13 +228,17 @@ export default function AssetsScreen({
       result = assetsHierarchy.filter((asset, index) => {
         return (
           asset.hierarchy[asset.hierarchy.length - 2] === route.params.id &&
-          asset.id !== route.params.id
+          asset.id !== route.params.id &&
+          asset.equipmentType === equipmentType
         );
       });
     } else
-      result = assetsHierarchy.filter((asset) => asset.hierarchy.length === 1);
+      result = assetsHierarchy.filter(
+        (asset) =>
+          asset.hierarchy.length === 1 && asset.equipmentType === equipmentType
+      );
     setCurrentAssets(result);
-  }, [assetsHierarchy]);
+  }, [assetsHierarchy, equipmentType]);
 
   const handleViewChildren = (asset) => {
     navigation.push('Assets', {
@@ -233,6 +257,24 @@ export default function AssetsScreen({
         onChangeText={setSearchQuery}
         value={searchQuery}
         style={{ backgroundColor: theme.colors.paperMuted }}
+      />
+      <SegmentedButtons
+        value={equipmentType}
+        onValueChange={(value) => setEquipmentType(value as EquipmentType)}
+        buttons={[
+          {
+            value: 'WAREHOUSE_EQUIPMENT',
+            label: t('warehouse_short'),
+            icon: 'warehouse'
+          },
+          { value: 'TRAILER', label: t('trailers'), icon: 'truck-trailer' },
+          {
+            value: 'FARM_IMPLEMENT',
+            label: t('farm_short'),
+            icon: 'tractor'
+          }
+        ]}
+        style={styles.sections}
       />
       {view === 'list' ? (
         <ScrollView
@@ -298,7 +340,7 @@ export default function AssetsScreen({
           label={t('create')}
           color={theme.colors.paper}
           style={[styles.fab, { backgroundColor: theme.colors.primary }]}
-          onPress={() => navigation.navigate('AddAsset', {})}
+          onPress={() => navigation.navigate('AddAsset', { equipmentType })}
         />
       )}
     </View>
@@ -325,6 +367,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
+  sections: { marginHorizontal: 6, marginTop: 10 },
   cardActions: {
     minHeight: 52,
     justifyContent: 'flex-end',

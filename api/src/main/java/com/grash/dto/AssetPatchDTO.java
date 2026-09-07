@@ -2,6 +2,7 @@ package com.grash.dto;
 
 import com.grash.model.*;
 import com.grash.model.enums.AssetStatus;
+import com.grash.model.enums.EquipmentType;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -27,6 +28,8 @@ public class AssetPatchDTO {
     private String area;
 
     private String barCode;
+
+    private EquipmentType equipmentType;
 
     private String nfcId;
 

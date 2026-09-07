@@ -41,6 +41,7 @@ export default function CreateAssetScreen({
         navigation={navigation}
         submitText={t('create_asset')}
         values={{
+          equipmentType: route.params?.equipmentType ?? 'WAREHOUSE_EQUIPMENT',
           inServiceDate: null,
           warrantyExpirationDate: null,
           location: route.params?.location

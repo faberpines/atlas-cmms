@@ -23,6 +23,18 @@ export type AssetStatus =
   | 'INSPECTION_SCHEDULED'
   | 'COMMISSIONING'
   | 'EMERGENCY_SHUTDOWN';
+export type EquipmentType =
+  | 'WAREHOUSE_EQUIPMENT'
+  | 'FLEET_VEHICLE'
+  | 'TRAILER'
+  | 'FARM_IMPLEMENT';
+
+export const equipmentTypes: EquipmentType[] = [
+  'WAREHOUSE_EQUIPMENT',
+  'FLEET_VEHICLE',
+  'TRAILER',
+  'FARM_IMPLEMENT'
+];
 export interface AssetDTO extends Audit {
   nfcId: string;
   id: number;
@@ -34,6 +46,7 @@ export interface AssetDTO extends Audit {
   serialNumber: string;
   status: AssetStatus;
   barCode: string;
+  equipmentType: EquipmentType;
   category: Category;
   description: string;
   primaryUser: UserMiniDTO;

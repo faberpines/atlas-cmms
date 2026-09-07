@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.grash.model.abstracts.CompanyAudit;
 import com.grash.model.enums.AssetStatus;
+import com.grash.model.enums.EquipmentType;
 import com.grash.utils.Helper;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -44,6 +45,10 @@ public class Asset extends CompanyAudit {
     private String description;
 
     private String barCode;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private EquipmentType equipmentType = EquipmentType.WAREHOUSE_EQUIPMENT;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private AssetCategory category;

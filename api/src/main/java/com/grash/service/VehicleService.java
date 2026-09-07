@@ -4,6 +4,8 @@ import com.grash.advancedsearch.SearchCriteria;
 import com.grash.advancedsearch.SpecificationBuilder;
 import com.grash.exception.CustomException;
 import com.grash.model.Vehicle;
+import com.grash.model.Asset;
+import com.grash.model.enums.EquipmentType;
 import com.grash.repository.VehicleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -70,7 +72,29 @@ public class VehicleService {
     }
 
     public Collection<Vehicle> findByCompany(Long companyId) {
-        return vehicleRepository.findByCompany_Id(companyId, Sort.by(Sort.Direction.DESC, "createdAt"));
+        return vehicleRepository.findByCompany_Id(companyId, Sort.by(Sort.Direction.DESC, "createdAt"))
+                .stream()
+                .filter(vehicle -> vehicle.getAsset() == null ||
+                        vehicle.getAsset().getEquipmentType() == EquipmentType.FLEET_VEHICLE)
+                .toList();
+    }
+
+    public Optional<Vehicle> findByAsset(Long assetId) {
+        return vehicleRepository.findByAsset_Id(assetId);
+    }
+
+    @Transactional
+    public void ensureVehicleForAsset(Asset asset) {
+        if (asset.getEquipmentType() != EquipmentType.FLEET_VEHICLE) return;
+        Vehicle vehicle = findByAsset(asset.getId()).orElseGet(Vehicle::new);
+        vehicle.setAsset(asset);
+        vehicle.setName(asset.getName());
+        vehicle.setAssetNumber(asset.getBarCode());
+        vehicle.setVin(asset.getSerialNumber());
+        vehicle.setModel(asset.getModel());
+        vehicle.setNotes(asset.getDescription());
+        vehicle.setImage(asset.getImage());
+        vehicleRepository.save(vehicle);
     }
 
     public Page<Vehicle> findBySearchCriteria(SearchCriteria searchCriteria) {

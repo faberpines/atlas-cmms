@@ -43,7 +43,9 @@ import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import {
   AssetDTO,
   AssetMiniDTO,
-  AssetStatus
+  AssetStatus,
+  EquipmentType,
+  equipmentTypes
 } from '../../../models/owns/asset';
 import Form from '../components/form';
 import * as Yup from 'yup';
@@ -91,6 +93,10 @@ function Assets() {
   const { uploadFiles } = useContext(CompanySettingsContext);
   const [searchParams, setSearchParams] = useSearchParams();
   const locationParam = searchParams.get('location');
+  const typeParam = searchParams.get('type') as EquipmentType;
+  const sectionType: EquipmentType = equipmentTypes.includes(typeParam)
+    ? typeParam
+    : 'WAREHOUSE_EQUIPMENT';
   const navigate = useNavigate();
   const {
     hasViewPermission,
@@ -100,7 +106,9 @@ function Assets() {
     hasFeature
   } = useAuth();
   const [openAddModal, setOpenAddModal] = useState<boolean>(false);
-  const [barcodePrintAsset, setBarcodePrintAsset] = useState<AssetDTO | null>(null);
+  const [barcodePrintAsset, setBarcodePrintAsset] = useState<AssetDTO | null>(
+    null
+  );
   const dispatch = useDispatch();
   const { assetsHierarchy, loadingGet, loadingHierarchy, assets } = useSelector(
     (state) => state.assets
@@ -116,7 +124,7 @@ function Assets() {
   const openMenu = Boolean(anchorEl);
   type ViewType = 'hierarchy' | 'list';
   const theme = useTheme();
-  const [view, setView] = useState<ViewType>('hierarchy');
+  const [view, setView] = useState<ViewType>('list');
   const [pageable, setPageable] = useState<Pageable>({
     page: 0,
     size: HIERARCHY_ZERO_PAGE_SIZE
@@ -127,6 +135,11 @@ function Assets() {
         field: 'archived',
         operation: 'eq',
         value: false
+      },
+      {
+        field: 'equipmentType',
+        operation: 'eq',
+        value: sectionType
       }
     ],
     pageSize: 10,
@@ -167,8 +180,8 @@ function Assets() {
   };
   const [openFilterDrawer, setOpenFilterDrawer] = useState<boolean>(false);
   useEffect(() => {
-    setTitle(t('assets'));
-  }, []);
+    setTitle(t(sectionType.toLowerCase()));
+  }, [sectionType]);
 
   useEffect(() => {
     if (hasViewPermission(PermissionEntity.ASSETS)) {
@@ -194,6 +207,18 @@ function Assets() {
     if (hasViewPermission(PermissionEntity.ASSETS))
       dispatch(getAssets(criteria));
   }, [criteria]);
+
+  useEffect(() => {
+    setView('list');
+    setCriteria({
+      ...initialCriteria,
+      filterFields: initialCriteria.filterFields.map((filter) =>
+        filter.field === 'equipmentType'
+          ? { ...filter, value: sectionType }
+          : filter
+      )
+    });
+  }, [sectionType]);
 
   const fetchMore = () => {
     setPageable((prevState) => {
@@ -268,6 +293,14 @@ function Assets() {
       renderCell: (params: GridRenderCellParams<string>) => (
         <Box sx={{ fontWeight: 'bold' }}>{params.value}</Box>
       )
+    },
+    {
+      field: 'equipmentType',
+      headerName: t('equipment_section'),
+      description: t('equipment_section'),
+      width: 180,
+      valueGetter: (params: GridValueGetterParams<EquipmentType>) =>
+        t(params.value?.toLowerCase())
     },
     {
       field: 'status',
@@ -432,6 +465,7 @@ function Assets() {
   // Mapping for column fields to API field names for sorting
   const fieldMapping: Record<string, string> = {
     name: 'name',
+    equipmentType: 'equipmentType',
     status: 'status',
     location: 'location.name',
     image: 'image',
@@ -450,7 +484,7 @@ function Assets() {
 
   const onResetFilters = () => {
     setCriteria(initialCriteria);
-    setView('hierarchy');
+    setView('list');
   };
   const defaultFields: Array<IField> = [
     {
@@ -464,6 +498,18 @@ function Assets() {
       label: t('name'),
       placeholder: t('asset_name_description'),
       required: true
+    },
+    {
+      name: 'equipmentType',
+      type: 'select',
+      label: t('equipment_section'),
+      placeholder: t('select_equipment_section'),
+      required: true,
+      midWidth: true,
+      items: equipmentTypes.map((type) => ({
+        label: t(type.toLowerCase()),
+        value: type
+      }))
     },
     {
       name: 'location',
@@ -671,6 +717,7 @@ function Assets() {
             validation={Yup.object().shape(shape)}
             submitText={t('create_asset')}
             values={{
+              equipmentType: sectionType,
               inServiceDate: null,
               warrantyExpirationDate: null,
               location: locationParamObject
@@ -731,12 +778,14 @@ function Assets() {
           <BarcodePrintDialog
             open={!!barcodePrintAsset}
             onClose={() => setBarcodePrintAsset(null)}
-            value={barcodePrintAsset.barCode || barcodePrintAsset.serialNumber || ''}
+            value={
+              barcodePrintAsset.barCode || barcodePrintAsset.serialNumber || ''
+            }
             label={barcodePrintAsset.name}
           />
         )}
         <Helmet>
-          <title>{t('assets')}</title>
+          <title>{t(sectionType.toLowerCase())}</title>
         </Helmet>
         <Box justifyContent="center" alignItems="stretch" paddingX={4}>
           <Box
@@ -796,7 +845,7 @@ function Assets() {
                 getRowHeight={() => 'auto'}
                 disableColumnFilter
                 loading={loadingGet}
-                paginationMode='server'
+                paginationMode="server"
                 rowCount={assets.totalElements}
                 page={criteria.pageNum}
                 pageSize={criteria.pageSize}

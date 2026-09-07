@@ -4,6 +4,7 @@ import MultipleTabsLayout from '../../components/MultipleTabsLayout';
 import { TitleContext } from '../../../../contexts/TitleContext';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Asset, { AssetDTO } from '../../../../models/owns/asset';
+import { equipmentTypes } from '../../../../models/owns/asset';
 import AssetWorkOrders from './AssetWorkOrders';
 import AssetDetails from './AssetDetails';
 import AssetParts from './AssetParts';
@@ -108,6 +109,18 @@ const ShowAsset = ({}: PropsType) => {
       label: t('name'),
       placeholder: t('asset_name_description'),
       required: true
+    },
+    {
+      name: 'equipmentType',
+      type: 'select',
+      label: t('equipment_section'),
+      placeholder: t('select_equipment_section'),
+      required: true,
+      midWidth: true,
+      items: equipmentTypes.map((type) => ({
+        label: t(type.toLowerCase()),
+        value: type
+      }))
     },
     {
       name: 'location',

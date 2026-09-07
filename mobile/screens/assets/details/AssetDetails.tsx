@@ -36,6 +36,10 @@ export default function AssetDetails({
     value: string | number;
   }[] = [
     { label: t('name'), value: asset?.name },
+    {
+      label: t('equipment_section'),
+      value: t((asset?.equipmentType ?? 'WAREHOUSE_EQUIPMENT').toLowerCase())
+    },
     { label: t('description'), value: asset?.description },
     { label: t('category'), value: asset?.category?.name },
     { label: t('model'), value: asset?.model },

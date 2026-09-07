@@ -189,7 +189,8 @@ const locale = {
   no_account_yet: 'Don’t have an account, yet?',
   signup_here: 'Sign up here',
   wrong_credentials: 'Wrong credentials provided',
-  server_unreachable: 'Cannot reach the Atlas server. Check your Wi-Fi or Tailscale connection.',
+  server_unreachable:
+    'Cannot reach the Atlas server. Check your Wi-Fi or Tailscale connection.',
   lost_password: 'Lost password ?',
   //work-orders
   link_wo: 'Link Work Orders',
@@ -1534,7 +1535,8 @@ const locale = {
   no_tagouts: 'No tagouts recorded',
   no_tagouts_hint: 'Active and released lockouts will appear here.',
   tagout_safety_title: 'Lockout / Tagout',
-  tagout_safety_note: 'Verify zero energy before work begins. Follow your written energy-control procedure.',
+  tagout_safety_note:
+    'Verify zero energy before work begins. Follow your written energy-control procedure.',
   electrical_short: 'Electrical',
   hydraulic_short: 'Hydraulic',
   mechanical_short: 'Mechanical',
@@ -1545,26 +1547,42 @@ const locale = {
   scan_another_asset: 'Scan Another Asset',
   asset_lookup: 'Asset lookup',
   scan_asset: 'Scan an asset',
-  scan_requester_help: 'Identify equipment and send a maintenance request from the floor.',
-  scan_technician_help: 'Identify equipment, review its record, and start a linked work order.',
+  scan_requester_help:
+    'Identify equipment and send a maintenance request from the floor.',
+  scan_technician_help:
+    'Identify equipment, review its record, and start a linked work order.',
   barcode_scan_help: 'Use the camera to read the asset barcode.',
   nfc_scan_help: 'Hold your device near the asset NFC tag.',
   what_happens_next: 'What happens next',
-  requester_scan_next: 'We will open the asset record with a button to submit a linked request.',
-  technician_scan_next: 'We will open the asset record with actions for details and a linked work order.',
+  requester_scan_next:
+    'We will open the asset record with a button to submit a linked request.',
+  technician_scan_next:
+    'We will open the asset record with actions for details and a linked work order.',
   app_updates: 'App Updates',
-  check_updates_description: 'Check the Atlas server for the newest Android app.',
+  check_updates_description:
+    'Check the Atlas server for the newest Android app.',
   check_for_updates: 'Check for Updates',
   app_is_up_to_date: 'You have the newest version.',
   update_available: 'Version {{version}} is ready to install.',
   download_and_install: 'Download & Install',
   downloading_update: 'Downloading Update...',
   current_version: 'Current version: {{version}}',
-  update_check_failure: 'Could not check for updates. Confirm Wi-Fi or Tailscale is connected.',
-  update_download_failure: 'Could not install the update. Check the connection and allow installs from this app.',
+  update_check_failure:
+    'Could not check for updates. Confirm Wi-Fi or Tailscale is connected.',
+  update_download_failure:
+    'Could not install the update. Check the connection and allow installs from this app.',
   add_photos: 'Add Photos',
   take_or_choose_photos: 'Take a picture or choose photos from your phone.',
   work_order_photos: 'Work Order Photos',
-  work_order_photo_added: 'Photo added to work order'
+  work_order_photo_added: 'Photo added to work order',
+  equipment_section: 'Equipment section',
+  warehouse_equipment: 'Warehouse Equipment',
+  warehouse_short: 'Warehouse',
+  fleet_vehicle: 'Fleet Vehicles',
+  trailers: 'Trailers',
+  trailer: 'Trailer',
+  farm_implements: 'Farm Implements',
+  farm_implement: 'Farm Implement',
+  farm_short: 'Farm'
 };
 export default locale;

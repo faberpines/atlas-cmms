@@ -210,4 +210,6 @@
              relativeToChangelogFile="true"/>
     <include file="changelog/2026_09_05_1788600000_work_order_tracking.xml"
              relativeToChangelogFile="true"/>
+    <include file="changelog/2026_09_07_1788780000_asset_equipment_type.xml"
+             relativeToChangelogFile="true"/>
 </databaseChangeLog>

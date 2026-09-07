@@ -10,6 +10,7 @@ import com.grash.model.Vehicle;
 import com.grash.model.VehicleLocation;
 import com.grash.model.VehicleUsageLog;
 import com.grash.model.enums.PermissionEntity;
+import com.grash.model.enums.EquipmentType;
 import com.grash.model.enums.RoleType;
 import com.grash.service.LoraDeviceService;
 import com.grash.service.AssetService;
@@ -116,6 +117,10 @@ public class VehicleController {
                 .filter(candidate -> candidate.getCompany().getId().equals(user.getCompany().getId()))
                 .orElseThrow(() -> new CustomException("Asset not found", HttpStatus.NOT_FOUND));
         vehicle.setAsset(asset);
+        if (asset.getEquipmentType() != EquipmentType.FLEET_VEHICLE) {
+            asset.setEquipmentType(EquipmentType.FLEET_VEHICLE);
+            assetService.save(asset);
+        }
     }
 
     @DeleteMapping("/{id}")

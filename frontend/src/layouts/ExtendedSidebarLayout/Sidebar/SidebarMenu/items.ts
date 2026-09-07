@@ -151,9 +151,21 @@ const ownMenuItems: MenuItems[] = [
         uiConfigKey: 'requests'
       },
       {
-        name: 'assets',
-        link: '/app/assets',
+        name: 'warehouse_equipment',
+        link: '/app/assets?type=WAREHOUSE_EQUIPMENT',
         icon: Inventory2TwoToneIcon,
+        permission: PermissionEntity.ASSETS
+      },
+      {
+        name: 'trailers',
+        link: '/app/assets?type=TRAILER',
+        icon: Inventory2TwoToneIcon,
+        permission: PermissionEntity.ASSETS
+      },
+      {
+        name: 'farm_implements',
+        link: '/app/assets?type=FARM_IMPLEMENT',
+        icon: HandymanTwoToneIcon,
         permission: PermissionEntity.ASSETS
       },
       {

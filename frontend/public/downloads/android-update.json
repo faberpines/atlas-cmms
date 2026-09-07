@@ -1,7 +1,7 @@
 {
-  "version": "1.2.0",
-  "versionCode": 12,
-  "apkUrl": "http://192.168.1.122:3000/downloads/Bay-Baby-Maintenance-1.2.0.apk",
-  "releaseNotes": "Adds carrier tracking numbers and clickable tracking links for Parts Ordered work orders.",
-  "publishedAt": "2026-09-05"
+  "version": "1.2.1",
+  "versionCode": 13,
+  "apkUrl": "http://192.168.1.122:3000/downloads/Bay-Baby-Maintenance-1.2.1.apk",
+  "releaseNotes": "Organizes assets into Warehouse Equipment, Fleet Vehicles, Trailers, and Farm Implements with automatic sorting.",
+  "publishedAt": "2026-09-07"
 }

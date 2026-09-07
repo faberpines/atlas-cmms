@@ -4,6 +4,7 @@ import com.grash.model.AssetCategory;
 import com.grash.model.Deprecation;
 import com.grash.dto.FileShowDTO;
 import com.grash.model.enums.AssetStatus;
+import com.grash.model.enums.EquipmentType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -30,6 +31,8 @@ public class AssetShowDTO extends AuditShowDTO {
     private String area;
 
     private String barCode;
+
+    private EquipmentType equipmentType;
 
     private String nfcId;
 

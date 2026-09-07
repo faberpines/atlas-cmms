@@ -1810,7 +1810,15 @@ const esJSON = {
     'Descargue la aplicación Bay Baby Maintenance para Android aquí: {{link}}. Si Android lo solicita, permita la instalación desde esta fuente.',
   new_user_email: 'Correo electrónico del usuario nuevo',
   new_user_phone: 'Teléfono del usuario nuevo',
-  copy_link: 'Copiar enlace'
+  copy_link: 'Copiar enlace',
+  equipment_section: 'Sección de equipo',
+  select_equipment_section: 'Seleccione una sección de equipo',
+  warehouse_equipment: 'Equipo de almacén',
+  fleet_vehicle: 'Vehículos de flota',
+  trailers: 'Remolques',
+  trailer: 'Remolque',
+  farm_implements: 'Implementos agrícolas',
+  farm_implement: 'Implemento agrícola'
 };
 
 export default esJSON;

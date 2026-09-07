@@ -297,7 +297,7 @@ function RootNavigator() {
       <Stack.Screen
         name="Assets"
         component={AssetsScreen}
-        options={{ title: t('assets') }}
+        options={{ title: t('warehouse_equipment') }}
       />
       <Stack.Screen
         name="AssetDetails"
@@ -374,16 +374,16 @@ function RootNavigator() {
         component={ScannedAssetScreen}
         options={{ title: t('asset_scan_result') }}
       />
-        <Stack.Screen
-          name="AddVehicle"
-          component={CreateVehicleScreen}
-          options={{ title: t('add_vehicle') }}
-        />
-        <Stack.Screen
-          name="LogVehicleUsage"
-          component={LogVehicleUsageScreen}
-          options={{ title: t('log_usage') }}
-        />
+      <Stack.Screen
+        name="AddVehicle"
+        component={CreateVehicleScreen}
+        options={{ title: t('add_vehicle') }}
+      />
+      <Stack.Screen
+        name="LogVehicleUsage"
+        component={LogVehicleUsageScreen}
+        options={{ title: t('log_usage') }}
+      />
       <Stack.Screen
         name="AddTagout"
         component={CreateTagoutScreen}
@@ -571,8 +571,16 @@ function BottomTabNavigator({ navigation }: any) {
         headerTitleStyle: { fontWeight: '700' },
         headerRight: () => (
           <View style={{ flexDirection: 'row' }}>
-            <IconButton icon="barcode-scan" iconColor={theme.colors.paper} onPress={() => tabNavigation.getParent()?.navigate('ScanAsset')} />
-            <IconButton icon="cog-outline" iconColor={theme.colors.paper} onPress={() => tabNavigation.getParent()?.navigate('Settings')} />
+            <IconButton
+              icon="barcode-scan"
+              iconColor={theme.colors.paper}
+              onPress={() => tabNavigation.getParent()?.navigate('ScanAsset')}
+            />
+            <IconButton
+              icon="cog-outline"
+              iconColor={theme.colors.paper}
+              onPress={() => tabNavigation.getParent()?.navigate('Settings')}
+            />
           </View>
         ),
         tabBarActiveTintColor: theme.colors.paper,
@@ -604,16 +612,93 @@ function BottomTabNavigator({ navigation }: any) {
     >
       {isRequester ? (
         <>
-          <BottomTab.Screen name="Requests" component={RequestsScreen} options={{ title: t('requests'), tabBarIcon: ({ color }) => <Feather name="inbox" color={color} size={25} /> }} />
-          <BottomTab.Screen name="Scan" component={ScanAssetScreen} options={{ title: t('scan'), tabBarIcon: ({ color }) => <Ionicons name="barcode-outline" color={color} size={27} /> }} />
+          <BottomTab.Screen
+            name="Requests"
+            component={RequestsScreen}
+            options={{
+              title: t('requests'),
+              tabBarIcon: ({ color }) => (
+                <Feather name="inbox" color={color} size={25} />
+              )
+            }}
+          />
+          <BottomTab.Screen
+            name="Scan"
+            component={ScanAssetScreen}
+            options={{
+              title: t('scan'),
+              tabBarIcon: ({ color }) => (
+                <Ionicons name="barcode-outline" color={color} size={27} />
+              )
+            }}
+          />
         </>
       ) : (
         <>
-          {hasViewPermission(PermissionEntity.WORK_ORDERS) && <BottomTab.Screen name="WorkOrders" component={WorkOrdersScreen} options={{ title: t('work_orders'), tabBarIcon: ({ color }) => <Ionicons name="clipboard-outline" color={color} size={25} /> }} />}
-          {hasViewPermission(PermissionEntity.PARTS_AND_MULTIPARTS) && <BottomTab.Screen name="Parts" component={PartsScreen} options={{ title: t('parts'), tabBarIcon: ({ color }) => <Ionicons name="cube-outline" color={color} size={25} /> }} />}
-          {hasViewPermission(PermissionEntity.ASSETS) && <BottomTab.Screen name="Assets" component={AssetsScreen} options={{ title: t('assets'), tabBarIcon: ({ color }) => <Ionicons name="barcode-outline" color={color} size={25} /> }} />}
-          {hasViewPermission(PermissionEntity.FLEET) && <BottomTab.Screen name="Fleet" component={FleetScreen} options={{ title: t('fleet'), tabBarIcon: ({ color }) => <Ionicons name="car-outline" color={color} size={25} /> }} />}
-          {hasViewPermission(PermissionEntity.LOTO) && <BottomTab.Screen name="Tagout" component={TagoutScreen} options={{ title: t('tagout'), tabBarIcon: ({ color }) => <Ionicons name="lock-closed-outline" color={color} size={25} /> }} />}
+          {hasViewPermission(PermissionEntity.WORK_ORDERS) && (
+            <BottomTab.Screen
+              name="WorkOrders"
+              component={WorkOrdersScreen}
+              options={{
+                title: t('work_orders'),
+                tabBarIcon: ({ color }) => (
+                  <Ionicons name="clipboard-outline" color={color} size={25} />
+                )
+              }}
+            />
+          )}
+          {hasViewPermission(PermissionEntity.PARTS_AND_MULTIPARTS) && (
+            <BottomTab.Screen
+              name="Parts"
+              component={PartsScreen}
+              options={{
+                title: t('parts'),
+                tabBarIcon: ({ color }) => (
+                  <Ionicons name="cube-outline" color={color} size={25} />
+                )
+              }}
+            />
+          )}
+          {hasViewPermission(PermissionEntity.ASSETS) && (
+            <BottomTab.Screen
+              name="Assets"
+              component={AssetsScreen}
+              options={{
+                title: t('warehouse_short'),
+                tabBarIcon: ({ color }) => (
+                  <Ionicons name="barcode-outline" color={color} size={25} />
+                )
+              }}
+            />
+          )}
+          {hasViewPermission(PermissionEntity.FLEET) && (
+            <BottomTab.Screen
+              name="Fleet"
+              component={FleetScreen}
+              options={{
+                title: t('fleet'),
+                tabBarIcon: ({ color }) => (
+                  <Ionicons name="car-outline" color={color} size={25} />
+                )
+              }}
+            />
+          )}
+          {hasViewPermission(PermissionEntity.LOTO) && (
+            <BottomTab.Screen
+              name="Tagout"
+              component={TagoutScreen}
+              options={{
+                title: t('tagout'),
+                tabBarIcon: ({ color }) => (
+                  <Ionicons
+                    name="lock-closed-outline"
+                    color={color}
+                    size={25}
+                  />
+                )
+              }}
+            />
+          )}
         </>
       )}
     </BottomTab.Navigator>

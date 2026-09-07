@@ -197,7 +197,8 @@ const locale = {
   no_account_yet: '¿Aún no tienes una cuenta?',
   signup_here: 'Regístrate aquí',
   wrong_credentials: 'Credenciales incorrectas proporcionadas',
-  server_unreachable: 'No se puede conectar al servidor Atlas. Revisa tu conexión Wi-Fi o Tailscale.',
+  server_unreachable:
+    'No se puede conectar al servidor Atlas. Revisa tu conexión Wi-Fi o Tailscale.',
   lost_password: '¿Perdiste tu contraseña?',
   link_wo: 'Vincular Órdenes de Trabajo',
   link_wo_description: 'Crear relaciones entre Órdenes de Trabajo',
@@ -940,7 +941,8 @@ const locale = {
   inspection_created: 'Inspección creada correctamente',
   inspection_saved: 'Inspección guardada',
   inspection_deleted: 'Inspección eliminada',
-  confirm_delete_inspection: '¿Está seguro de que desea eliminar esta inspección?',
+  confirm_delete_inspection:
+    '¿Está seguro de que desea eliminar esta inspección?',
   save_progress: 'Guardar Progreso',
   pass: 'Aprobado',
   fail: 'Fallido',
@@ -1533,7 +1535,8 @@ const locale = {
   vehicle_created: 'Vehículo agregado',
   vehicle_create_failure: 'No se pudo agregar el vehículo',
   no_vehicles: 'No hay vehículos',
-  no_vehicles_hint: 'Agrega el primer vehículo para comenzar a gestionar la flota.',
+  no_vehicles_hint:
+    'Agrega el primer vehículo para comenzar a gestionar la flota.',
   license_plate: 'Matrícula',
   asset_number: 'Número de activo',
   make: 'Marca',
@@ -1564,7 +1567,8 @@ const locale = {
   no_tagouts: 'No hay bloqueos registrados',
   no_tagouts_hint: 'Los bloqueos activos y liberados aparecerán aquí.',
   tagout_safety_title: 'Bloqueo / Etiquetado',
-  tagout_safety_note: 'Verifica energía cero antes de comenzar. Sigue el procedimiento escrito de control de energía.',
+  tagout_safety_note:
+    'Verifica energía cero antes de comenzar. Sigue el procedimiento escrito de control de energía.',
   electrical_short: 'Eléctrico',
   hydraulic_short: 'Hidráulico',
   mechanical_short: 'Mecánico',
@@ -1575,27 +1579,43 @@ const locale = {
   scan_another_asset: 'Escanear Otro Activo',
   asset_lookup: 'Búsqueda de activo',
   scan_asset: 'Escanear un activo',
-  scan_requester_help: 'Identifica el equipo y envía una solicitud de mantenimiento desde el área de trabajo.',
-  scan_technician_help: 'Identifica el equipo, revisa su registro e inicia una orden de trabajo vinculada.',
+  scan_requester_help:
+    'Identifica el equipo y envía una solicitud de mantenimiento desde el área de trabajo.',
+  scan_technician_help:
+    'Identifica el equipo, revisa su registro e inicia una orden de trabajo vinculada.',
   barcode_scan_help: 'Usa la cámara para leer el código de barras del activo.',
   nfc_scan_help: 'Acerca el dispositivo a la etiqueta NFC del activo.',
   what_happens_next: 'Qué sucede después',
-  requester_scan_next: 'Abriremos el registro del activo con un botón para enviar una solicitud vinculada.',
-  technician_scan_next: 'Abriremos el registro del activo con acciones para ver detalles y crear una orden vinculada.',
+  requester_scan_next:
+    'Abriremos el registro del activo con un botón para enviar una solicitud vinculada.',
+  technician_scan_next:
+    'Abriremos el registro del activo con acciones para ver detalles y crear una orden vinculada.',
   app_updates: 'Actualizaciones de la Aplicación',
-  check_updates_description: 'Busca la aplicación Android más reciente en el servidor Atlas.',
+  check_updates_description:
+    'Busca la aplicación Android más reciente en el servidor Atlas.',
   check_for_updates: 'Buscar Actualizaciones',
   app_is_up_to_date: 'Tienes la versión más reciente.',
   update_available: 'La versión {{version}} está lista para instalar.',
   download_and_install: 'Descargar e Instalar',
   downloading_update: 'Descargando Actualización...',
   current_version: 'Versión actual: {{version}}',
-  update_check_failure: 'No se pudieron buscar actualizaciones. Confirma que Wi-Fi o Tailscale esté conectado.',
-  update_download_failure: 'No se pudo instalar la actualización. Verifica la conexión y permite instalaciones desde esta aplicación.',
+  update_check_failure:
+    'No se pudieron buscar actualizaciones. Confirma que Wi-Fi o Tailscale esté conectado.',
+  update_download_failure:
+    'No se pudo instalar la actualización. Verifica la conexión y permite instalaciones desde esta aplicación.',
   add_photos: 'Agregar Fotos',
   take_or_choose_photos: 'Toma una foto o elige fotos de tu teléfono.',
   work_order_photos: 'Fotos de la Orden de Trabajo',
-  work_order_photo_added: 'Foto agregada a la orden de trabajo'
+  work_order_photo_added: 'Foto agregada a la orden de trabajo',
+  equipment_section: 'Sección de equipo',
+  warehouse_equipment: 'Equipo de almacén',
+  warehouse_short: 'Almacén',
+  fleet_vehicle: 'Vehículos de flota',
+  trailers: 'Remolques',
+  trailer: 'Remolque',
+  farm_implements: 'Implementos agrícolas',
+  farm_implement: 'Implemento agrícola',
+  farm_short: 'Agrícola'
 };
 
 export default locale;

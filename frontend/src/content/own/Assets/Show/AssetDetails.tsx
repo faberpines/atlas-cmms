@@ -49,6 +49,12 @@ const AssetDetails = ({ asset, loading }: PropsType) => {
   );
   const informationFields = [
     { label: t('name'), value: asset?.name },
+    {
+      label: t('equipment_section'),
+      value: asset?.equipmentType
+        ? t(asset.equipmentType.toLowerCase())
+        : t('warehouse_equipment')
+    },
     { label: t('description'), value: asset?.description },
     { label: t('category'), value: asset?.category?.name },
     { label: t('model'), value: asset?.model },

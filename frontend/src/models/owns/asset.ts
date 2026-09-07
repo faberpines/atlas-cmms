@@ -29,6 +29,18 @@ export const assetStatuses = [
 ] as const;
 
 export type AssetStatus = typeof assetStatuses[number]['status'];
+export type EquipmentType =
+  | 'WAREHOUSE_EQUIPMENT'
+  | 'FLEET_VEHICLE'
+  | 'TRAILER'
+  | 'FARM_IMPLEMENT';
+
+export const equipmentTypes: EquipmentType[] = [
+  'WAREHOUSE_EQUIPMENT',
+  'FLEET_VEHICLE',
+  'TRAILER',
+  'FARM_IMPLEMENT'
+];
 export interface AssetDTO extends Audit {
   id: number;
   name: string;
@@ -39,6 +51,7 @@ export interface AssetDTO extends Audit {
   serialNumber: string;
   status: AssetStatus;
   barCode: string;
+  equipmentType: EquipmentType;
   category: Category;
   description: string;
   primaryUser: UserMiniDTO;
