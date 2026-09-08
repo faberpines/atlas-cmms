@@ -1,7 +1,7 @@
 {
-  "version": "1.2.5",
-  "versionCode": 17,
-  "apkUrl": "https://bbp.tailfda364.ts.net/downloads/Bay-Baby-Maintenance-1.2.5.apk",
+  "version": "1.2.6",
+  "versionCode": 18,
+  "apkUrl": "https://bbp.tailfda364.ts.net/downloads/Bay-Baby-Maintenance-1.2.6.apk",
   "releaseNotes": "Adds direct HTTPS access from any internet connection without requiring the Tailscale app.",
   "publishedAt": "2026-09-08"
 }
