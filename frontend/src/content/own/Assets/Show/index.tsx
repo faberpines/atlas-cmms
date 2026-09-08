@@ -4,6 +4,7 @@ import MultipleTabsLayout from '../../components/MultipleTabsLayout';
 import { TitleContext } from '../../../../contexts/TitleContext';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Asset, { AssetDTO } from '../../../../models/owns/asset';
+import { EquipmentType } from '../../../../models/owns/asset';
 import { equipmentTypes } from '../../../../models/owns/asset';
 import AssetWorkOrders from './AssetWorkOrders';
 import AssetDetails from './AssetDetails';
@@ -54,6 +55,8 @@ const ShowAsset = ({}: PropsType) => {
   const asset: AssetDTO = assetInfos[assetId]?.asset;
   const navigate = useNavigate();
   const [openDelete, setOpenDelete] = useState<boolean>(false);
+  const [changingEquipmentType, setChangingEquipmentType] =
+    useState<boolean>(false);
   const {
     hasViewPermission,
     hasEditPermission,
@@ -301,6 +304,13 @@ const ShowAsset = ({}: PropsType) => {
   };
   const onEditFailure = (err) =>
     showSnackBar(t('asset_update_failure'), 'error');
+  const handleEquipmentTypeChange = (equipmentType: EquipmentType) => {
+    setChangingEquipmentType(true);
+    dispatch(editAsset(Number(assetId), { equipmentType }))
+      .then(() => showSnackBar(t('changes_saved_success'), 'success'))
+      .catch(onEditFailure)
+      .finally(() => setChangingEquipmentType(false));
+  };
 
   const renderAssetUpdateModal = () => (
     <Dialog
@@ -448,7 +458,13 @@ const ShowAsset = ({}: PropsType) => {
       >
         {isNumeric(assetId) ? (
           tabIndex === 0 ? (
-            <AssetDetails asset={asset} loading={loadingGet} />
+            <AssetDetails
+              asset={asset}
+              loading={loadingGet}
+              canEdit={hasEditPermission(PermissionEntity.ASSETS, asset)}
+              changingEquipmentType={changingEquipmentType}
+              onEquipmentTypeChange={handleEquipmentTypeChange}
+            />
           ) : tabIndex === 1 ? (
             <AssetWorkOrders asset={asset} />
           ) : tabIndex === 2 ? (

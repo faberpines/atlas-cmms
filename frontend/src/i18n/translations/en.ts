@@ -2063,6 +2063,8 @@ const locale = {
   copy_link: 'Copy link',
   equipment_section: 'Equipment section',
   select_equipment_section: 'Select an equipment section',
+  equipment_section_sort_help:
+    'Changing this selection saves immediately and moves the asset to that section.',
   warehouse_equipment: 'Warehouse Equipment',
   fleet_vehicle: 'Fleet Vehicles',
   trailers: 'Trailers',

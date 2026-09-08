@@ -2,15 +2,23 @@ import {
   Box,
   Card,
   Divider,
+  FormControl,
   Grid,
+  InputLabel,
   Link,
+  MenuItem,
+  Select,
   Stack,
   styled,
   Typography,
   useTheme
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { AssetDTO } from '../../../../models/owns/asset';
+import {
+  AssetDTO,
+  EquipmentType,
+  equipmentTypes
+} from '../../../../models/owns/asset';
 import { UserMiniDTO } from '../../../../models/user';
 import { Customer } from '../../../../models/owns/customer';
 import { Vendor } from '../../../../models/owns/vendor';
@@ -29,6 +37,9 @@ import Loading from '../../Analytics/Loading';
 interface PropsType {
   asset: AssetDTO;
   loading: boolean;
+  canEdit?: boolean;
+  changingEquipmentType?: boolean;
+  onEquipmentTypeChange?: (equipmentType: EquipmentType) => void;
 }
 
 const LabelWrapper = styled(Box)(
@@ -41,7 +52,13 @@ const LabelWrapper = styled(Box)(
     line-height: 1;
   `
 );
-const AssetDetails = ({ asset, loading }: PropsType) => {
+const AssetDetails = ({
+  asset,
+  loading,
+  canEdit,
+  changingEquipmentType,
+  onEquipmentTypeChange
+}: PropsType) => {
   const { t }: { t: any } = useTranslation();
   const theme = useTheme();
   const { getFormattedDate, getFormattedCurrency } = useContext(
@@ -169,6 +186,35 @@ const AssetDetails = ({ asset, loading }: PropsType) => {
                   {asset && <AssetStatusTag status={asset.status} />}
                 </Stack>
               </Grid>
+              {canEdit && asset && (
+                <Grid item xs={12} md={6}>
+                  <FormControl fullWidth>
+                    <InputLabel id="asset-equipment-section-label">
+                      {t('equipment_section')}
+                    </InputLabel>
+                    <Select
+                      labelId="asset-equipment-section-label"
+                      value={asset.equipmentType ?? 'WAREHOUSE_EQUIPMENT'}
+                      label={t('equipment_section')}
+                      disabled={changingEquipmentType}
+                      onChange={(event) =>
+                        onEquipmentTypeChange?.(
+                          event.target.value as EquipmentType
+                        )
+                      }
+                    >
+                      {equipmentTypes.map((type) => (
+                        <MenuItem key={type} value={type}>
+                          {t(type.toLowerCase())}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  <Typography variant="caption" color="text.secondary">
+                    {t('equipment_section_sort_help')}
+                  </Typography>
+                </Grid>
+              )}
               {informationFields.map((field) => (
                 <BasicField
                   key={field.label}

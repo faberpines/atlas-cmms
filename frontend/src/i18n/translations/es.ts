@@ -1813,6 +1813,8 @@ const esJSON = {
   copy_link: 'Copiar enlace',
   equipment_section: 'Sección de equipo',
   select_equipment_section: 'Seleccione una sección de equipo',
+  equipment_section_sort_help:
+    'Cambiar esta selección guarda inmediatamente y mueve el activo a esa sección.',
   warehouse_equipment: 'Equipo de almacén',
   fleet_vehicle: 'Vehículos de flota',
   trailers: 'Remolques',
