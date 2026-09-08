@@ -85,7 +85,7 @@ export default function InviteUserDialog({
         }}
       >
         <Typography variant="h4" gutterBottom>
-          {t('invite_users')}
+          Create or invite a user
         </Typography>
       </DialogTitle>
 
@@ -123,6 +123,9 @@ export default function InviteUserDialog({
           <Box pb={3}>
             <UserRoleCardList onChange={onRoleChange} />
           </Box>
+          {roleId && (
+            <CreateUser roleId={roleId} onClose={onClose} onRefreshUsers={onRefreshUsers} />
+          )}
           {isEmailVerificationEnabled ? (
             <>
               <Grid container spacing={1}>
@@ -213,15 +216,7 @@ export default function InviteUserDialog({
                 {t('invite')}
               </Button>
             </>
-          ) : (
-            roleId && (
-              <CreateUser
-                roleId={roleId}
-                onClose={onClose}
-                onRefreshUsers={onRefreshUsers}
-              />
-            )
-          )}
+          ) : null}
           <Box ref={bottomRef} />
         </Box>
       </DialogContent>

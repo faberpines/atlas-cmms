@@ -89,6 +89,7 @@ const People = ({ openModal, handleCloseModal }: PropsType) => {
     onSearchQueryChange<User>(event, criteria, setCriteria, [
       'firstName',
       'lastName',
+      'username',
       'email',
       'phone',
       'jobTitle'
@@ -151,7 +152,7 @@ const People = ({ openModal, handleCloseModal }: PropsType) => {
     {
       name: 'password',
       type: 'text',
-      label: t('password_leave_empty_if_you_dont_want_to_change')
+      label: 'Reset password (leave blank to keep current)'
     } as IField
   ];
   const getFields = () => {
@@ -296,9 +297,15 @@ const People = ({ openModal, handleCloseModal }: PropsType) => {
       )
     },
     {
+      field: 'username',
+      headerName: 'Username',
+      width: 150
+    },
+    {
       field: 'email',
       headerName: t('email'),
-      width: 150
+      width: 170,
+      valueGetter: (params) => params.value?.endsWith('@local.atlas.invalid') ? 'Username account' : params.value
     },
     {
       field: 'phone',

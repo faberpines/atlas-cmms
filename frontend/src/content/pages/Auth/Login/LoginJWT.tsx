@@ -37,10 +37,7 @@ const LoginJWT: FC = () => {
         submit: null
       }}
       validationSchema={Yup.object().shape({
-        email: Yup.string()
-          .email(t('invalid_email'))
-          .max(255)
-          .required(t('required_email')),
+        email: Yup.string().max(255).required('Email or username is required'),
         password: Yup.string().max(255).required(t('required_password'))
       })}
       onSubmit={async (
@@ -76,11 +73,11 @@ const LoginJWT: FC = () => {
             margin="normal"
             autoFocus
             helperText={touched.email && errors.email}
-            label={t('email')}
+            label="Email or username"
             name="email"
             onBlur={handleBlur}
             onChange={handleChange}
-            type="email"
+            type="text"
             value={values.email}
             variant="outlined"
           />

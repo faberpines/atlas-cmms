@@ -203,6 +203,12 @@ export const addUser =
     const userResponse = await api.post<UserResponseDTO>('users', user);
     dispatch(slice.actions.addUser({ user: userResponse }));
   };
+export const createManagedUser =
+  (account: { username: string; password: string; displayName?: string; roleId: number }): AppThunk =>
+  async (dispatch) => {
+    const user = await api.post<UserResponseDTO>('users/managed', account);
+    dispatch(slice.actions.addUser({ user }));
+  };
 export const deleteUser =
   (id: number): AppThunk =>
   async (dispatch) => {

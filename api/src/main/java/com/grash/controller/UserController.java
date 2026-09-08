@@ -42,6 +42,24 @@ public class UserController {
     private final RoleService roleService;
     private final UserMapper userMapper;
 
+    @PostMapping("/managed")
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
+    public UserResponseDTO createManaged(@Valid @RequestBody ManagedUserCreateDTO request,
+                                         @Parameter(hidden = true) @CurrentUser OwnUser administrator) {
+        if (!administrator.getRole().getCreatePermissions().contains(PermissionEntity.PEOPLE_AND_TEAMS))
+            throw new CustomException("Access denied", HttpStatus.FORBIDDEN);
+        Role role = roleService.findById(request.getRoleId())
+                .filter(candidate -> candidate.belongsToCompany(administrator.getCompany()))
+                .orElseThrow(() -> new CustomException("Role not found", HttpStatus.NOT_FOUND));
+        if (role.isPaid()) {
+            long paidUsers = userService.findByCompany(administrator.getCompany().getId()).stream()
+                    .filter(OwnUser::isEnabledInSubscriptionAndPaid).count();
+            if (paidUsers >= administrator.getCompany().getSubscription().getUsersCount())
+                throw new CustomException("Your current subscription does not allow another paid user", HttpStatus.NOT_ACCEPTABLE);
+        }
+        return userMapper.toResponseDto(userService.createManagedUser(request, administrator, role));
+    }
+
     @PostMapping("/search")
     @PreAuthorize("permitAll()")
     public ResponseEntity<Page<UserResponseDTO>> search(@RequestBody SearchCriteria searchCriteria,

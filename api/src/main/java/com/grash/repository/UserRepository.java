@@ -17,6 +17,10 @@ public interface UserRepository extends JpaRepository<OwnUser, Long>, JpaSpecifi
 
     boolean existsByUsername(String username);
 
+    boolean existsByUsernameIgnoreCase(String username);
+
+    Optional<OwnUser> findByUsernameIgnoreCase(String username);
+
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     Optional<OwnUser> findByEmailIgnoreCase(String email);
 

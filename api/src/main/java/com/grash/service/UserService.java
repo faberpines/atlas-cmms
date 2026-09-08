@@ -92,19 +92,23 @@ public class UserService {
     private String[] allowedOrganizationAdmins;
 
 
-    public String signin(String email, String password, String type) {
+    public String signin(String identifier, String password, String type) {
         try {
-            cacheService.evictUserFromCache(email);
+            String normalizedIdentifier = identifier.trim().toLowerCase();
+            OwnUser loginUser = userRepository.findByEmailIgnoreCase(normalizedIdentifier)
+                    .orElseGet(() -> userRepository.findByUsernameIgnoreCase(normalizedIdentifier)
+                            .orElseThrow(() -> new CustomException("Invalid credentials", HttpStatus.FORBIDDEN)));
+            String authenticationEmail = loginUser.getEmail();
+            cacheService.evictUserFromCache(authenticationEmail);
             Authentication authentication =
-                    authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+                    authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationEmail, password));
             if (authentication.getAuthorities().stream().noneMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_" + type.toUpperCase()))) {
                 throw new CustomException("Invalid credentials", HttpStatus.FORBIDDEN);
             }
-            Optional<OwnUser> optionalUser = userRepository.findByEmailIgnoreCase(email);
-            OwnUser user = optionalUser.get();
+            OwnUser user = userRepository.findByEmailIgnoreCase(authenticationEmail).orElseThrow();
             user.setLastLogin(new Date());
             userRepository.save(user);
-            return jwtTokenProvider.createToken(email, Collections.singletonList(user.getRole().getRoleType()));
+            return jwtTokenProvider.createToken(authenticationEmail, Collections.singletonList(user.getRole().getRoleType()));
         } catch (AuthenticationException e) {
             throw new CustomException("Invalid credentials", HttpStatus.FORBIDDEN);
         }
@@ -392,6 +396,29 @@ public class UserService {
 
     public OwnUser save(OwnUser user) {
         return userRepository.save(user);
+    }
+
+    public OwnUser createManagedUser(ManagedUserCreateDTO request, OwnUser administrator, Role role) {
+        String username = request.getUsername().trim().toLowerCase();
+        if (!username.matches("[a-z0-9._-]{3,80}"))
+            throw new CustomException("Username must be 3-80 characters and use only letters, numbers, dots, dashes, or underscores", HttpStatus.NOT_ACCEPTABLE);
+        if (userRepository.existsByUsernameIgnoreCase(username))
+            throw new CustomException("Username is already in use", HttpStatus.NOT_ACCEPTABLE);
+
+        checkUsageBasedLimit(role.isPaid() ? 1 : 0);
+        OwnUser managedUser = new OwnUser();
+        String displayName = request.getDisplayName() == null || request.getDisplayName().trim().isEmpty()
+                ? username : request.getDisplayName().trim();
+        managedUser.setFirstName(displayName);
+        managedUser.setLastName("");
+        managedUser.setUsername(username);
+        managedUser.setEmail(username + "." + administrator.getCompany().getId() + "@local.atlas.invalid");
+        managedUser.setPassword(passwordEncoder.encode(request.getPassword()));
+        managedUser.setCompany(administrator.getCompany());
+        managedUser.setRole(role);
+        managedUser.setEnabled(true);
+        managedUser.setEnabledInSubscription(true);
+        return userRepository.save(managedUser);
     }
 
     public Collection<OwnUser> saveAll(Collection<OwnUser> users) {
