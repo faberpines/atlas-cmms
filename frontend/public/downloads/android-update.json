@@ -1,7 +1,7 @@
 {
-  "version": "1.2.2",
-  "versionCode": 14,
-  "apkUrl": "http://192.168.1.122:3000/downloads/Bay-Baby-Maintenance-1.2.2.apk",
-  "releaseNotes": "Renames Fleet Management to Tractors/Vehicles and places it directly below Warehouse Equipment.",
+  "version": "1.2.3",
+  "versionCode": 15,
+  "apkUrl": "http://100.69.251.12:3000/downloads/Bay-Baby-Maintenance-1.2.3.apk",
+  "releaseNotes": "Adds secure remote access through Tailscale and automatically replaces the old local Wi-Fi server address.",
   "publishedAt": "2026-09-07"
 }

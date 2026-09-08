@@ -11,6 +11,16 @@ const defaultApiUrl = Constants.expoConfig?.extra?.API_URL as
   | undefined;
 export const IS_LOCALHOST = false;
 
+const legacyLocalHosts = ['192.168.1.122'];
+
+const isLegacyLocalUrl = (url: string) => {
+  try {
+    return legacyLocalHosts.includes(new URL(url).hostname);
+  } catch {
+    return false;
+  }
+};
+
 // Function to get the API URL (either custom or default)
 export const getApiUrl = async (): Promise<string> => {
   try {
@@ -18,7 +28,14 @@ export const getApiUrl = async (): Promise<string> => {
     const customUrl = await AsyncStorage.getItem('customApiUrl');
 
     // Use custom URL if available, otherwise use default
-    const rawApiUrl = customUrl || defaultApiUrl;
+    // Older releases saved the LAN-only address as a custom server. Once a
+    // remote default is bundled, migrate that value so the app works away
+    // from the facility Wi-Fi without asking the user to clear app data.
+    if (customUrl && defaultApiUrl && isLegacyLocalUrl(customUrl)) {
+      await AsyncStorage.removeItem('customApiUrl');
+    }
+    const rawApiUrl =
+      customUrl && !isLegacyLocalUrl(customUrl) ? customUrl : defaultApiUrl;
     if (!rawApiUrl) {
       throw new Error(
         'No CMMS server is configured. Set API_URL or choose a custom server.'

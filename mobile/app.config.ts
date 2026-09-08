@@ -6,7 +6,7 @@ const googleServicesJson = process.env.GOOGLE_SERVICES_JSON;
 const easProjectId = process.env.EAS_PROJECT_ID;
 
 const appName = 'Bay Baby Maintenance';
-const appVersion = '1.2.0';
+const appVersion = '1.2.3';
 const androidPackage = 'com.baybabyproduce.maintenance';
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
@@ -45,7 +45,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       foregroundImage: './assets/images/adaptive-icon.png',
       backgroundColor: '#ffffff'
     },
-    versionCode: 12,
+    versionCode: 15,
     package: androidPackage,
     jsEngine: 'hermes',
     permissions: [
@@ -74,7 +74,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     API_URL: apiUrl,
     UPDATE_MANIFEST_URL:
       process.env.UPDATE_MANIFEST_URL ||
-      'http://192.168.1.122:3000/downloads/android-update.json',
+      'http://100.69.251.12:3000/downloads/android-update.json',
     ...(easProjectId ? { eas: { projectId: easProjectId } } : {})
   },
   plugins: [
