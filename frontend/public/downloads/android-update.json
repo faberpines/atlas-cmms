@@ -1,7 +1,7 @@
 {
-  "version": "1.2.1",
-  "versionCode": 13,
-  "apkUrl": "http://192.168.1.122:3000/downloads/Bay-Baby-Maintenance-1.2.1.apk",
-  "releaseNotes": "Organizes assets into Warehouse Equipment, Fleet Vehicles, Trailers, and Farm Implements with automatic sorting.",
+  "version": "1.2.2",
+  "versionCode": 14,
+  "apkUrl": "http://192.168.1.122:3000/downloads/Bay-Baby-Maintenance-1.2.2.apk",
+  "releaseNotes": "Renames Fleet Management to Tractors/Vehicles and places it directly below Warehouse Equipment.",
   "publishedAt": "2026-09-07"
 }

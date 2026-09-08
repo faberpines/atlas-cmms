@@ -1736,7 +1736,7 @@ const locale = {
     'Get started for free - No credit card required',
 
   // Fleet Management
-  fleet_management: 'Fleet Management',
+  fleet_management: 'Tractors/Vehicles',
   vehicles: 'Vehicles',
   add_vehicle: 'Add Vehicle',
 

@@ -157,6 +157,12 @@ const ownMenuItems: MenuItems[] = [
         permission: PermissionEntity.ASSETS
       },
       {
+        name: 'fleet_management',
+        link: '/app/fleet',
+        icon: DirectionsCarTwoToneIcon,
+        permission: PermissionEntity.FLEET
+      },
+      {
         name: 'trailers',
         link: '/app/assets?type=TRAILER',
         icon: Inventory2TwoToneIcon,
@@ -180,12 +186,6 @@ const ownMenuItems: MenuItems[] = [
         icon: LocationOnTwoToneIcon,
         permission: PermissionEntity.LOCATIONS,
         uiConfigKey: 'locations'
-      },
-      {
-        name: 'fleet_management',
-        link: '/app/fleet',
-        icon: DirectionsCarTwoToneIcon,
-        permission: PermissionEntity.FLEET
       },
       {
         name: 'parts_and_inventory',

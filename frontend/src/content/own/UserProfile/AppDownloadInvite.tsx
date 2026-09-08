@@ -25,7 +25,7 @@ type AndroidUpdate = {
   apkUrl: string;
 };
 
-const fallbackApkPath = '/downloads/Bay-Baby-Maintenance-1.2.1.apk';
+const fallbackApkPath = '/downloads/Bay-Baby-Maintenance-1.2.2.apk';
 
 function AppDownloadInvite() {
   const { t }: { t: any } = useTranslation();
