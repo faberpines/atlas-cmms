@@ -73,8 +73,11 @@ import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 import QrCode2TwoToneIcon from '@mui/icons-material/QrCode2TwoTone';
 import BuildTwoToneIcon from '@mui/icons-material/BuildTwoTone';
 import BarcodePrintDialog from '../components/BarcodePrintDialog';
+import BatchBarcodePrintDialog from '../components/BatchBarcodePrintDialog';
+import PrintTwoToneIcon from '@mui/icons-material/PrintTwoTone';
 import {
   FilterField,
+  Page,
   Pageable,
   SearchCriteria
 } from '../../../models/owns/page';
@@ -84,6 +87,7 @@ import SearchInput from '../components/SearchInput';
 import File from '../../../models/owns/file';
 import { PlanFeature } from '../../../models/owns/subscriptionPlan';
 import { getErrorMessage } from '../../../utils/api';
+import api from '../../../utils/api';
 
 const HIERARCHY_ZERO_PAGE_SIZE = 40;
 
@@ -109,6 +113,9 @@ function Assets() {
   const [barcodePrintAsset, setBarcodePrintAsset] = useState<AssetDTO | null>(
     null
   );
+  const [batchPrintAssets, setBatchPrintAssets] = useState<AssetDTO[]>([]);
+  const [batchPrintOpen, setBatchPrintOpen] = useState(false);
+  const [loadingBatchPrint, setLoadingBatchPrint] = useState(false);
   const dispatch = useDispatch();
   const { assetsHierarchy, loadingGet, loadingHierarchy, assets } = useSelector(
     (state) => state.assets
@@ -240,6 +247,43 @@ function Assets() {
   };
   const onPageChange = (number: number) => {
     setCriteria({ ...criteria, pageNum: number });
+  };
+  const loadAllPrintableBarcodes = async () => {
+    setLoadingBatchPrint(true);
+    try {
+      const printableAssets: AssetDTO[] = [];
+      let pageNum = 0;
+      let last = false;
+
+      while (!last) {
+        const page = await api.post<Page<AssetDTO>>('assets/search', {
+          filterFields: [{ field: 'archived', operation: 'eq', value: false }],
+          pageSize: 250,
+          pageNum,
+          sortField: 'name',
+          direction: 'ASC'
+        });
+        printableAssets.push(
+          ...page.content.filter((asset) => asset.barCode?.trim())
+        );
+        last = page.last || page.content.length === 0;
+        pageNum += 1;
+      }
+
+      if (!printableAssets.length) {
+        showSnackBar('No active assets have printable barcodes.', 'error');
+        return;
+      }
+      setBatchPrintAssets(printableAssets);
+      setBatchPrintOpen(true);
+    } catch (error) {
+      showSnackBar(
+        getErrorMessage(error, 'Unable to load asset barcodes.'),
+        'error'
+      );
+    } finally {
+      setLoadingBatchPrint(false);
+    }
   };
   const renderMenu = () => (
     <Menu
@@ -784,6 +828,11 @@ function Assets() {
             label={barcodePrintAsset.name}
           />
         )}
+        <BatchBarcodePrintDialog
+          open={batchPrintOpen}
+          onClose={() => setBatchPrintOpen(false)}
+          assets={batchPrintAssets}
+        />
         <Helmet>
           <title>{t(sectionType.toLowerCase())}</title>
         </Helmet>
@@ -797,6 +846,20 @@ function Assets() {
           >
             <SearchInput onChange={debouncedQueryChange} />
             <Stack direction="row" spacing={1}>
+              <Button
+                variant="outlined"
+                startIcon={
+                  loadingBatchPrint ? (
+                    <CircularProgress size="1rem" />
+                  ) : (
+                    <PrintTwoToneIcon />
+                  )
+                }
+                onClick={loadAllPrintableBarcodes}
+                disabled={loadingBatchPrint}
+              >
+                Print all barcodes
+              </Button>
               {view === 'hierarchy' &&
                 assetsHierarchy.length >= HIERARCHY_ZERO_PAGE_SIZE &&
                 assetsHierarchy.length % HIERARCHY_ZERO_PAGE_SIZE === 0 && (
