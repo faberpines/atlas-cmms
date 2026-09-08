@@ -4,6 +4,7 @@ import com.grash.advancedsearch.SearchCriteria;
 import com.grash.advancedsearch.SpecificationBuilder;
 import com.grash.dto.SignupSuccessResponse;
 import com.grash.dto.SuccessResponse;
+import com.grash.dto.ManagedUserCreateDTO;
 import com.grash.dto.UserPatchDTO;
 import com.grash.dto.UserSignupRequest;
 import com.grash.dto.license.LicenseEntitlement;
