@@ -134,7 +134,11 @@ export type RootStackParamList = {
   Meters: undefined;
   Parts: undefined;
   Locations: { id?: number; hierarchy?: number[] };
-  Assets: { id?: number; hierarchy?: number[] };
+  Assets: {
+    id?: number;
+    hierarchy?: number[];
+    equipmentType?: EquipmentType;
+  };
   PeopleTeams: undefined;
   VendorsCustomers: undefined;
   Notifications: undefined;
@@ -163,7 +167,7 @@ export type RootTabParamList = {
   Home: undefined;
   WorkOrders: { filterFields: FilterField[]; fromHome?: boolean };
   Parts: undefined;
-  Assets: undefined;
+  Assets: { equipmentType?: EquipmentType } | undefined;
   Fleet: undefined;
   Tagout: undefined;
   Requests: undefined;

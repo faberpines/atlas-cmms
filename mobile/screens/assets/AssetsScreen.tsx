@@ -142,7 +142,7 @@ export default function AssetsScreen({
     useSelector((state) => state.assets);
   const theme = useAppTheme();
   const [equipmentType, setEquipmentType] = useState<EquipmentType>(
-    'WAREHOUSE_EQUIPMENT'
+    route.params?.equipmentType ?? 'WAREHOUSE_EQUIPMENT'
   );
   const [view, setView] = useState<'hierarchy' | 'list'>('hierarchy');
   const dispatch = useDispatch();
@@ -183,6 +183,11 @@ export default function AssetsScreen({
   useEffect(() => {
     setCriteria(getCriteriaFromFilterFields([]));
   }, [equipmentType]);
+  useEffect(() => {
+    if (route.params?.equipmentType) {
+      setEquipmentType(route.params.equipmentType);
+    }
+  }, [route.params?.equipmentType]);
   const [currentAssets, setCurrentAssets] = useState<AssetRow[]>([]);
   useEffect(() => {
     if (

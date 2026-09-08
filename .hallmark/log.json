@@ -1,5 +1,14 @@
 [
   {
+    "date": "2026-09-08",
+    "scope": "app",
+    "macrostructure": "Workbench",
+    "theme": "custom",
+    "theme_axes": "warm-paper / field-equipment / evergreen-orange",
+    "enrichment": "operations destination grid",
+    "brief": "Role-aware mobile operations hub with direct warehouse, tractor, trailer, farm implement, parts, tagout, and barcode workflows"
+  },
+  {
     "date": "2026-09-05",
     "scope": "app",
     "macrostructure": "Workbench",

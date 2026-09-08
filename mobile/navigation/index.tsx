@@ -563,7 +563,7 @@ function BottomTabNavigator({ navigation }: any) {
 
   return (
     <BottomTab.Navigator
-      initialRouteName={isRequester ? 'Requests' : 'WorkOrders'}
+      initialRouteName="Home"
       screenOptions={({ navigation: tabNavigation }) => ({
         headerStyle: { backgroundColor: theme.colors.chassis },
         headerTintColor: theme.colors.paper,
@@ -610,6 +610,17 @@ function BottomTabNavigator({ navigation }: any) {
         tabBarLabelStyle: { fontSize: 11, fontWeight: '600' }
       })}
     >
+      <BottomTab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          title: 'Home',
+          headerShown: false,
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="grid-outline" color={color} size={25} />
+          )
+        }}
+      />
       {isRequester ? (
         <>
           <BottomTab.Screen
@@ -647,6 +658,16 @@ function BottomTabNavigator({ navigation }: any) {
               }}
             />
           )}
+          <BottomTab.Screen
+            name="Scan"
+            component={ScanAssetScreen}
+            options={{
+              title: t('scan'),
+              tabBarIcon: ({ color }) => (
+                <Ionicons name="barcode-outline" color={color} size={27} />
+              )
+            }}
+          />
           {hasViewPermission(PermissionEntity.PARTS_AND_MULTIPARTS) && (
             <BottomTab.Screen
               name="Parts"
@@ -665,6 +686,7 @@ function BottomTabNavigator({ navigation }: any) {
               component={AssetsScreen}
               options={{
                 title: t('warehouse_short'),
+                tabBarButton: () => null,
                 tabBarIcon: ({ color }) => (
                   <Ionicons name="barcode-outline" color={color} size={25} />
                 )
@@ -677,6 +699,7 @@ function BottomTabNavigator({ navigation }: any) {
               component={FleetScreen}
               options={{
                 title: t('fleet'),
+                tabBarButton: () => null,
                 tabBarIcon: ({ color }) => (
                   <Ionicons name="car-outline" color={color} size={25} />
                 )

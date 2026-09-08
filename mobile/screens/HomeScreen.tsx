@@ -1,361 +1,433 @@
-import {
-  RefreshControl,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity
-} from 'react-native';
-import { View } from '../components/Themed';
-import { RootTabScreenProps } from '../types';
-import { Badge, IconButton, Switch, Text, useTheme } from 'react-native-paper';
-import { useTranslation } from 'react-i18next';
-import { ExtendedWorkOrderStatus, getStatusColor } from '../utils/overall';
-import { FilterField, SearchCriteria } from '../models/page';
-import useAuth from '../hooks/useAuth';
+/* Hallmark · genre: modern-minimal · macrostructure: Workbench · design-system: design.md · designed-as-app */
 import * as React from 'react';
-import { useContext, useEffect, useState } from 'react';
-import { getMobileOverviewStats } from '../slices/analytics/workOrder';
-import { useDispatch, useSelector } from '../store';
-import { getNotifications } from '../slices/notification';
-import { useNetInfo } from '@react-native-community/netinfo';
-import { CustomSnackBarContext } from '../contexts/CustomSnackBarContext';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Text } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
+import { RootTabScreenProps } from '../types';
+import useAuth from '../hooks/useAuth';
 import { PermissionEntity } from '../models/role';
 import { useAppTheme } from '../custom-theme';
+
+type Destination = {
+  title: string;
+  eyebrow: string;
+  icon: React.ComponentProps<typeof MaterialCommunityIcons>['name'];
+  onPress: () => void;
+  visible: boolean;
+  featured?: boolean;
+};
 
 export default function HomeScreen({ navigation }: RootTabScreenProps<'Home'>) {
   const theme = useAppTheme();
   const { t } = useTranslation();
-  const dispatch = useDispatch();
-  const netInfo = useNetInfo();
-  const {
-    userSettings,
-    fetchUserSettings,
-    hasViewPermission,
-    hasViewOtherPermission,
-    patchUserSettings,
-    user
-  } = useAuth();
-  const { showSnackBar } = useContext(CustomSnackBarContext);
-  const { notifications } = useSelector((state) => state.notifications);
-  const { mobileOverview, loading } = useSelector((state) => state.woAnalytics);
-  const iconButtonStyle = {
-    ...styles.iconButton,
-    backgroundColor: theme.colors.background
-  };
-  const [assignedToMe, setAssignedToMe] = useState<boolean>(
-    userSettings?.statsForAssignedWorkOrders
-  );
-  const notificationsCriteria: SearchCriteria = {
-    filterFields: [],
-    pageSize: 15,
-    pageNum: 0,
-    direction: 'DESC'
-  };
-  const getTodayDates = () => {
-    const date1 = new Date();
-    const date2 = new Date();
-    date1.setHours(0, 0, 0, 0);
-    date2.setHours(24, 0, 0, 0);
-    return [date1, date2];
-  };
+  const { hasViewPermission, user } = useAuth();
+  const isRequester = user.role.code === 'REQUESTER';
 
-  useEffect(() => {
-    fetchUserSettings();
-    dispatch(getNotifications(notificationsCriteria));
-  }, []);
-
-  useEffect(() => {
-    if (userSettings?.statsForAssignedWorkOrders !== undefined) {
-      dispatch(getMobileOverviewStats(userSettings.statsForAssignedWorkOrders));
-      setAssignedToMe(userSettings.statsForAssignedWorkOrders);
-    }
-  }, [userSettings]);
-
-  const onRefresh = () => {
-    if (userSettings)
-      dispatch(getMobileOverviewStats(userSettings.statsForAssignedWorkOrders));
-  };
-  const stats: {
-    label: ExtendedWorkOrderStatus;
-    value: number;
-    filterFields: FilterField[];
-  }[] = [
-    {
-      label: 'OPEN',
-      value: mobileOverview.open,
-      filterFields: [
+  const destinations: Destination[] = isRequester
+    ? [
         {
-          field: 'status',
-          operation: 'in',
-          value: '',
-          values: ['OPEN'],
-          enumName: 'STATUS'
-        }
-      ]
-    },
-    {
-      label: 'ON_HOLD',
-      value: mobileOverview.onHold,
-      filterFields: [
-        {
-          field: 'status',
-          operation: 'in',
-          value: '',
-          values: ['ON_HOLD'],
-          enumName: 'STATUS'
-        }
-      ]
-    },
-    {
-      label: 'IN_PROGRESS',
-      value: mobileOverview.inProgress,
-      filterFields: [
-        {
-          field: 'status',
-          operation: 'in',
-          value: '',
-          values: ['IN_PROGRESS'],
-          enumName: 'STATUS'
-        }
-      ]
-    },
-    {
-      label: 'COMPLETE',
-      value: mobileOverview.complete,
-      filterFields: [
-        {
-          field: 'status',
-          operation: 'in',
-          value: '',
-          values: ['COMPLETE'],
-          enumName: 'STATUS'
-        }
-      ]
-    },
-    // {
-    //   label: 'LATE_WO', value: 3,
-    //   filterField: {
-    //     field: 'dueDate',
-    //     operation: 'ge',
-    //     value: 'ON_HOLD'
-    //   }
-    // },
-    {
-      label: 'TODAY_WO',
-      value: mobileOverview.today,
-      filterFields: [
-        {
-          field: 'dueDate',
-          operation: 'ge',
-          value: getTodayDates()[0],
-          enumName: 'JS_DATE'
+          title: t('scan'),
+          eyebrow: 'FIND EQUIPMENT',
+          icon: 'barcode-scan',
+          onPress: () => navigation.navigate('Scan'),
+          visible: true,
+          featured: true
         },
         {
-          field: 'dueDate',
-          operation: 'le',
-          value: getTodayDates()[1],
-          enumName: 'JS_DATE'
+          title: t('requests'),
+          eyebrow: 'MY REQUESTS',
+          icon: 'clipboard-text-outline',
+          onPress: () => navigation.navigate('Requests'),
+          visible: true
         }
       ]
-    },
-    {
-      label: 'HIGH_WO',
-      value: mobileOverview.high,
-      filterFields: [
+    : [
         {
-          field: 'priority',
-          operation: 'in',
-          value: '',
-          values: ['HIGH'],
-          enumName: 'PRIORITY'
+          title: t('work_orders'),
+          eyebrow: 'MAINTENANCE',
+          icon: 'clipboard-text-outline',
+          onPress: () =>
+            navigation.navigate('WorkOrders', { filterFields: [] }),
+          visible: hasViewPermission(PermissionEntity.WORK_ORDERS),
+          featured: true
+        },
+        {
+          title: 'Warehouse Equipment',
+          eyebrow: 'EQUIPMENT',
+          icon: 'warehouse',
+          onPress: () =>
+            navigation.navigate('Assets', {
+              equipmentType: 'WAREHOUSE_EQUIPMENT'
+            }),
+          visible: hasViewPermission(PermissionEntity.ASSETS)
+        },
+        {
+          title: 'Tractors / Vehicles',
+          eyebrow: 'FLEET',
+          icon: 'tractor-variant',
+          onPress: () => navigation.navigate('Fleet'),
+          visible: hasViewPermission(PermissionEntity.FLEET)
+        },
+        {
+          title: 'Trailers',
+          eyebrow: 'EQUIPMENT',
+          icon: 'truck-trailer',
+          onPress: () =>
+            navigation.navigate('Assets', { equipmentType: 'TRAILER' }),
+          visible: hasViewPermission(PermissionEntity.ASSETS)
+        },
+        {
+          title: 'Farm Implements',
+          eyebrow: 'EQUIPMENT',
+          icon: 'tractor',
+          onPress: () =>
+            navigation.navigate('Assets', { equipmentType: 'FARM_IMPLEMENT' }),
+          visible: hasViewPermission(PermissionEntity.ASSETS)
+        },
+        {
+          title: t('parts'),
+          eyebrow: 'INVENTORY',
+          icon: 'cube-outline',
+          onPress: () => navigation.navigate('Parts'),
+          visible: hasViewPermission(PermissionEntity.PARTS_AND_MULTIPARTS)
+        },
+        {
+          title: t('tagout'),
+          eyebrow: 'SAFETY',
+          icon: 'lock-alert-outline',
+          onPress: () => navigation.navigate('Tagout'),
+          visible: hasViewPermission(PermissionEntity.LOTO)
         }
-      ]
-    }
-  ];
+      ];
+
   return (
-    <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
-    <ScrollView
-      contentContainerStyle={{ paddingBottom: 100 }}
-      style={{ ...styles.container, backgroundColor: theme.colors.background }}
-      refreshControl={
-        <RefreshControl
-          refreshing={loading.mobileOverview}
-          colors={[theme.colors.primary]}
-          onRefresh={onRefresh}
-        />
-      }
+    <SafeAreaView
+      edges={['top']}
+      style={[styles.screen, { backgroundColor: theme.colors.chassis }]}
     >
-      <View
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center'
-        }}
-      >
-        {hasViewPermission(PermissionEntity.ASSETS) && (
-          <IconButton
-            style={iconButtonStyle}
-            icon={'magnify-scan'}
-            onPress={() => {
-              if (netInfo.isInternetReachable) {
-                navigation.navigate('ScanAsset');
-              } else {
-                showSnackBar(t('no_internet_connection'), 'error');
-              }
-            }}
-          />
-        )}
-        <IconButton
-          style={iconButtonStyle}
-          icon={'poll'}
-          onPress={() => {
-            navigation.navigate('WorkOrderStats');
-          }}
+      <View style={[styles.hero, { backgroundColor: theme.colors.chassis }]}>
+        <View
+          style={[styles.datum, { backgroundColor: theme.colors.seasonal }]}
         />
-        <View style={{ ...iconButtonStyle, position: 'relative' }}>
-          <IconButton
-            icon={'bell-outline'}
-            onPress={() => navigation.navigate('Notifications')}
-          />
-          <Badge
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              right: 0,
-              backgroundColor: theme.colors.error
-            }}
-            visible={
-              notifications.content.filter((notification) => !notification.seen)
-                .length > 0
-            }
-          >
-            {
-              notifications.content.filter((notification) => !notification.seen)
-                .length
-            }
-          </Badge>
-        </View>
-        {hasViewPermission(PermissionEntity.ASSETS) && (
-          <IconButton
-            style={iconButtonStyle}
-            icon={'package-variant-closed'}
-            onPress={() => navigation.navigate('Assets')}
-          />
-        )}
-      </View>
-      {hasViewOtherPermission(PermissionEntity.WORK_ORDERS) && (
-        <View
-          style={{
-            marginHorizontal: 10,
-            marginTop: 20,
-            paddingHorizontal: 10,
-            paddingVertical: 5,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            borderRadius: 10,
-            alignItems: 'center'
-          }}
-        >
-          <Text style={{ color: theme.colors.grey }}>
-            {t('only_assigned_to_me')}
-          </Text>
-          <Switch
-            value={assignedToMe}
-            onValueChange={(value) => {
-              patchUserSettings({
-                ...userSettings,
-                statsForAssignedWorkOrders: value
-              });
-              setAssignedToMe(value);
-            }}
-          />
-        </View>
-      )}
-      {stats.map((stat) => (
-        <View
-          key={stat.label}
-          style={{
-            marginHorizontal: 10,
-            marginTop: 20,
-            paddingHorizontal: 10,
-            paddingVertical: 5,
-            borderRadius: 10
-          }}
-        >
-          <TouchableOpacity
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              width: '100%'
-            }}
-            onPress={() => {
-              if (userSettings) {
-                const filterFields = stat.filterFields;
-                if (userSettings.statsForAssignedWorkOrders) {
-                  filterFields.push({
-                    field: 'assignedToUser',
-                    operation: 'eq',
-                    value: user.id
-                  });
-                }
-                navigation.navigate('WorkOrders', {
-                  filterFields,
-                  fromHome: true
-                });
-              }
-            }}
-          >
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                alignItems: 'center'
-              }}
+        <Text style={[styles.kicker, { color: theme.colors.seasonal }]}>
+          BAY BABY PRODUCE
+        </Text>
+        <Text style={[styles.title, { color: theme.colors.paper }]}>
+          Maintenance Workbench
+        </Text>
+        <Text style={[styles.subtitle, { color: theme.colors.outline }]}>
+          Choose an area to inspect, update, or create records.
+        </Text>
+        <View style={styles.utilities}>
+          {!isRequester && (
+            <TouchableOpacity
+              accessibilityLabel="Work order dashboard"
+              onPress={() => navigation.navigate('WorkOrderStats')}
+              style={[
+                styles.utilityButton,
+                { borderColor: theme.colors.primary }
+              ]}
             >
-              <View
-                style={{
-                  width: 2,
-                  height: 30,
-                  backgroundColor: getStatusColor(stat.label, theme)
-                }}
-              >
-                {null}
-              </View>
-              <Text
-                variant={'titleSmall'}
-                style={{ fontWeight: 'bold', marginLeft: 10 }}
-              >
-                {t(stat.label)}
-              </Text>
-            </View>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'flex-start'
-              }}
-            >
-              <Text style={{ color: theme.colors.grey }}>{stat.value}</Text>
-              <IconButton
-                icon={'chevron-double-right'}
-                iconColor={theme.colors.grey}
+              <MaterialCommunityIcons
+                name="chart-box-outline"
+                size={20}
+                color={theme.colors.paper}
               />
-            </View>
+              <Text
+                style={[styles.utilityLabel, { color: theme.colors.paper }]}
+              >
+                Dashboard
+              </Text>
+            </TouchableOpacity>
+          )}
+          <TouchableOpacity
+            accessibilityLabel="Notifications"
+            onPress={() => navigation.navigate('Notifications')}
+            style={[
+              styles.utilityButton,
+              { borderColor: theme.colors.primary }
+            ]}
+          >
+            <MaterialCommunityIcons
+              name="bell-outline"
+              size={20}
+              color={theme.colors.paper}
+            />
+            <Text style={[styles.utilityLabel, { color: theme.colors.paper }]}>
+              Alerts
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            accessibilityLabel="Settings"
+            onPress={() => navigation.navigate('Settings')}
+            style={[
+              styles.utilityButton,
+              { borderColor: theme.colors.primary }
+            ]}
+          >
+            <MaterialCommunityIcons
+              name="cog-outline"
+              size={20}
+              color={theme.colors.paper}
+            />
+            <Text style={[styles.utilityLabel, { color: theme.colors.paper }]}>
+              Settings
+            </Text>
           </TouchableOpacity>
         </View>
-      ))}
-    </ScrollView>
-    </View>
+      </View>
+
+      <ScrollView
+        style={{ backgroundColor: theme.colors.background }}
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.sectionHeading}>
+          <View>
+            <Text
+              style={[styles.sectionEyebrow, { color: theme.colors.primary }]}
+            >
+              OPERATIONS
+            </Text>
+            <Text
+              style={[styles.sectionTitle, { color: theme.colors.onSurface }]}
+            >
+              Where are you working?
+            </Text>
+          </View>
+          <TouchableOpacity
+            accessibilityRole="button"
+            accessibilityLabel="Scan an asset barcode"
+            onPress={() => navigation.navigate('Scan')}
+            style={[
+              styles.scanButton,
+              { backgroundColor: theme.colors.primary }
+            ]}
+          >
+            <MaterialCommunityIcons
+              name="barcode-scan"
+              size={23}
+              color={theme.colors.paper}
+            />
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.grid}>
+          {destinations
+            .filter((item) => item.visible)
+            .map((item) => (
+              <TouchableOpacity
+                key={item.title}
+                accessibilityRole="button"
+                onPress={item.onPress}
+                activeOpacity={0.78}
+                style={[
+                  styles.card,
+                  item.featured && styles.featuredCard,
+                  {
+                    backgroundColor: item.featured
+                      ? theme.colors.chassisRaised
+                      : theme.colors.paper,
+                    borderColor: item.featured
+                      ? theme.colors.chassisRaised
+                      : theme.colors.rule
+                  }
+                ]}
+              >
+                <View
+                  style={[
+                    styles.iconWell,
+                    {
+                      backgroundColor: item.featured
+                        ? theme.colors.primary
+                        : theme.colors.paperMuted
+                    }
+                  ]}
+                >
+                  <MaterialCommunityIcons
+                    name={item.icon}
+                    size={28}
+                    color={
+                      item.featured ? theme.colors.paper : theme.colors.primary
+                    }
+                  />
+                </View>
+                <Text
+                  style={[
+                    styles.cardEyebrow,
+                    {
+                      color: item.featured
+                        ? theme.colors.seasonal
+                        : theme.colors.onSurfaceVariant
+                    }
+                  ]}
+                >
+                  {item.eyebrow}
+                </Text>
+                <Text
+                  style={[
+                    styles.cardTitle,
+                    {
+                      color: item.featured
+                        ? theme.colors.paper
+                        : theme.colors.onSurface
+                    }
+                  ]}
+                >
+                  {item.title}
+                </Text>
+                <MaterialCommunityIcons
+                  name="arrow-right"
+                  size={20}
+                  color={
+                    item.featured ? theme.colors.paper : theme.colors.primary
+                  }
+                  style={styles.arrow}
+                />
+              </TouchableOpacity>
+            ))}
+        </View>
+
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Scan')}
+          style={[
+            styles.scanStrip,
+            {
+              backgroundColor: theme.colors.paper,
+              borderColor: theme.colors.rule
+            }
+          ]}
+        >
+          <View
+            style={[
+              styles.scanStripIcon,
+              { backgroundColor: theme.colors.primary }
+            ]}
+          >
+            <MaterialCommunityIcons
+              name="barcode-scan"
+              size={25}
+              color={theme.colors.paper}
+            />
+          </View>
+          <View style={styles.scanCopy}>
+            <Text style={[styles.scanTitle, { color: theme.colors.onSurface }]}>
+              Scan equipment barcode
+            </Text>
+            <Text
+              style={[
+                styles.scanSubtitle,
+                { color: theme.colors.onSurfaceVariant }
+              ]}
+            >
+              Open the asset record and start work immediately.
+            </Text>
+          </View>
+          <MaterialCommunityIcons
+            name="chevron-right"
+            size={25}
+            color={theme.colors.primary}
+          />
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1
+  screen: { flex: 1 },
+  hero: { paddingHorizontal: 20, paddingTop: 24, paddingBottom: 25 },
+  datum: { width: 44, height: 4, borderRadius: 2, marginBottom: 16 },
+  kicker: {
+    fontSize: 11,
+    fontWeight: '800',
+    letterSpacing: 1.5,
+    marginBottom: 6
   },
-  iconButton: { width: 50, height: 50, borderRadius: 25 }
+  title: {
+    fontFamily: 'serif',
+    fontSize: 29,
+    lineHeight: 34,
+    fontWeight: '700'
+  },
+  subtitle: { fontSize: 14, lineHeight: 20, marginTop: 7, maxWidth: 330 },
+  utilities: { flexDirection: 'row', gap: 8, marginTop: 18 },
+  utilityButton: {
+    minHeight: 44,
+    paddingHorizontal: 11,
+    borderWidth: 1,
+    borderRadius: 7,
+    flexDirection: 'row',
+    gap: 6,
+    alignItems: 'center'
+  },
+  utilityLabel: { fontSize: 12, fontWeight: '700' },
+  content: { padding: 16, paddingBottom: 110 },
+  sectionHeading: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 14
+  },
+  sectionEyebrow: { fontSize: 11, fontWeight: '800', letterSpacing: 1.2 },
+  sectionTitle: {
+    fontFamily: 'serif',
+    fontSize: 22,
+    fontWeight: '700',
+    marginTop: 2
+  },
+  scanButton: {
+    width: 48,
+    height: 48,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+  card: {
+    width: '48.5%',
+    minHeight: 160,
+    borderRadius: 10,
+    borderWidth: 1,
+    padding: 14
+  },
+  featuredCard: { width: '100%', minHeight: 148 },
+  iconWell: {
+    width: 48,
+    height: 48,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 18
+  },
+  cardEyebrow: { fontSize: 10, fontWeight: '800', letterSpacing: 1.1 },
+  cardTitle: {
+    fontSize: 17,
+    lineHeight: 21,
+    fontWeight: '700',
+    paddingRight: 24,
+    marginTop: 3
+  },
+  arrow: { position: 'absolute', right: 13, bottom: 14 },
+  scanStrip: {
+    minHeight: 76,
+    borderWidth: 1,
+    borderRadius: 10,
+    marginTop: 12,
+    padding: 12,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  scanStripIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  scanCopy: { flex: 1, paddingHorizontal: 12 },
+  scanTitle: { fontSize: 15, fontWeight: '700' },
+  scanSubtitle: { fontSize: 12, lineHeight: 17, marginTop: 2 }
 });
