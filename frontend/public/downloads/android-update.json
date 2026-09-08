@@ -1,7 +1,7 @@
 {
-  "version": "1.2.3",
-  "versionCode": 15,
-  "apkUrl": "http://100.69.251.12:3000/downloads/Bay-Baby-Maintenance-1.2.3.apk",
-  "releaseNotes": "Adds secure remote access through Tailscale and automatically replaces the old local Wi-Fi server address.",
-  "publishedAt": "2026-09-07"
+  "version": "1.2.4",
+  "versionCode": 16,
+  "apkUrl": "https://bbp.tailfda364.ts.net/downloads/Bay-Baby-Maintenance-1.2.4.apk",
+  "releaseNotes": "Adds direct HTTPS access from any internet connection without requiring the Tailscale app.",
+  "publishedAt": "2026-09-08"
 }
