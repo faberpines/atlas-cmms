@@ -12,3 +12,9 @@
 -keep class com.facebook.react.turbomodule.** { *; }
 
 # Add any project specific keep options here:
+
+# Optional desktop-Java adapters referenced by Jackson/JJWT are not available
+# or used on Android. Suppress their R8 lookup without retaining dead code.
+-dontwarn java.beans.ConstructorProperties
+-dontwarn java.beans.Transient
+-dontwarn javax.xml.bind.DatatypeConverter
