@@ -41,9 +41,8 @@ export default function LoginScreen({
           }}
           validationSchema={Yup.object().shape({
             email: Yup.string()
-              .email(t('invalid_email'))
               .max(255)
-              .required(t('required_email')),
+              .required('A username or email is required'),
             password: Yup.string().max(255).required(t('required_password'))
           })}
           onSubmit={async (
@@ -80,7 +79,7 @@ export default function LoginScreen({
             <View style={{ alignSelf: 'stretch', paddingHorizontal: 30 }}>
               <TextInput
                 error={Boolean(touched.email && errors.email)}
-                label={t('email')}
+                label="Username or email"
                 onBlur={handleBlur('email')}
                 onChangeText={handleChange('email')}
                 value={values.email}

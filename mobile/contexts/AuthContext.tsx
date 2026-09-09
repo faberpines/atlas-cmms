@@ -61,7 +61,7 @@ export type FieldConfigurationsType = 'workOrder' | 'request';
 
 interface AuthContextValue extends AuthState {
   method: 'JWT';
-  login: (email: string, password: string) => Promise<void>;
+  login: (identifier: string, password: string) => Promise<void>;
   logout: () => void;
   register: (values: any) => Promise<void>;
   getInfos: () => void;
@@ -729,11 +729,11 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
       }
     });
   };
-  const login = async (email: string, password: string): Promise<void> => {
+  const login = async (identifier: string, password: string): Promise<void> => {
     const response = await api.post<{ accessToken: string }>(
       'auth/signin',
       {
-        email,
+        email: identifier.trim(),
         type: 'client',
         password
       },

@@ -1,7 +1,7 @@
 {
-  "version": "1.2.8",
-  "versionCode": 20,
-  "apkUrl": "https://bbp.tailfda364.ts.net/downloads/Bay-Baby-Maintenance-1.2.8.apk",
-  "releaseNotes": "Adds a Wash Tanks tab for recording turbidity, chemical PPM, tote levels, shift, date, and notes directly from the Android app.",
+  "version": "1.2.9",
+  "versionCode": 21,
+  "apkUrl": "https://bbp.tailfda364.ts.net/downloads/Bay-Baby-Maintenance-1.2.9.apk",
+  "releaseNotes": "The Android app login now accepts either a username or an email address.",
   "publishedAt": "2026-09-09"
 }
