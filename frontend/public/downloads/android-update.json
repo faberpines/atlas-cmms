@@ -1,7 +1,7 @@
 {
-  "version": "1.2.7",
-  "versionCode": 19,
-  "apkUrl": "https://bbp.tailfda364.ts.net/downloads/Bay-Baby-Maintenance-1.2.7.apk",
-  "releaseNotes": "A redesigned operations hub with clearer navigation for warehouse equipment, tractors and vehicles, trailers, farm implements, work orders, parts, tagout, and barcode scanning.",
-  "publishedAt": "2026-09-08"
+  "version": "1.2.8",
+  "versionCode": 20,
+  "apkUrl": "https://bbp.tailfda364.ts.net/downloads/Bay-Baby-Maintenance-1.2.8.apk",
+  "releaseNotes": "Adds a Wash Tanks tab for recording turbidity, chemical PPM, tote levels, shift, date, and notes directly from the Android app.",
+  "publishedAt": "2026-09-09"
 }

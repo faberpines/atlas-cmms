@@ -115,6 +115,7 @@ import LogVehicleUsageScreen from '../screens/fleet/LogVehicleUsageScreen';
 import TagoutScreen from '../screens/tagout/TagoutScreen';
 import CreateTagoutScreen from '../screens/tagout/CreateTagoutScreen';
 import ScannedAssetScreen from '../screens/assets/ScannedAssetScreen';
+import WashTankScreen from '../screens/WashTankScreen';
 
 export default function Navigation({
   colorScheme
@@ -659,12 +660,12 @@ function BottomTabNavigator({ navigation }: any) {
             />
           )}
           <BottomTab.Screen
-            name="Scan"
-            component={ScanAssetScreen}
+            name="WashTanks"
+            component={WashTankScreen}
             options={{
-              title: t('scan'),
+              title: 'Wash Tanks',
               tabBarIcon: ({ color }) => (
-                <Ionicons name="barcode-outline" color={color} size={27} />
+                <Ionicons name="water-outline" color={color} size={27} />
               )
             }}
           />

@@ -172,6 +172,7 @@ export type RootTabParamList = {
   Tagout: undefined;
   Requests: undefined;
   Scan: undefined;
+  WashTanks: undefined;
   AddEntities: undefined;
   MoreEntities: undefined;
 };
