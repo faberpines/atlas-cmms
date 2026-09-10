@@ -1,0 +1,1 @@
+export const DESKTOP_SIDEBAR_RAIL_WIDTH = 84;

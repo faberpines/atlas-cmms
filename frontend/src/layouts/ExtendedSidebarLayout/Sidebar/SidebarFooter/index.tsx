@@ -52,6 +52,7 @@ function SidebarFooter() {
 
   return (
     <Box
+      className="sidebar-footer"
       sx={{
         height: 64,
         gap: 0.75,

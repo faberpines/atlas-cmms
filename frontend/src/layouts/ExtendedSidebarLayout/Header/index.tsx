@@ -20,6 +20,7 @@ import HeaderUserbox from './Userbox';
 import { useTranslation } from 'react-i18next';
 import { TitleContext } from '../../../contexts/TitleContext';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { DESKTOP_SIDEBAR_RAIL_WIDTH } from '../constants';
 
 const HeaderWrapper = styled(Box)(
   ({ theme }) => `
@@ -36,7 +37,7 @@ const HeaderWrapper = styled(Box)(
         justify-content: space-between;
         width: 100%;
         @media (min-width: ${theme.breakpoints.values.lg}px) {
-            left: ${theme.sidebar.width};
+            left: ${DESKTOP_SIDEBAR_RAIL_WIDTH}px;
             width: auto;
         }
 `
@@ -70,9 +71,13 @@ function Header() {
           disabled={location.key === 'default'}
           sx={{ width: 44, height: 44 }}
         >
-          <ArrowBackTwoToneIcon/>
+          <ArrowBackTwoToneIcon />
         </IconButton>
-        <Typography variant="h2" noWrap sx={{ fontSize: { xs: 18, sm: 21 }, fontWeight: 700 }}>
+        <Typography
+          variant="h2"
+          noWrap
+          sx={{ fontSize: { xs: 18, sm: 21 }, fontWeight: 700 }}
+        >
           {title}
         </Typography>
         <Typography
@@ -99,7 +104,12 @@ function Header() {
           }}
         >
           <Tooltip arrow title={t('toggle_menu')}>
-            <IconButton aria-label={t('toggle_menu')} color="primary" onClick={toggleSidebar} sx={{ width: 44, height: 44 }}>
+            <IconButton
+              aria-label={t('toggle_menu')}
+              color="primary"
+              onClick={toggleSidebar}
+              sx={{ width: 44, height: 44 }}
+            >
               {!sidebarToggle ? (
                 <MenuTwoToneIcon fontSize="small" />
               ) : (

@@ -4,6 +4,7 @@ import { Outlet } from 'react-router-dom';
 
 import Sidebar from './Sidebar';
 import Header from './Header';
+import { DESKTOP_SIDEBAR_RAIL_WIDTH } from './constants';
 
 interface ExtendedSidebarLayoutProps {
   children?: ReactNode;
@@ -56,7 +57,7 @@ const ExtendedSidebarLayout: FC<ExtendedSidebarLayoutProps> = () => {
             flex: 1,
             pt: `${theme.header.height}`,
             [theme.breakpoints.up('lg')]: {
-              ml: `${theme.sidebar.width}`,
+              ml: `${DESKTOP_SIDEBAR_RAIL_WIDTH}px`,
               borderLeft: '4px solid rgba(226, 112, 57, 0.72)'
             },
             '@media print': {

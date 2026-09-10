@@ -91,7 +91,7 @@ const SidebarMenuItem: FC<SidebarMenuItemProps> = ({
           ) : (
             <Badge badgeContent={badge} />
           )}
-          {t(name)}
+          <span className="sidebar-menu-label">{t(name)}</span>
         </Button>
         <Collapse in={menuToggle}>{children}</Collapse>
       </ListItem>
@@ -107,7 +107,7 @@ const SidebarMenuItem: FC<SidebarMenuItemProps> = ({
         startIcon={Icon && <Icon />}
         aria-current={active ? 'page' : undefined}
       >
-        {t(name)}
+        <span className="sidebar-menu-label">{t(name)}</span>
         {badgeTooltip ? (
           <TooltipWrapper title={badgeTooltip} arrow placement="right">
             {badge === '' ? (
