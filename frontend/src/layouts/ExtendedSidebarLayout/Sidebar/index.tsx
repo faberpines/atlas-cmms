@@ -11,7 +11,6 @@ import {
   useTheme
 } from '@mui/material';
 import SidebarMenu from './SidebarMenu';
-import SidebarFooter from './SidebarFooter';
 import Logo from 'src/components/LogoSign';
 import { isWhiteLabeled } from '../../../config';
 import { DESKTOP_SIDEBAR_RAIL_WIDTH } from '../constants';
@@ -24,7 +23,7 @@ const SidebarWrapper = styled(Box)(
         position: relative;
         z-index: 7;
         height: 100%;
-        padding-bottom: 64px;
+        padding-bottom: 0;
         border-right: 1px solid ${theme.colors.alpha.trueWhite[10]};
         overflow: hidden;
         transition: width 220ms cubic-bezier(0.16, 1, 0.3, 1),
@@ -96,13 +95,6 @@ const SidebarWrapper = styled(Box)(
             }
           }
 
-          .sidebar-footer {
-            height: 112px;
-            padding-left: 14px;
-            padding-right: 14px;
-            flex-wrap: wrap;
-            align-content: center;
-          }
         }
 
         .sidebar-brand-logo,
@@ -212,12 +204,6 @@ function Sidebar() {
           />
           <SidebarMenu />
         </Scrollbar>
-        <Divider
-          sx={{
-            background: theme.colors.alpha.trueWhite[10]
-          }}
-        />
-        <SidebarFooter />
       </SidebarWrapper>
       <Drawer
         data-print-hide="true"
@@ -247,7 +233,6 @@ function Sidebar() {
             />
             <SidebarMenu />
           </Scrollbar>
-          <SidebarFooter />
         </SidebarWrapper>
       </Drawer>
     </>

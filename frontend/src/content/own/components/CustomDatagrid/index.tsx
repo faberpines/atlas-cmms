@@ -1,4 +1,9 @@
-import { DataGrid, DataGridProps, GridToolbarColumnsButton, GridToolbarContainer } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  DataGridProps,
+  GridToolbarColumnsButton,
+  GridToolbarContainer
+} from '@mui/x-data-grid';
 import { useTranslation } from 'react-i18next';
 import { Box, Stack, Typography, useTheme } from '@mui/material';
 import gridLocaleText from './GridLocaleText';
@@ -50,7 +55,9 @@ function CustomDataGrid(props: CustomDatagridProps) {
   const visibilityStorageKey = `col_vis_${storageKey}`;
   const widthStorageKey = `col_width_${storageKey}`;
 
-  const [columnVisibilityModel, setColumnVisibilityModel] = useState<Record<string, boolean>>(() => {
+  const [columnVisibilityModel, setColumnVisibilityModel] = useState<
+    Record<string, boolean>
+  >(() => {
     try {
       const saved = localStorage.getItem(visibilityStorageKey);
       return saved ? JSON.parse(saved) : {};
@@ -61,17 +68,21 @@ function CustomDataGrid(props: CustomDatagridProps) {
 
   const handleColumnVisibilityChange = (model: Record<string, boolean>) => {
     setColumnVisibilityModel(model);
-    try { localStorage.setItem(visibilityStorageKey, JSON.stringify(model)); } catch {}
+    try {
+      localStorage.setItem(visibilityStorageKey, JSON.stringify(model));
+    } catch {}
   };
 
-  const [columnWidths, setColumnWidths] = useState<Record<string, number>>(() => {
-    try {
-      const saved = localStorage.getItem(widthStorageKey);
-      return saved ? JSON.parse(saved) : {};
-    } catch {
-      return {};
+  const [columnWidths, setColumnWidths] = useState<Record<string, number>>(
+    () => {
+      try {
+        const saved = localStorage.getItem(widthStorageKey);
+        return saved ? JSON.parse(saved) : {};
+      } catch {
+        return {};
+      }
     }
-  });
+  );
   const savedWidthsRef = useRef(JSON.stringify(columnWidths));
 
   const beginColumnResize = (
@@ -82,23 +93,35 @@ function CustomDataGrid(props: CustomDatagridProps) {
     event.preventDefault();
     event.stopPropagation();
     const startX = event.clientX;
-    const startWidth = columnWidths[column.field] || currentWidth || column.width || 100;
+    const startWidth =
+      columnWidths[column.field] || currentWidth || column.width || 100;
     const minWidth = column.minWidth || 50;
     const maxWidth = column.maxWidth || 1200;
     let finalWidth = startWidth;
 
     const onMouseMove = (moveEvent: MouseEvent) => {
-      finalWidth = Math.max(minWidth, Math.min(maxWidth, startWidth + moveEvent.clientX - startX));
-      setColumnWidths((current) => ({ ...current, [column.field]: finalWidth }));
+      finalWidth = Math.max(
+        minWidth,
+        Math.min(maxWidth, startWidth + moveEvent.clientX - startX)
+      );
+      setColumnWidths((current) => ({
+        ...current,
+        [column.field]: finalWidth
+      }));
     };
     const onMouseUp = () => {
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
-      const nextWidths = { ...columnWidths, [column.field]: Math.round(finalWidth) };
+      const nextWidths = {
+        ...columnWidths,
+        [column.field]: Math.round(finalWidth)
+      };
       savedWidthsRef.current = JSON.stringify(nextWidths);
-      try { localStorage.setItem(widthStorageKey, savedWidthsRef.current); } catch {}
+      try {
+        localStorage.setItem(widthStorageKey, savedWidthsRef.current);
+      } catch {}
     };
 
     document.body.style.cursor = 'col-resize';
@@ -109,77 +132,94 @@ function CustomDataGrid(props: CustomDatagridProps) {
 
   const handleGridStateChange = (state: any, event: any, details: any) => {
     const nextWidths = Object.fromEntries(
-      Object.entries(state?.columns?.lookup || {}).map(([field, column]: [string, any]) =>
-        [field, Math.round(column.computedWidth || column.width)]
+      Object.entries(state?.columns?.lookup || {}).map(
+        ([field, column]: [string, any]) => [
+          field,
+          Math.round(column.computedWidth || column.width)
+        ]
       )
     );
     const serialized = JSON.stringify(nextWidths);
     if (serialized !== savedWidthsRef.current) {
       savedWidthsRef.current = serialized;
-      try { localStorage.setItem(widthStorageKey, serialized); } catch {}
+      try {
+        localStorage.setItem(widthStorageKey, serialized);
+      } catch {}
     }
     props.onStateChange?.(state, event, details);
   };
 
-  const persistedColumns = useMemo(() => props.columns
-    .filter((col) => col.uiConfigKey ? user.uiConfiguration[col.uiConfigKey] : true)
-    .map((col) => {
-      const savedWidth = columnWidths[col.field];
-      const originalRenderHeader = col.renderHeader;
-      return {
-        ...col,
-        ...(savedWidth ? { flex: undefined, width: savedWidth } : {}),
-        renderHeader: (params) => (
-          <Box
-            sx={{
-              alignItems: 'center',
-              display: 'flex',
-              height: '100%',
-              minWidth: 0,
-              position: 'relative',
-              width: '100%'
-            }}
-          >
-            <Box sx={{ minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis' }}>
-              {originalRenderHeader ? originalRenderHeader(params) : col.headerName}
-            </Box>
-            {col.resizable !== false && (
-              <Box
-                aria-label={`Resize ${col.headerName || col.field} column`}
-                onMouseDown={(event) => beginColumnResize(
-                  event,
-                  col,
-                  params.colDef.computedWidth
-                )}
-                role="separator"
-                sx={{
-                  bottom: 0,
-                  cursor: 'col-resize',
-                  position: 'absolute',
-                  right: 0,
-                  top: 0,
-                  width: 18,
-                  zIndex: 3,
-                  '&::after': {
-                    bgcolor: 'divider',
-                    bottom: 9,
-                    content: '""',
-                    position: 'absolute',
-                    right: 0,
-                    top: 9,
-                    width: 1
-                  },
-                  '&:hover::after': {
-                    bgcolor: 'primary.main',
-                    width: 2
-                  }
-                }}
-              />
-            )}
-          </Box>
+  const persistedColumns = useMemo(
+    () =>
+      props.columns
+        .filter((col) =>
+          col.uiConfigKey ? user.uiConfiguration[col.uiConfigKey] : true
         )
-      };
-    }), [props.columns, columnWidths, user.uiConfiguration]);
+        .map((col) => {
+          const savedWidth = columnWidths[col.field];
+          const originalRenderHeader = col.renderHeader;
+          return {
+            ...col,
+            ...(savedWidth ? { flex: undefined, width: savedWidth } : {}),
+            renderHeader: (params) => (
+              <Box
+                sx={{
+                  alignItems: 'center',
+                  display: 'flex',
+                  height: '100%',
+                  minWidth: 0,
+                  position: 'relative',
+                  width: '100%'
+                }}
+              >
+                <Box
+                  sx={{
+                    minWidth: 0,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis'
+                  }}
+                >
+                  {originalRenderHeader
+                    ? originalRenderHeader(params)
+                    : col.headerName}
+                </Box>
+                {col.resizable !== false && (
+                  <Box
+                    aria-label={`Resize ${col.headerName || col.field} column`}
+                    onMouseDown={(event) =>
+                      beginColumnResize(event, col, params.colDef.computedWidth)
+                    }
+                    role="separator"
+                    sx={{
+                      backgroundColor: 'transparent',
+                      bottom: 0,
+                      cursor: 'col-resize',
+                      position: 'absolute',
+                      right: 0,
+                      top: 0,
+                      width: 18,
+                      zIndex: 3,
+                      '&::after': {
+                        bottom: 9,
+                        content: '""',
+                        opacity: 0,
+                        position: 'absolute',
+                        right: 0,
+                        top: 9,
+                        width: 1
+                      },
+                      '&:hover::after': {
+                        opacity: 0
+                      }
+                    }}
+                  />
+                )}
+              </Box>
+            )
+          };
+        }),
+    [props.columns, columnWidths, user.uiConfiguration]
+  );
 
   const getTableHeight = () => {
     if (tableRef.current) {
@@ -202,7 +242,14 @@ function CustomDataGrid(props: CustomDatagridProps) {
       return [key, t(value)];
     })
   );
-  const { notClickable, pro, columns, apiRef: _apiRef, storageKey: _sk, ...rest } = props;
+  const {
+    notClickable,
+    pro,
+    columns,
+    apiRef: _apiRef,
+    storageKey: _sk,
+    ...rest
+  } = props;
 
   // Allow a caller toolbar override; otherwise every grid gets a Columns chooser.
   const callerComponents = (rest as any).components ?? {};
@@ -213,9 +260,11 @@ function CustomDataGrid(props: CustomDatagridProps) {
   return (
     <div
       ref={tableRef}
-      style={props.autoHeight
-        ? { width: '100%' }
-        : { height: tableHeight, minHeight: 360, width: '100%' }}
+      style={
+        props.autoHeight
+          ? { width: '100%' }
+          : { height: tableHeight, minHeight: 360, width: '100%' }
+      }
     >
       {/*@ts-ignore*/}
       <DataGrid
@@ -235,13 +284,17 @@ function CustomDataGrid(props: CustomDatagridProps) {
             fontSize: theme.typography.pxToRem(11),
             color: theme.palette.text.secondary
           },
+          '& .MuiDataGrid-columnSeparator': {
+            opacity: 0
+          },
           '& .MuiDataGrid-columnHeader:focus, & .MuiDataGrid-cell:focus': {
             outline: 'none'
           },
-          '& .MuiDataGrid-columnHeader:focus-visible, & .MuiDataGrid-cell:focus-visible': {
-            outline: `2px solid ${theme.palette.primary.main}`,
-            outlineOffset: -2
-          },
+          '& .MuiDataGrid-columnHeader:focus-visible, & .MuiDataGrid-cell:focus-visible':
+            {
+              outline: `2px solid ${theme.palette.primary.main}`,
+              outlineOffset: -2
+            },
           '& .MuiDataGrid-row': {
             cursor: notClickable ? 'auto' : 'pointer',
             transition: 'background-color 120ms cubic-bezier(0.16, 1, 0.3, 1)',
@@ -295,4 +348,3 @@ function CustomDataGrid(props: CustomDatagridProps) {
 }
 
 export default CustomDataGrid;
-
