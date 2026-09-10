@@ -56,10 +56,18 @@ const SidebarWrapper = styled(Box)(
 
           .sidebar-brand-caption,
           .MuiListSubheader-root,
-          .sidebar-menu-label,
           .MuiButton-endIcon,
           .MuiCollapse-root,
           .MuiBadge-root {
+            opacity: 0;
+            pointer-events: none;
+          }
+
+          .sidebar-menu-label {
+            position: absolute;
+            width: 0;
+            height: 0;
+            overflow: hidden;
             opacity: 0;
             pointer-events: none;
           }
@@ -77,8 +85,15 @@ const SidebarWrapper = styled(Box)(
           }
 
           .MuiListItem-root .MuiButton-startIcon {
+            flex: 0 0 24px;
+            width: 24px;
             margin-left: 0;
             margin-right: 0;
+
+            .MuiSvgIcon-root {
+              width: 22px;
+              height: 22px;
+            }
           }
 
           .sidebar-footer {
