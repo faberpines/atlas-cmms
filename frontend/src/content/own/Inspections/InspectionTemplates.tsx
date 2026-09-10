@@ -27,13 +27,13 @@ import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import {
-  DataGrid,
   GridActionsCellItem,
   GridEnrichedColDef,
   GridRenderCellParams,
   GridRowParams,
   GridToolbar
 } from '@mui/x-data-grid';
+import CustomDataGrid from '../components/CustomDatagrid';
 import {
   createTemplate,
   deleteTemplate,
@@ -237,7 +237,8 @@ export default function InspectionTemplates({ templates, loading }: Props) {
             New Template
           </Button>
         </Box>
-        <DataGrid
+        <CustomDataGrid
+          storageKey="inspection_templates"
           rows={templates}
           columns={columns}
           loading={loading}

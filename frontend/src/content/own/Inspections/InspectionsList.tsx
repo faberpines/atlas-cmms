@@ -28,13 +28,13 @@ import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
 import PrintTwoToneIcon from '@mui/icons-material/PrintTwoTone';
 import {
-  DataGrid,
   GridActionsCellItem,
   GridEnrichedColDef,
   GridRenderCellParams,
   GridRowParams,
   GridToolbar
 } from '@mui/x-data-grid';
+import CustomDataGrid from '../components/CustomDatagrid';
 import { createInspection, deleteInspection, editInspection } from '../../../slices/inspection';
 import { addFilesToWorkOrder } from '../../../slices/workOrder';
 import {
@@ -316,7 +316,8 @@ export default function InspectionsList({
             New Inspection
           </Button>
         </Box>
-        <DataGrid
+        <CustomDataGrid
+          storageKey="inspections"
           rows={filteredInspections}
           columns={columns}
           loading={loading}

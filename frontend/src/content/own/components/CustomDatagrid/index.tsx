@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Stack, Typography, useTheme } from '@mui/material';
 import gridLocaleText from './GridLocaleText';
 import useWindowDimensions from '../../../../hooks/useWindowDimensions';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { UiConfiguration } from '../../../../models/owns/uiConfiguration';
 import type {
   GridColumns,
@@ -19,8 +19,8 @@ interface CustomDatagridProps extends DataGridProps {
   pro?: boolean;
   apiRef?: any;
   columns: CustomDatagridColumn[];
-  /** When provided, a "Columns" button appears in the toolbar and visibility
-   *  preferences are saved to localStorage under this key. */
+  /** Optional stable name for the saved layout. When omitted, one is generated
+   *  from the current page and the grid's column fields. */
   storageKey?: string;
 }
 
@@ -40,14 +40,19 @@ function CustomDataGrid(props: CustomDatagridProps) {
   const [tableHeight, setTableHeight] = useState<number>(500);
   const { user } = useAuth();
 
-  // ── Persistent column visibility ──────────────────────────────────────────
-  const { storageKey } = props;
-  const lsKey = storageKey ? `col_vis_${storageKey}` : null;
+  // Keep every grid's visible columns and resized widths on this browser.
+  const generatedStorageKey = useMemo(() => {
+    const route = window.location.pathname.replace(/[^a-z0-9]+/gi, '_');
+    const fields = props.columns.map(({ field }) => field).join('_');
+    return `auto${route}_${fields}`;
+  }, [props.columns]);
+  const storageKey = props.storageKey || generatedStorageKey;
+  const visibilityStorageKey = `col_vis_${storageKey}`;
+  const widthStorageKey = `col_width_${storageKey}`;
 
   const [columnVisibilityModel, setColumnVisibilityModel] = useState<Record<string, boolean>>(() => {
-    if (!lsKey) return {};
     try {
-      const saved = localStorage.getItem(lsKey);
+      const saved = localStorage.getItem(visibilityStorageKey);
       return saved ? JSON.parse(saved) : {};
     } catch {
       return {};
@@ -56,11 +61,38 @@ function CustomDataGrid(props: CustomDatagridProps) {
 
   const handleColumnVisibilityChange = (model: Record<string, boolean>) => {
     setColumnVisibilityModel(model);
-    if (lsKey) {
-      try { localStorage.setItem(lsKey, JSON.stringify(model)); } catch {}
-    }
+    try { localStorage.setItem(visibilityStorageKey, JSON.stringify(model)); } catch {}
   };
-  // ─────────────────────────────────────────────────────────────────────────
+
+  const [columnWidths] = useState<Record<string, number>>(() => {
+    try {
+      const saved = localStorage.getItem(widthStorageKey);
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+  const savedWidthsRef = useRef(JSON.stringify(columnWidths));
+
+  const handleGridStateChange = (state: any, event: any, details: any) => {
+    const nextWidths = Object.fromEntries(
+      Object.entries(state?.columns?.lookup || {}).map(([field, column]: [string, any]) =>
+        [field, Math.round(column.computedWidth || column.width)]
+      )
+    );
+    const serialized = JSON.stringify(nextWidths);
+    if (serialized !== savedWidthsRef.current) {
+      savedWidthsRef.current = serialized;
+      try { localStorage.setItem(widthStorageKey, serialized); } catch {}
+    }
+    props.onStateChange?.(state, event, details);
+  };
+
+  const persistedColumns = useMemo(() => props.columns
+    .filter((col) => col.uiConfigKey ? user.uiConfiguration[col.uiConfigKey] : true)
+    .map((col) => columnWidths[col.field]
+      ? { ...col, flex: undefined, width: columnWidths[col.field] }
+      : col), [props.columns, columnWidths, user.uiConfiguration]);
 
   const getTableHeight = () => {
     if (tableRef.current) {
@@ -85,17 +117,18 @@ function CustomDataGrid(props: CustomDatagridProps) {
   );
   const { notClickable, pro, columns, apiRef: _apiRef, storageKey: _sk, ...rest } = props;
 
-  // Build components object: allow caller to override toolbar, but if storageKey
-  // is set and no toolbar override is provided, inject the columns toolbar.
+  // Allow a caller toolbar override; otherwise every grid gets a Columns chooser.
   const callerComponents = (rest as any).components ?? {};
-  const resolvedComponents = storageKey && !callerComponents.Toolbar
+  const resolvedComponents = !callerComponents.Toolbar
     ? { ...callerComponents, Toolbar: ColumnsToolbar }
     : callerComponents;
 
   return (
     <div
       ref={tableRef}
-      style={{ height: tableHeight, minHeight: 360, width: '100%' }}
+      style={props.autoHeight
+        ? { width: '100%' }
+        : { height: tableHeight, minHeight: 360, width: '100%' }}
     >
       {/*@ts-ignore*/}
       <DataGrid
@@ -163,13 +196,10 @@ function CustomDataGrid(props: CustomDatagridProps) {
           ...resolvedComponents
         }}
         {...rest}
-        columns={props.columns.filter((col) =>
-          col.uiConfigKey ? user.uiConfiguration[col.uiConfigKey] : true
-        )}
-        {...(lsKey ? {
-          columnVisibilityModel,
-          onColumnVisibilityModelChange: handleColumnVisibilityChange
-        } : {})}
+        columns={persistedColumns}
+        columnVisibilityModel={columnVisibilityModel}
+        onColumnVisibilityModelChange={handleColumnVisibilityChange}
+        onStateChange={handleGridStateChange}
         disableSelectionOnClick
         localeText={translatedGridLocaleText}
       />

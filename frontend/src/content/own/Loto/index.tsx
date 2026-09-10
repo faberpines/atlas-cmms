@@ -27,7 +27,8 @@ import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import PrintTwoToneIcon from '@mui/icons-material/PrintTwoTone';
-import { DataGrid, GridEnrichedColDef } from '@mui/x-data-grid';
+import { GridEnrichedColDef } from '@mui/x-data-grid';
+import CustomDataGrid from '../components/CustomDatagrid';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -374,7 +375,8 @@ function Loto() {
         </Box>
 
         {/* DataGrid */}
-        <DataGrid
+        <CustomDataGrid
+          storageKey="tagout"
           rows={lotoRecords}
           columns={columns}
           loading={loadingGet}

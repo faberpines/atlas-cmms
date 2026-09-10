@@ -28,7 +28,8 @@ import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import PrintTwoToneIcon from '@mui/icons-material/PrintTwoTone';
 import WaterTwoToneIcon from '@mui/icons-material/WaterTwoTone';
-import { DataGrid, GridEnrichedColDef } from '@mui/x-data-grid';
+import { GridEnrichedColDef } from '@mui/x-data-grid';
+import CustomDataGrid from '../components/CustomDatagrid';
 import { TitleContext } from '../../../contexts/TitleContext';
 import { CustomSnackBarContext } from 'src/contexts/CustomSnackBarContext';
 import { useDispatch, useSelector } from '../../../store';
@@ -367,7 +368,8 @@ function WashTank() {
       <TankStats readings={tankReadings} t={t} />
 
       {/* Data Grid */}
-      <DataGrid
+      <CustomDataGrid
+        storageKey="wash_tanks"
         rows={tankReadings}
         columns={columns}
         loading={loadingGet}
