@@ -156,7 +156,7 @@ function CustomDataGrid(props: CustomDatagridProps) {
                   bottom: 0,
                   cursor: 'col-resize',
                   position: 'absolute',
-                  right: -10,
+                  right: 0,
                   top: 0,
                   width: 18,
                   zIndex: 3,
@@ -165,7 +165,7 @@ function CustomDataGrid(props: CustomDatagridProps) {
                     bottom: 9,
                     content: '""',
                     position: 'absolute',
-                    right: 8,
+                    right: 0,
                     top: 9,
                     width: 1
                   },
