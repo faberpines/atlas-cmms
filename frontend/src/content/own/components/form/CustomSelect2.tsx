@@ -236,7 +236,12 @@ export const CustomSelect = ({
         </>
       );
     case 'asset': {
-      options = assetsMini
+      const selectableAssets = assetsMini.filter(
+        (asset) =>
+          !field.allowedAssetTypes?.length ||
+          field.allowedAssetTypes.includes(asset.equipmentType)
+      );
+      options = selectableAssets
         .filter((asset) => asset.id !== excluded)
         .map((asset) => {
           return {
@@ -303,6 +308,7 @@ export const CustomSelect = ({
             excludedAssetIds={[excluded]}
             locationId={locationId}
             maxSelections={field.multiple ? 10 : 1}
+            allowedAssetTypes={field.allowedAssetTypes}
             onSelect={(selectedAssets) => {
               handleChange(
                 formik,
@@ -321,7 +327,7 @@ export const CustomSelect = ({
               );
               setAssetModalOpen(false); // Close the modal
             }}
-            initialSelectedAssets={assetsMini.filter((asset) =>
+            initialSelectedAssets={selectableAssets.filter((asset) =>
               (field.multiple
                 ? fieldValue ?? []
                 : fieldValue

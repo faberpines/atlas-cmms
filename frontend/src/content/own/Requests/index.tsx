@@ -77,7 +77,8 @@ function Files() {
     companySettings,
     hasViewPermission,
     hasCreatePermission,
-    getFilteredFields
+    getFilteredFields,
+    user
   } = useAuth();
   const { workOrderRequestConfiguration } = companySettings;
   const [currentRequest, setCurrentRequest] = useState<Request>();
@@ -282,6 +283,13 @@ function Files() {
   };
   const getFieldsAndShapes = (): [Array<IField>, { [key: string]: any }] => {
     let fields = [...getFilteredFields(defaultFields)];
+    if (user.role.code === 'REQUESTER') {
+      fields = fields.map((field) =>
+        field.name === 'asset'
+          ? { ...field, allowedAssetTypes: ['WAREHOUSE_EQUIPMENT'] }
+          : field
+      );
+    }
     let shape = { ...defaultShape };
     const fieldsToConfigure = [
       'asset',
@@ -342,22 +350,100 @@ function Files() {
     setCriteria(newCriteria);
   };
   const PUMPKIN_PALS = [
-  { url: 'https://cdn.shopify.com/s/files/1/0248/3817/6823/files/jack.png', name: 'Jack', top: -18, left: 0, size: 72 },
-  { url: 'https://cdn.shopify.com/s/files/1/0248/3817/6823/files/daisy.png', name: 'Daisy Kae', top: -22, left: 60, size: 68 },
-  { url: 'https://cdn.shopify.com/s/files/1/0248/3817/6823/files/chelsea.png', name: 'Chelsea', top: -14, left: 118, size: 64 },
-  { url: 'https://cdn.shopify.com/s/files/1/0248/3817/6823/files/yaya.png', name: 'Ya Ya', top: -20, left: 176, size: 70 },
-  { url: 'https://cdn.shopify.com/s/files/1/0248/3817/6823/files/gracie.png', name: 'Gracie', top: -16, left: 238, size: 66 },
-  { url: 'https://cdn.shopify.com/s/files/1/0248/3817/6823/files/vinny.png', name: 'Vinny', top: -22, left: 298, size: 72 },
-  { url: 'https://cdn.shopify.com/s/files/1/0248/3817/6823/files/joy.png', name: 'Joy', top: -14, left: 360, size: 64 },
-  { url: 'https://cdn.shopify.com/s/files/1/0248/3817/6823/files/spazal.png', name: 'Spazal', top: -20, left: 418, size: 70 },
-  { url: 'https://cdn.shopify.com/s/files/1/0248/3817/6823/files/devkin.png', name: 'Devkin', top: -18, left: 480, size: 66 },
-  { url: 'https://cdn.shopify.com/s/files/1/0248/3817/6823/files/nader.png', name: 'Nader D.', top: -22, left: 540, size: 68 },
-  { url: 'https://cdn.shopify.com/s/files/1/0248/3817/6823/files/beezie.png', name: 'Beezie', top: -16, left: 600, size: 64 },
-  { url: 'https://cdn.shopify.com/s/files/1/0248/3817/6823/files/bigmax.png', name: 'Big Max', top: -28, left: 658, size: 80 },
-  { url: 'https://cdn.shopify.com/s/files/1/0248/3817/6823/files/rerr.png', name: 'Rerr', top: -14, left: 732, size: 60 },
-];
+    {
+      url: 'https://cdn.shopify.com/s/files/1/0248/3817/6823/files/jack.png',
+      name: 'Jack',
+      top: -18,
+      left: 0,
+      size: 72
+    },
+    {
+      url: 'https://cdn.shopify.com/s/files/1/0248/3817/6823/files/daisy.png',
+      name: 'Daisy Kae',
+      top: -22,
+      left: 60,
+      size: 68
+    },
+    {
+      url: 'https://cdn.shopify.com/s/files/1/0248/3817/6823/files/chelsea.png',
+      name: 'Chelsea',
+      top: -14,
+      left: 118,
+      size: 64
+    },
+    {
+      url: 'https://cdn.shopify.com/s/files/1/0248/3817/6823/files/yaya.png',
+      name: 'Ya Ya',
+      top: -20,
+      left: 176,
+      size: 70
+    },
+    {
+      url: 'https://cdn.shopify.com/s/files/1/0248/3817/6823/files/gracie.png',
+      name: 'Gracie',
+      top: -16,
+      left: 238,
+      size: 66
+    },
+    {
+      url: 'https://cdn.shopify.com/s/files/1/0248/3817/6823/files/vinny.png',
+      name: 'Vinny',
+      top: -22,
+      left: 298,
+      size: 72
+    },
+    {
+      url: 'https://cdn.shopify.com/s/files/1/0248/3817/6823/files/joy.png',
+      name: 'Joy',
+      top: -14,
+      left: 360,
+      size: 64
+    },
+    {
+      url: 'https://cdn.shopify.com/s/files/1/0248/3817/6823/files/spazal.png',
+      name: 'Spazal',
+      top: -20,
+      left: 418,
+      size: 70
+    },
+    {
+      url: 'https://cdn.shopify.com/s/files/1/0248/3817/6823/files/devkin.png',
+      name: 'Devkin',
+      top: -18,
+      left: 480,
+      size: 66
+    },
+    {
+      url: 'https://cdn.shopify.com/s/files/1/0248/3817/6823/files/nader.png',
+      name: 'Nader D.',
+      top: -22,
+      left: 540,
+      size: 68
+    },
+    {
+      url: 'https://cdn.shopify.com/s/files/1/0248/3817/6823/files/beezie.png',
+      name: 'Beezie',
+      top: -16,
+      left: 600,
+      size: 64
+    },
+    {
+      url: 'https://cdn.shopify.com/s/files/1/0248/3817/6823/files/bigmax.png',
+      name: 'Big Max',
+      top: -28,
+      left: 658,
+      size: 80
+    },
+    {
+      url: 'https://cdn.shopify.com/s/files/1/0248/3817/6823/files/rerr.png',
+      name: 'Rerr',
+      top: -14,
+      left: 732,
+      size: 60
+    }
+  ];
 
-const renderAddModal = () => (
+  const renderAddModal = () => (
     <Dialog
       fullWidth
       maxWidth="md"
@@ -396,7 +482,10 @@ const renderAddModal = () => (
                 height: 'auto',
                 filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.18))',
                 transition: 'transform 0.2s',
-                '&:hover': { transform: 'scale(1.18) rotate(-4deg)', zIndex: 10 },
+                '&:hover': {
+                  transform: 'scale(1.18) rotate(-4deg)',
+                  zIndex: 10
+                },
                 zIndex: 1,
                 pointerEvents: 'auto'
               }}

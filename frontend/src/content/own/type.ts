@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { EquipmentType } from '../../models/owns/asset';
 
 export interface TableCustomizedDataType {
   id: string | number;
@@ -66,6 +67,7 @@ export interface IField {
   checked?: boolean;
   loading?: boolean;
   excluded?: number;
+  allowedAssetTypes?: EquipmentType[];
   relatedFields?: { field: string; value?: any; hide?: boolean }[];
 }
 

@@ -1,5 +1,6 @@
 package com.grash.dto;
 
+import com.grash.model.enums.EquipmentType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -17,5 +18,7 @@ public class AssetMiniDTO {
     private Long parentId;
 
     private Long locationId;
+
+    private EquipmentType equipmentType;
 
 }

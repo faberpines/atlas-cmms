@@ -20,7 +20,7 @@ import {
   GridRenderCellParams,
   GridSelectionModel
 } from '@mui/x-data-grid';
-import { AssetMiniDTO } from '../../../../models/owns/asset';
+import { AssetMiniDTO, EquipmentType } from '../../../../models/owns/asset';
 import ReplayTwoToneIcon from '@mui/icons-material/ReplayTwoTone';
 import { Pageable } from '../../../../models/owns/page';
 import NoRowsMessageWrapper from '../NoRowsMessageWrapper';
@@ -34,6 +34,7 @@ interface SelectAssetModalProps {
   locationId?: number;
   maxSelections?: number; // Optional limit for selections
   initialSelectedAssets?: AssetMiniDTO[]; // Optional pre-selected assets
+  allowedAssetTypes?: EquipmentType[];
 }
 
 const getAssetRows = (assets: AssetMiniDTO[]): IRow[] => {
@@ -63,7 +64,8 @@ const getAssetRows = (assets: AssetMiniDTO[]): IRow[] => {
     hierarchy.unshift(currentAsset.id);
 
     while (
-      currentAsset.parentId &&
+      currentAsset?.parentId &&
+      assetMap[currentAsset.parentId] &&
       !hierarchy.includes(currentAsset.parentId)
     ) {
       hierarchy.unshift(currentAsset.parentId);
@@ -90,7 +92,8 @@ const SelectAssetModal: React.FC<SelectAssetModalProps> = ({
   excludedAssetIds = [],
   locationId,
   maxSelections,
-  initialSelectedAssets = []
+  initialSelectedAssets = [],
+  allowedAssetTypes
 }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -99,9 +102,18 @@ const SelectAssetModal: React.FC<SelectAssetModalProps> = ({
   const initialized = useRef<boolean>(false);
   const single = maxSelections === 1;
 
+  const selectableAssets = useMemo(
+    () =>
+      assetsMini.filter(
+        (asset) =>
+          !allowedAssetTypes?.length ||
+          allowedAssetTypes.includes(asset.equipmentType)
+      ),
+    [assetsMini, allowedAssetTypes]
+  );
   const assetsHierarchy: IRow[] = useMemo(
-    () => getAssetRows(assetsMini),
-    [assetsMini.length]
+    () => getAssetRows(selectableAssets),
+    [selectableAssets]
   );
 
   // State for tracking selected assets
@@ -181,9 +193,11 @@ const SelectAssetModal: React.FC<SelectAssetModalProps> = ({
     setSelectionModel(currentSelectionModel);
 
     // Update the selected assets array
-    const updatedSelectedAssets = currentSelectionModel.map((id) => {
-      return assetsMini.find((a) => a.id === id);
-    }).filter(Boolean) as IRow[];
+    const updatedSelectedAssets = currentSelectionModel
+      .map((id) => {
+        return selectableAssets.find((a) => a.id === id);
+      })
+      .filter(Boolean) as IRow[];
     setSelectedAssets(updatedSelectedAssets);
     if (single) {
       onSelect(updatedSelectedAssets);
@@ -264,9 +278,11 @@ const SelectAssetModal: React.FC<SelectAssetModalProps> = ({
                 return;
               }
               setSelectionModel(newSelectionModel);
-              const updatedSelectedAssets = newSelectionModel.map((id) => {
-                return assetsMini.find((a) => a.id === id);
-              }).filter(Boolean) as IRow[];
+              const updatedSelectedAssets = newSelectionModel
+                .map((id) => {
+                  return assetsMini.find((a) => a.id === id);
+                })
+                .filter(Boolean) as IRow[];
 
               setSelectedAssets(updatedSelectedAssets);
             }}

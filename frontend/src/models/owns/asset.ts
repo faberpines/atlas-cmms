@@ -82,4 +82,5 @@ export interface AssetMiniDTO {
   customId: string;
   locationId: number;
   parentId: number;
+  equipmentType: EquipmentType;
 }
