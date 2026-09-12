@@ -314,6 +314,13 @@ function SidebarMenu() {
           .map((section, index) => {
             const sectionClone = { ...section };
             sectionClone.items = sectionClone.items.filter((item) => {
+              if (
+                user.role.code === 'REQUESTER' &&
+                item.link === '/app/inspections'
+              ) {
+                return false;
+              }
+
               const hasPermission = item.permission
                 ? hasViewPermission(item.permission)
                 : true;
