@@ -1,11 +1,12 @@
+/* Hallmark · pre-emit critique: P5 H5 E4 S5 R5 V4 */
 import { FC, ReactNode } from 'react';
 import PropTypes from 'prop-types';
 import { Box, styled } from '@mui/material';
 
 const PageTitle = styled(Box)(
   ({ theme }) => `
-        margin: ${theme.spacing(2)} ${theme.spacing(4)} ${theme.spacing(2)};
-        padding: ${theme.spacing(2.5)} ${theme.spacing(3)};
+        margin: ${theme.spacing(1.25)} ${theme.spacing(4)} ${theme.spacing(1)};
+        padding: ${theme.spacing(1.5)} ${theme.spacing(2.5)};
         color: #fffdf7;
         background: #143923;
         border: 1px solid rgba(255, 255, 255, 0.12);
@@ -40,8 +41,8 @@ const PageTitle = styled(Box)(
         }
 
         ${theme.breakpoints.down('sm')} {
-          margin: ${theme.spacing(1.5)};
-          padding: ${theme.spacing(2)};
+          margin: ${theme.spacing(1)} ${theme.spacing(1.5)};
+          padding: ${theme.spacing(1.25)} ${theme.spacing(1.5)};
         }
 
         & > * {

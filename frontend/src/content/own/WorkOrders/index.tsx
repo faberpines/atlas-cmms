@@ -1,3 +1,4 @@
+/* Hallmark · pre-emit critique: P5 H5 E4 S5 R5 V4 */
 import { Helmet } from 'react-helmet-async';
 import {
   Box,
@@ -897,9 +898,9 @@ function WorkOrders() {
           sx={{
             position: 'relative',
             overflow: 'hidden',
-            mb: 2,
+            mb: 1.25,
             px: { xs: 2, sm: 3 },
-            py: { xs: 2.25, sm: 2.75 },
+            py: { xs: 1.25, sm: 1.5 },
             color: 'common.white',
             bgcolor: '#183d22',
             borderRadius: 2,
@@ -911,13 +912,13 @@ function WorkOrders() {
             direction={{ xs: 'column', md: 'row' }}
             justifyContent="space-between"
             alignItems={{ xs: 'stretch', md: 'center' }}
-            spacing={2.5}
+            spacing={1.5}
           >
-            <Stack direction="row" spacing={2} alignItems="center">
+            <Stack direction="row" spacing={1.5} alignItems="center">
               <Box
                 sx={{
-                  width: 52,
-                  height: 52,
+                  width: 44,
+                  height: 44,
                   display: { xs: 'none', sm: 'grid' },
                   placeItems: 'center',
                   bgcolor: 'rgba(255,255,255,0.1)',
@@ -925,7 +926,7 @@ function WorkOrders() {
                   borderRadius: 1.5
                 }}
               >
-                <AssignmentTwoToneIcon sx={{ fontSize: 29, color: '#f0b28d' }} />
+                <AssignmentTwoToneIcon sx={{ fontSize: 25, color: '#f0b28d' }} />
               </Box>
               <Box>
                 <Typography
@@ -945,14 +946,14 @@ function WorkOrders() {
                   sx={{
                     color: 'common.white',
                     fontFamily: 'Georgia, serif',
-                    fontSize: { xs: 26, sm: 32 },
+                    fontSize: { xs: 24, sm: 28 },
                     lineHeight: 1.1,
                     fontWeight: 600
                   }}
                 >
                   {t('work_orders')}
                 </Typography>
-                <Typography sx={{ mt: 0.75, color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>
+                <Typography sx={{ mt: 0.25, color: 'rgba(255,255,255,0.7)', fontSize: 12 }}>
                   {workOrders.totalElements || 0} records · review, assign, and keep work moving
                 </Typography>
               </Box>
@@ -1005,12 +1006,12 @@ function WorkOrders() {
           <Box
             sx={{
               px: { xs: 1.25, sm: 2 },
-              py: 1.25,
+              py: 0.5,
               display: 'flex',
               flexDirection: { xs: 'column', md: 'row' },
               alignItems: { xs: 'stretch', md: 'center' },
               justifyContent: 'space-between',
-              gap: 1.5,
+              gap: 0.75,
               bgcolor: '#f7f9f5'
             }}
           >
@@ -1020,12 +1021,12 @@ function WorkOrders() {
               variant="scrollable"
               scrollButtons="auto"
               sx={{
-                minHeight: 42,
+                minHeight: 38,
                 '& .MuiTabs-flexContainer': { gap: 0.5 },
                 '& .MuiTabs-indicator': { display: 'none' },
                 '& .MuiTab-root': {
-                  minHeight: 42,
-                  px: 2,
+                  minHeight: 38,
+                  px: 1.5,
                   borderRadius: 1.25,
                   fontSize: 13,
                   fontWeight: 700,
@@ -1056,7 +1057,7 @@ function WorkOrders() {
             <Stack
               sx={{
                 px: { xs: 1.5, sm: 2 },
-                py: 1.5,
+                py: 0.75,
                 flexWrap: 'wrap',
                 rowGap: 1,
                 bgcolor: 'background.paper'

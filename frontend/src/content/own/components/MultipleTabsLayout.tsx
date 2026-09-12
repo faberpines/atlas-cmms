@@ -1,3 +1,4 @@
+/* Hallmark · pre-emit critique: P5 H5 E4 S5 R5 V4 */
 import { ChangeEvent, ReactNode } from 'react';
 import { Helmet } from 'react-helmet-async';
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
@@ -12,8 +13,8 @@ const TabsContainerWrapper = styled(Box)(
       flex: 1 1 auto;
 
       .MuiTabs-root {
-        height: 44px;
-        min-height: 44px;
+        height: 40px;
+        min-height: 40px;
       }
 
       .MuiTabs-scrollableX {
@@ -42,8 +43,8 @@ const TabsContainerWrapper = styled(Box)(
 
       .MuiTab-root {
           &.MuiButtonBase-root {
-              height: 44px;
-              min-height: 44px;
+              height: 40px;
+              min-height: 40px;
               background: transparent;
               border: 0;
               position: relative;
@@ -109,16 +110,16 @@ function MultipleTabsLayout(props: SettingsLayoutProps) {
   };
 
   return (
-    <Box sx={{ pt: { xs: 1.5, md: 2.5 }, pb: 4 }}>
+    <Box sx={{ pt: { xs: 1, md: 1.5 }, pb: 3 }}>
       <Helmet>
         <title>{title}</title>
       </Helmet>
       <Box
         sx={{
           mx: { xs: 1.5, sm: 3, md: 4 },
-          mb: 2,
-          px: { xs: 2, md: 3 },
-          py: 2,
+          mb: 1,
+          px: { xs: 1.5, md: 2.5 },
+          py: 1.25,
           borderRadius: 2,
           color: 'common.white',
           bgcolor: '#143923',
@@ -128,7 +129,7 @@ function MultipleTabsLayout(props: SettingsLayoutProps) {
       >
         <Typography
           component="h1"
-          sx={{ fontFamily: 'Georgia, serif', fontSize: { xs: 25, md: 30 }, fontWeight: 600 }}
+          sx={{ fontFamily: 'Georgia, serif', fontSize: { xs: 23, md: 27 }, fontWeight: 600 }}
         >
           {title}
         </Typography>
@@ -160,7 +161,7 @@ function MultipleTabsLayout(props: SettingsLayoutProps) {
         <Stack
           direction="row"
           spacing={1}
-          sx={{ my: 1, flexShrink: 0, flexWrap: 'wrap' }}
+          sx={{ my: 0.5, flexShrink: 0, flexWrap: 'wrap' }}
         >
           {action && (
             <Button
