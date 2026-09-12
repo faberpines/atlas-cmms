@@ -211,7 +211,10 @@ export const editWorkOrder =
 export const addFilesToWorkOrder =
   (id: number, files: { id: number }[]): AppThunk =>
   async (dispatch) => {
-    await api.patch(`${basePath}/files/${id}/add`, files);
+    // This endpoint expects a JSON array. Passing `withoutCompany` prevents the
+    // shared API helper from spreading that array into an object while adding
+    // the company reference.
+    await api.patch(`${basePath}/files/${id}/add`, files, undefined, true);
     await dispatch(getWorkOrderDetails(id));
   };
 export const deleteWorkOrder =

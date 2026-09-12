@@ -1,7 +1,7 @@
 {
-  "version": "1.2.9",
-  "versionCode": 21,
-  "apkUrl": "https://bbp.tailfda364.ts.net/downloads/Bay-Baby-Maintenance-1.2.9.apk",
-  "releaseNotes": "The Android app login now accepts either a username or an email address.",
-  "publishedAt": "2026-09-09"
+  "version": "1.2.10",
+  "versionCode": 22,
+  "apkUrl": "https://bbp.tailfda364.ts.net/downloads/Bay-Baby-Maintenance-1.2.10.apk",
+  "releaseNotes": "Fixes photo uploads when saving an update to a work order.",
+  "publishedAt": "2026-09-12"
 }
