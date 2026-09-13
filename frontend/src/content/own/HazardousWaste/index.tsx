@@ -142,6 +142,24 @@ export default function HazardousWaste() {
     () => records.filter((record) => dayjs(record.disposalDate).year() === dayjs().year()).length,
     [records]
   );
+  const yearlyGallonTotals = useMemo(() => {
+    const totals = new Map<string, number>();
+    records
+      .filter(
+        (record) =>
+          dayjs(record.disposalDate).year() === dayjs().year() &&
+          record.unit.toLowerCase() === 'gallons'
+      )
+      .forEach((record) => {
+        totals.set(record.material, (totals.get(record.material) || 0) + Number(record.amount));
+      });
+    return Array.from(totals.entries())
+      .map(([material, gallons]) => ({ material, gallons }))
+      .sort((a, b) => a.material.localeCompare(b.material));
+  }, [records]);
+
+  const formatGallons = (gallons: number) =>
+    gallons.toLocaleString(undefined, { maximumFractionDigits: 2 });
 
   const columns: GridEnrichedColDef[] = [
     {
@@ -221,14 +239,35 @@ export default function HazardousWaste() {
         </Stack>
       </Paper>
 
-      <Grid container spacing={2} mb={2}>
-        <Grid item xs={12} sm={6}>
+      <Box mb={1}>
+        <Typography variant="h6">{dayjs().year()} gallons disposed</Typography>
+        <Typography variant="body2" color="text.secondary">
+          Year-to-date totals by hazardous material
+        </Typography>
+      </Box>
+      <Grid container spacing={1.5} mb={2}>
+        {yearlyGallonTotals.map(({ material, gallons }) => (
+          <Grid item xs={12} sm={6} md={3} key={material}>
+            <Paper variant="outlined" sx={{ p: 1.5, borderTop: '3px solid', borderTopColor: 'secondary.main' }}>
+              <Typography variant="caption" color="text.secondary">{material}</Typography>
+              <Typography variant="h5" fontWeight={700}>{formatGallons(gallons)} gal</Typography>
+            </Paper>
+          </Grid>
+        ))}
+        {yearlyGallonTotals.length === 0 && (
+          <Grid item xs={12}>
+            <Paper variant="outlined" sx={{ p: 1.5 }}>
+              <Typography color="text.secondary">No gallon-based disposal records have been logged this year.</Typography>
+            </Paper>
+          </Grid>
+        )}
+        <Grid item xs={12} sm={6} md={3}>
           <Paper variant="outlined" sx={{ p: 1.5 }}>
             <Typography variant="caption" color="text.secondary">All disposal records</Typography>
             <Typography variant="h5" fontWeight={700}>{totalEntries}</Typography>
           </Paper>
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} md={3}>
           <Paper variant="outlined" sx={{ p: 1.5 }}>
             <Typography variant="caption" color="text.secondary">Records this year</Typography>
             <Typography variant="h5" fontWeight={700}>{currentYearEntries}</Typography>
