@@ -22,6 +22,7 @@ import {
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
+import OpenInNewTwoToneIcon from '@mui/icons-material/OpenInNewTwoTone';
 import ScienceTwoToneIcon from '@mui/icons-material/ScienceTwoTone';
 import { GridEnrichedColDef } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
@@ -201,9 +202,22 @@ export default function HazardousWaste() {
               </Typography>
             </Box>
           </Stack>
-          <Button variant="contained" color="secondary" startIcon={<AddTwoToneIcon />} onClick={openAdd} sx={{ whiteSpace: 'nowrap' }}>
-            Log disposal
-          </Button>
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1}>
+            <Button
+              component="a"
+              href="https://www.skagitcounty.net/Departments/PublicWorksSolidWaste/hhw.htm"
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="outlined"
+              startIcon={<OpenInNewTwoToneIcon />}
+              sx={{ color: 'primary.contrastText', borderColor: 'primary.contrastText', whiteSpace: 'nowrap' }}
+            >
+              Disposal information
+            </Button>
+            <Button variant="contained" color="secondary" startIcon={<AddTwoToneIcon />} onClick={openAdd} sx={{ whiteSpace: 'nowrap' }}>
+              Log disposal
+            </Button>
+          </Stack>
         </Stack>
       </Paper>
 
