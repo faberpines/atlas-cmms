@@ -214,4 +214,6 @@
              relativeToChangelogFile="true"/>
     <include file="changelog/2026_09_12_1789230000_hazardous_waste_disposal.xml"
              relativeToChangelogFile="true"/>
+    <include file="changelog/2026_09_12_1789270000_hazardous_waste_disposed_by.xml"
+             relativeToChangelogFile="true"/>
 </databaseChangeLog>

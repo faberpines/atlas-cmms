@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="2026_09_12_hazardous_waste_disposed_by" author="codex">
+        <addColumn tableName="hazardous_waste_disposal">
+            <column name="disposed_by_id" type="bigint"/>
+        </addColumn>
+        <addForeignKeyConstraint baseTableName="hazardous_waste_disposal" baseColumnNames="disposed_by_id"
+                                 referencedTableName="own_user" referencedColumnNames="id" onDelete="SET NULL"
+                                 constraintName="fk_hazardous_waste_disposed_by"/>
+        <createIndex tableName="hazardous_waste_disposal" indexName="idx_hazardous_waste_disposed_by">
+            <column name="disposed_by_id"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

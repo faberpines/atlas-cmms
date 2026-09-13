@@ -31,6 +31,8 @@ import { CustomSnackBarContext } from '../../../contexts/CustomSnackBarContext';
 import CustomDataGrid from '../components/CustomDatagrid';
 import { HazardousWasteDisposal } from '../../../models/owns/hazardousWaste';
 import api from '../../../utils/api';
+import { useDispatch, useSelector } from '../../../store';
+import { getUsersMini } from '../../../slices/user';
 
 const materials = ['Paint', 'Used motor oil', 'Hydraulic fluid', 'Coolant', 'Other'];
 const units = ['Gallons', 'Quarts', 'Liters', 'Pounds', 'Containers'];
@@ -41,6 +43,7 @@ interface DisposalForm {
   customMaterial: string;
   amount: string;
   unit: string;
+  disposedById: number | '';
   notes: string;
 }
 
@@ -50,12 +53,15 @@ const emptyForm = (): DisposalForm => ({
   customMaterial: '',
   amount: '',
   unit: 'Gallons',
+  disposedById: '',
   notes: ''
 });
 
 export default function HazardousWaste() {
   const { setTitle } = useContext(TitleContext);
   const { showSnackBar } = useContext(CustomSnackBarContext);
+  const dispatch = useDispatch();
+  const { allUsersMini } = useSelector((state) => state.users);
   const [records, setRecords] = useState<HazardousWasteDisposal[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -78,6 +84,7 @@ export default function HazardousWaste() {
   useEffect(() => {
     setTitle('Hazardous Waste');
     loadRecords();
+    dispatch(getUsersMini(true));
   }, []);
 
   const openAdd = () => {
@@ -94,6 +101,7 @@ export default function HazardousWaste() {
       customMaterial: materials.includes(record.material) ? '' : record.material,
       amount: String(record.amount),
       unit: record.unit,
+      disposedById: record.disposedBy?.id || '',
       notes: record.notes || ''
     });
     setDialogOpen(true);
@@ -102,12 +110,19 @@ export default function HazardousWaste() {
   const save = async () => {
     const amount = Number(form.amount);
     const material = form.material === 'Other' ? form.customMaterial.trim() : form.material;
-    if (!form.disposalDate || !material || !form.unit || !Number.isFinite(amount) || amount <= 0) {
-      showSnackBar('Enter a date, material, and an amount greater than zero.', 'error');
+    if (!form.disposalDate || !material || !form.unit || !form.disposedById || !Number.isFinite(amount) || amount <= 0) {
+      showSnackBar('Enter a date, material, amount, and who disposed of it.', 'error');
       return;
     }
     setSaving(true);
-    const payload = { disposalDate: form.disposalDate, material, amount, unit: form.unit, notes: form.notes.trim() || null };
+    const payload = {
+      disposalDate: form.disposalDate,
+      material,
+      amount,
+      unit: form.unit,
+      disposedBy: { id: form.disposedById },
+      notes: form.notes.trim() || null
+    };
     try {
       const saved = editing
         ? await api.patch<HazardousWasteDisposal>(`hazardous-waste-disposals/${editing.id}`, payload)
@@ -174,6 +189,14 @@ export default function HazardousWaste() {
       headerName: 'Amount',
       minWidth: 160,
       valueGetter: (params) => `${params.row.amount} ${params.row.unit}`
+    },
+    {
+      field: 'disposedBy',
+      headerName: 'Disposed by',
+      minWidth: 180,
+      valueGetter: (params) => params.row.disposedBy
+        ? `${params.row.disposedBy.firstName} ${params.row.disposedBy.lastName}`.trim()
+        : '—'
     },
     { field: 'notes', headerName: 'Notes', minWidth: 260, flex: 1, valueFormatter: (params) => params.value || '—' },
     {
@@ -321,6 +344,22 @@ export default function HazardousWaste() {
                 <InputLabel>Unit</InputLabel>
                 <Select value={form.unit} label="Unit" onChange={(event) => setForm({ ...form, unit: event.target.value })}>
                   {units.map((unit) => <MenuItem key={unit} value={unit}>{unit}</MenuItem>)}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+              <FormControl fullWidth required>
+                <InputLabel>Disposed by</InputLabel>
+                <Select
+                  value={form.disposedById}
+                  label="Disposed by"
+                  onChange={(event) => setForm({ ...form, disposedById: event.target.value as number })}
+                >
+                  {allUsersMini.map((user) => (
+                    <MenuItem key={user.id} value={user.id}>
+                      {user.firstName} {user.lastName}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Grid>

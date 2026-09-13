@@ -34,7 +34,9 @@ public class HazardousWasteDisposalController {
     @PostMapping
     @PreAuthorize("hasRole('ROLE_CLIENT')")
     public ResponseEntity<HazardousWasteDisposal> create(
-            @Valid @RequestBody HazardousWasteDisposal disposal) {
+            @Valid @RequestBody HazardousWasteDisposal disposal,
+            HttpServletRequest req) {
+        requireCompanyPersonnel(disposal, req);
         return ResponseEntity.ok(service.create(disposal));
     }
 
@@ -45,6 +47,7 @@ public class HazardousWasteDisposalController {
             @Valid @RequestBody HazardousWasteDisposal patch,
             HttpServletRequest req) {
         requireCompanyRecord(id, req);
+        requireCompanyPersonnel(patch, req);
         return ResponseEntity.ok(service.update(id, patch));
     }
 
@@ -62,5 +65,17 @@ public class HazardousWasteDisposalController {
         if (!disposal.getCompany().getId().equals(user.getCompany().getId())) {
             throw new CustomException("Not found", HttpStatus.NOT_FOUND);
         }
+    }
+
+    private void requireCompanyPersonnel(HazardousWasteDisposal disposal, HttpServletRequest req) {
+        OwnUser requester = userService.whoami(req);
+        Long disposedById = disposal.getDisposedBy() == null ? null : disposal.getDisposedBy().getId();
+        OwnUser disposedBy = disposedById == null ? null : userService
+                .findByIdAndCompany(disposedById, requester.getCompany().getId())
+                .orElse(null);
+        if (disposedBy == null) {
+            throw new CustomException("Select valid personnel", HttpStatus.BAD_REQUEST);
+        }
+        disposal.setDisposedBy(disposedBy);
     }
 }

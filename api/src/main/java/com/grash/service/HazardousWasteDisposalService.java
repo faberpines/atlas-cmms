@@ -28,6 +28,7 @@ public class HazardousWasteDisposalService {
         if (patch.getMaterial() != null) existing.setMaterial(patch.getMaterial());
         if (patch.getAmount() != null) existing.setAmount(patch.getAmount());
         if (patch.getUnit() != null) existing.setUnit(patch.getUnit());
+        if (patch.getDisposedBy() != null) existing.setDisposedBy(patch.getDisposedBy());
         if (patch.getNotes() != null) existing.setNotes(patch.getNotes());
         return repository.save(existing);
     }
