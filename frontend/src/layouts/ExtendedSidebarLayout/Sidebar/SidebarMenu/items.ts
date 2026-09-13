@@ -31,6 +31,7 @@ import HearingTwoToneIcon from '@mui/icons-material/HearingTwoTone';
 import WaterTwoToneIcon from '@mui/icons-material/WaterTwoTone';
 import FindInPageTwoToneIcon from '@mui/icons-material/FindInPageTwoTone';
 import QrCodeScannerTwoToneIcon from '@mui/icons-material/QrCodeScannerTwoTone';
+import ScienceTwoToneIcon from '@mui/icons-material/ScienceTwoTone';
 import { PermissionEntity } from '../../../../models/owns/role';
 import { PlanFeature } from '../../../../models/owns/subscriptionPlan';
 import { IS_LOCALHOST } from '../../../../config';
@@ -246,6 +247,11 @@ const ownMenuItems: MenuItems[] = [
         link: '/app/jha',
         icon: FindInPageTwoToneIcon,
         permission: PermissionEntity.JHA
+      },
+      {
+        name: 'hazardous_waste',
+        link: '/app/hazardous-waste',
+        icon: ScienceTwoToneIcon
       },
       {
         name: 'people_teams',

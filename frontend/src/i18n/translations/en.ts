@@ -2068,6 +2068,7 @@ const locale = {
   warehouse_equipment: 'Warehouse Equipment',
   fleet_vehicle: 'Fleet Vehicles',
   trailers: 'Trailers',
+  hazardous_waste: 'Hazardous Waste',
   trailer: 'Trailer',
   farm_implements: 'Farm Implements',
   farm_implement: 'Farm Implement'

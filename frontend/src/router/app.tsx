@@ -80,6 +80,7 @@ const Fleet = Loader(lazy(() => import('../content/own/Fleet')));
 const Loto = Loader(lazy(() => import('../content/own/Loto')));
 const HearingConservation = Loader(lazy(() => import('../content/own/HearingConservation')));
 const JHA = Loader(lazy(() => import('../content/own/JHA')));
+const HazardousWaste = Loader(lazy(() => import('../content/own/HazardousWaste')));
 const ScanAsset = Loader(lazy(() => import('../content/own/ScanAsset')));
 const WorkOrders = Loader(lazy(() => import('../content/own/WorkOrders')));
 
@@ -255,6 +256,10 @@ const appRoutes = [
   {
     path: 'jha',
     children: [{ path: '', element: <JHA /> }]
+  },
+  {
+    path: 'hazardous-waste',
+    children: [{ path: '', element: <HazardousWaste /> }]
   },
   {
     path: 'scan-asset',

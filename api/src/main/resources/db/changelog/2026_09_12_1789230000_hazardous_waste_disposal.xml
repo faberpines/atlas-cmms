@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="2026_09_12_hazardous_waste_disposal" author="codex">
+        <createSequence sequenceName="hazardous_waste_disposal_seq" incrementBy="50" startValue="1"/>
+        <createTable tableName="hazardous_waste_disposal">
+            <column name="id" type="bigint" defaultValueSequenceNext="hazardous_waste_disposal_seq">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp"/>
+            <column name="updated_at" type="timestamp"/>
+            <column name="created_by" type="bigint"/>
+            <column name="updated_by" type="bigint"/>
+            <column name="company_id" type="bigint"><constraints nullable="false"/></column>
+            <column name="disposal_date" type="date"><constraints nullable="false"/></column>
+            <column name="material" type="varchar(120)"><constraints nullable="false"/></column>
+            <column name="amount" type="float8"><constraints nullable="false"/></column>
+            <column name="unit" type="varchar(40)"><constraints nullable="false"/></column>
+            <column name="notes" type="text"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="hazardous_waste_disposal" baseColumnNames="company_id"
+                                 referencedTableName="company" referencedColumnNames="id" onDelete="CASCADE"
+                                 constraintName="fk_hazardous_waste_company"/>
+        <createIndex tableName="hazardous_waste_disposal" indexName="idx_hazardous_waste_company_date">
+            <column name="company_id"/>
+            <column name="disposal_date" descending="true"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

@@ -1,5 +1,14 @@
 [
   {
+    "date": "2026-09-12",
+    "scope": "page",
+    "macrostructure": "Workbench ledger",
+    "theme": "custom",
+    "theme_axes": "warm-paper / field-equipment / evergreen-orange",
+    "enrichment": "none",
+    "brief": "Desktop hazardous-waste disposal entry form and chronological compliance ledger"
+  },
+  {
     "date": "2026-09-08",
     "scope": "app",
     "macrostructure": "Workbench",
