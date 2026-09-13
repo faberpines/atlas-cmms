@@ -107,6 +107,20 @@ function WashTank() {
     dispatch(getUsersMini());
   }, []);
 
+  useEffect(() => {
+    const refreshReadings = () => {
+      if (document.visibilityState === 'visible') dispatch(getReadings(true));
+    };
+    const interval = window.setInterval(refreshReadings, 15000);
+    window.addEventListener('focus', refreshReadings);
+    document.addEventListener('visibilitychange', refreshReadings);
+    return () => {
+      window.clearInterval(interval);
+      window.removeEventListener('focus', refreshReadings);
+      document.removeEventListener('visibilitychange', refreshReadings);
+    };
+  }, [dispatch]);
+
   const currentTank = (activeTab + 1) as 1 | 2;
   const tankReadings = readings.filter((r) => r.tankNumber === currentTank);
 
@@ -596,6 +610,7 @@ function WashTank() {
 function TankStats({ readings, t }: { readings: WashTankReading[]; t: any }) {
   const today = dayjs().format('YYYY-MM-DD');
   const todayReadings = readings.filter((r) => r.readingDate === today);
+  const completedShifts = new Set(todayReadings.map((reading) => reading.shift)).size;
   const lastReading = readings[0];
 
   const turbidityReadings = todayReadings.filter((r) => r.turbidityPass != null);
@@ -622,8 +637,8 @@ function TankStats({ readings, t }: { readings: WashTankReading[]; t: any }) {
       {[
         {
           label: t('todays_readings'),
-          value: `${todayReadings.length} / 4`,
-          color: todayReadings.length < 4 ? '#FFA319' : '#57CA22',
+          value: `${completedShifts} / 4`,
+          color: completedShifts < 4 ? '#FFA319' : '#57CA22',
           hint: t('readings_taken_today')
         },
         {

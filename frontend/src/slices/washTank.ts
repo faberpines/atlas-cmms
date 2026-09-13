@@ -48,8 +48,10 @@ const slice = createSlice({
 export const { reducer } = slice;
 export default reducer;
 
-export const getReadings = (): AppThunk => async (dispatch) => {
-  dispatch(slice.actions.setLoadingGet({ loading: true }));
+export const getReadings =
+  (silent = false): AppThunk =>
+  async (dispatch) => {
+  if (!silent) dispatch(slice.actions.setLoadingGet({ loading: true }));
   const readings = await api.get<WashTankReading[]>('wash-tank-readings');
   dispatch(slice.actions.setReadings({ readings }));
 };
