@@ -141,6 +141,7 @@ function Fleet() {
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [vinLoading, setVinLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [vehicleSearch, setVehicleSearch] = useState('');
 
   // Usage log state
   const [usageVehicle, setUsageVehicle] = useState<Vehicle | null>(null);
@@ -175,6 +176,23 @@ function Fleet() {
       .filter((a) => !existingAssetNumbers.has(a.barCode))
       .filter((a) => !q || a.name.toLowerCase().includes(q) || a.barCode.toLowerCase().includes(q));
   }, [importAssets, importSearch, vehicles]);
+
+  const filteredVehicles = useMemo(() => {
+    const query = vehicleSearch.trim().toLowerCase();
+    if (!query) return vehicles;
+    return vehicles.filter((vehicle) =>
+      [
+        vehicle.name,
+        vehicle.assetNumber,
+        vehicle.vin,
+        vehicle.make,
+        vehicle.model,
+        vehicle.year,
+        vehicle.licensePlate,
+        vehicle.status
+      ].some((value) => String(value ?? '').toLowerCase().includes(query))
+    );
+  }, [vehicleSearch, vehicles]);
 
   const allFilteredChecked =
     filteredImportAssets.length > 0 &&
@@ -554,9 +572,34 @@ function Fleet() {
 
         {tabIndex === 0 && (
           <Card>
+            <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}>
+              <TextField
+                value={vehicleSearch}
+                onChange={(event) => setVehicleSearch(event.target.value)}
+                placeholder="Search by vehicle, barcode, VIN, make, model, year, plate, or status"
+                aria-label="Search tractors and vehicles"
+                type="search"
+                size="small"
+                fullWidth
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchTwoToneIcon color="action" />
+                    </InputAdornment>
+                  ),
+                  endAdornment: vehicleSearch ? (
+                    <InputAdornment position="end">
+                      <Typography variant="caption" color="text.secondary">
+                        {filteredVehicles.length} found
+                      </Typography>
+                    </InputAdornment>
+                  ) : undefined
+                }}
+              />
+            </Box>
             <CustomDataGrid
               columns={columns}
-              rows={vehicles}
+              rows={filteredVehicles}
               loading={loadingGet}
               storageKey="fleet"
               onRowClick={(params) => setDrawerVehicle(params.row as Vehicle)}

@@ -40,6 +40,7 @@ import { UiConfiguration } from '../../../../models/owns/uiConfiguration';
 export interface MenuItem {
   link?: string;
   icon?: ReactNode;
+  hidden?: boolean;
   badge?: string;
   badgeTooltip?: string;
   permission?: PermissionEntity;
@@ -78,6 +79,7 @@ const ownMenuItems: MenuItems[] = [
       },
       {
         name: 'Statistics',
+        hidden: true,
         icon: InsertChartTwoToneIcon,
         permission: PermissionEntity.ANALYTICS,
         planFeature: PlanFeature.ANALYTICS,

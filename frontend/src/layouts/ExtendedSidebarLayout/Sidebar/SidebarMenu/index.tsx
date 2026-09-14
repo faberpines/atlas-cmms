@@ -314,6 +314,8 @@ function SidebarMenu() {
           .map((section, index) => {
             const sectionClone = { ...section };
             sectionClone.items = sectionClone.items.filter((item) => {
+              if (item.hidden) return false;
+
               if (
                 user.role.code === 'REQUESTER' &&
                 item.link === '/app/inspections'
