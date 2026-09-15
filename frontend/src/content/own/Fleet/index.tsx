@@ -49,6 +49,7 @@ import DownloadTwoToneIcon from '@mui/icons-material/DownloadTwoTone';
 import SpeedTwoToneIcon from '@mui/icons-material/SpeedTwoTone';
 import BuildTwoToneIcon from '@mui/icons-material/BuildTwoTone';
 import HistoryTwoToneIcon from '@mui/icons-material/HistoryTwoTone';
+import PrintTwoToneIcon from '@mui/icons-material/PrintTwoTone';
 import { GridActionsCellItem, GridEnrichedColDef, GridRowParams } from '@mui/x-data-grid';
 import { useDispatch, useSelector } from '../../../store';
 import {
@@ -74,6 +75,7 @@ import PageTitleWrapper from '../../../components/PageTitleWrapper';
 import FleetMap from './FleetMap';
 import LoraDevices from './LoraDevices';
 import VehicleDetailDrawer from './VehicleDetailDrawer';
+import BatchBarcodePrintDialog from '../components/BatchBarcodePrintDialog';
 import api from '../../../utils/api';
 import dayjs from 'dayjs';
 
@@ -142,6 +144,7 @@ function Fleet() {
   const [vinLoading, setVinLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [vehicleSearch, setVehicleSearch] = useState('');
+  const [batchPrintOpen, setBatchPrintOpen] = useState(false);
 
   // Usage log state
   const [usageVehicle, setUsageVehicle] = useState<Vehicle | null>(null);
@@ -193,6 +196,19 @@ function Fleet() {
       ].some((value) => String(value ?? '').toLowerCase().includes(query))
     );
   }, [vehicleSearch, vehicles]);
+
+  const printableVehicles = useMemo(
+    () => vehicles
+      .filter((vehicle) => vehicle.assetNumber?.trim())
+      .map((vehicle) => ({
+        id: vehicle.id,
+        name: vehicle.name,
+        barCode: vehicle.assetNumber.trim(),
+        equipmentType: 'TRACTORS / VEHICLES'
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name)),
+    [vehicles]
+  );
 
   const allFilteredChecked =
     filteredImportAssets.length > 0 &&
@@ -547,6 +563,15 @@ function Fleet() {
           <Stack direction="row" spacing={1}>
             <Button
               variant="outlined"
+              startIcon={<PrintTwoToneIcon />}
+              onClick={() => printableVehicles.length
+                ? setBatchPrintOpen(true)
+                : showSnackBar('No tractors or vehicles have printable barcodes.', 'error')}
+            >
+              Print all barcodes
+            </Button>
+            <Button
+              variant="outlined"
               startIcon={<DownloadTwoToneIcon />}
               onClick={() => { setOpenImport(true); loadImportAssets(); }}
             >
@@ -562,6 +587,13 @@ function Fleet() {
           </Stack>
         </Box>
       </PageTitleWrapper>
+
+      <BatchBarcodePrintDialog
+        open={batchPrintOpen}
+        onClose={() => setBatchPrintOpen(false)}
+        assets={printableVehicles}
+        title="Print all tractor and vehicle barcodes"
+      />
 
       <Box sx={{ px: 3, pb: 3 }}>
         <Tabs value={tabIndex} onChange={(_, v) => setTabIndex(v)} sx={{ mb: 2 }}>

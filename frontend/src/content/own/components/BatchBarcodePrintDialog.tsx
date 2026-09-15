@@ -12,18 +12,25 @@ import {
 } from '@mui/material';
 import PrintTwoToneIcon from '@mui/icons-material/PrintTwoTone';
 import Barcode from 'react-barcode';
-import { AssetDTO } from '../../../models/owns/asset';
+interface BarcodeLabelItem {
+  id: number;
+  name: string;
+  barCode: string;
+  equipmentType?: string;
+}
 
 interface Props {
   open: boolean;
   onClose: () => void;
-  assets: AssetDTO[];
+  assets: BarcodeLabelItem[];
+  title?: string;
 }
 
 export default function BatchBarcodePrintDialog({
   open,
   onClose,
-  assets
+  assets,
+  title = 'Print all asset barcodes'
 }: Props) {
   const printRef = useRef<HTMLDivElement>(null);
 
@@ -36,7 +43,7 @@ export default function BatchBarcodePrintDialog({
       <!doctype html>
       <html>
         <head>
-          <title>Asset Barcodes</title>
+          <title>${title}</title>
           <style>
             @page { margin: 0.3in; }
             * { box-sizing: border-box; }
@@ -61,7 +68,7 @@ export default function BatchBarcodePrintDialog({
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
-      <DialogTitle>Print all asset barcodes</DialogTitle>
+      <DialogTitle>{title}</DialogTitle>
       <DialogContent dividers>
         <Stack spacing={2}>
           <Typography color="text.secondary">
@@ -103,9 +110,11 @@ export default function BatchBarcodePrintDialog({
                   fontSize={11}
                   margin={3}
                 />
-                <div className="asset-section">
-                  {asset.equipmentType?.replaceAll('_', ' ')}
-                </div>
+                {asset.equipmentType && (
+                  <div className="asset-section">
+                    {asset.equipmentType.replaceAll('_', ' ')}
+                  </div>
+                )}
               </Box>
             ))}
           </Box>
